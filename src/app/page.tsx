@@ -10,7 +10,7 @@ interface PageProps {
 
 export default async function Home({ searchParams }: PageProps) {
   const { filter } = await searchParams;
-  const allPosts = getAllPosts();
+  const allPosts = await getAllPosts();
 
   const filteredPosts = filter && filter !== 'all'
     ? allPosts.filter(p => p.type.toLowerCase() === filter.toLowerCase())

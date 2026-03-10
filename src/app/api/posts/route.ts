@@ -3,7 +3,7 @@ import { getAllPosts, createPost, deletePost, db } from '@/lib/db';
 
 export async function GET() {
     try {
-        const posts = getAllPosts();
+        const posts = await getAllPosts();
         return NextResponse.json(posts);
     } catch (error) {
         return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
@@ -19,8 +19,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const newId = createPost({ type, title, url, imageUrl });
-        return NextResponse.json({ id: newId, success: true }, { status: 201 });
+        const newId = await createPost({ type, title, url, imageUrl });
+        return NextResponse.json({ id: Array.isArray(newId) ? newId[0] : newId, success: true }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
     }
@@ -35,7 +35,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'Post ID is required' }, { status: 400 });
         }
 
-        const success = deletePost(parseInt(id, 10));
+        const success = await deletePost(parseInt(id, 10));
         if (success) {
             return NextResponse.json({ success: true });
         } else {
@@ -45,6 +45,7 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
     }
 }
+
 export async function PUT(request: Request) {
     try {
         const body = await request.json();
@@ -54,10 +55,12 @@ export async function PUT(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const stmt = db.prepare('UPDATE posts SET type = ?, title = ?, url = ?, imageUrl = ? WHERE id = ?');
-        const info = stmt.run(type, title, url, imageUrl, id);
+        const result = await db.execute({
+            sql: 'UPDATE posts SET type = ?, title = ?, url = ?, imageUrl = ? WHERE id = ?',
+            args: [type, title, url, imageUrl, id]
+        });
 
-        if (info.changes > 0) {
+        if (result.rowsAffected > 0) {
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });

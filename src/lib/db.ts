@@ -1,51 +1,65 @@
-import Database from 'better-sqlite3';
-import path from 'path';
-import fs from 'fs';
+import { createClient } from '@libsql/client';
 
-// Ensure the data directory exists
-const dataDir = path.join(process.cwd(), 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+// Connect to the Turso database
+// In Vercel, these must be set in Environment Variables
+const url = process.env.TURSO_DATABASE_URL || 'file:data/database.sqlite';
+const authToken = process.env.TURSO_AUTH_TOKEN;
+
+export const db = createClient({
+    url,
+    authToken,
+});
+
+// Initialize the posts table
+async function initDb() {
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        type TEXT NOT NULL,
+        title TEXT NOT NULL,
+        url TEXT NOT NULL,
+        imageUrl TEXT,
+        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
 }
 
-// Connect to the SQLite database
-const dbPath = path.join(dataDir, 'database.sqlite');
-export const db = new Database(dbPath);
-
-// Initialize the posts table if it doesn't exist
-db.exec(`
-  CREATE TABLE IF NOT EXISTS posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type TEXT NOT NULL,
-    title TEXT NOT NULL,
-    url TEXT NOT NULL,
-    imageUrl TEXT,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+// Fire and forget initialization for simpler entry
+initDb().catch(err => console.error('Database initialization failed:', err));
 
 export interface Post {
     id?: number;
-    type: 'News' | 'Blog' | 'X';
+    type: string;
     title: string;
     url: string;
     imageUrl?: string;
     createdAt?: string;
 }
 
-export function getAllPosts(): Post[] {
-    const stmt = db.prepare('SELECT * FROM posts ORDER BY createdAt DESC');
-    return stmt.all() as Post[];
+export async function getAllPosts(): Promise<Post[]> {
+    const result = await db.execute('SELECT * FROM posts ORDER BY createdAt DESC');
+    return result.rows.map(row => ({
+        id: row.id as number,
+        type: row.type as string,
+        title: row.title as string,
+        url: row.url as string,
+        imageUrl: row.imageUrl as string,
+        createdAt: row.createdAt as string,
+    }));
 }
 
-export function createPost(post: Omit<Post, 'id' | 'createdAt'>): number | bigint {
-    const stmt = db.prepare('INSERT INTO posts (type, title, url, imageUrl) VALUES (@type, @title, @url, @imageUrl)');
-    const info = stmt.run(post);
-    return info.lastInsertRowid;
+export async function createPost(post: Omit<Post, 'id' | 'createdAt'>): Promise<number | bigint> {
+    const result = await db.execute({
+        sql: 'INSERT INTO posts (type, title, url, imageUrl) VALUES (?, ?, ?, ?)',
+        args: [post.type, post.title, post.url, post.imageUrl || '']
+    });
+    return result.lastInsertRowid || 0;
 }
 
-export function deletePost(id: number): boolean {
-    const stmt = db.prepare('DELETE FROM posts WHERE id = ?');
-    const info = stmt.run(id);
-    return info.changes > 0;
+export async function deletePost(id: number): Promise<boolean> {
+    const result = await db.execute({
+        sql: 'DELETE FROM posts WHERE id = ?',
+        args: [id]
+    });
+    return result.rowsAffected > 0;
 }
