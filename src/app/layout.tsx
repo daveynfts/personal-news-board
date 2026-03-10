@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import CryptoTicker from '@/components/CryptoTicker';
+import TokenRain from '@/components/TokenRain';
 
 export const metadata: Metadata = {
   title: 'Personal Board | Elite Curation',
@@ -38,6 +39,7 @@ export default function RootLayout({
           </header>
           {children}
         </div>
+        <TokenRain />
       </body>
     </html>
   );

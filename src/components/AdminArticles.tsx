@@ -207,7 +207,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                     </div>
 
                     <div className="form-section">
-                        <div className="form-section-title">Cover Image</div>
+                        <div className="form-section-title">Cover Image (16:9 recommended)</div>
                         <div className="form-group">
                             <label>Image URL</label>
                             <input

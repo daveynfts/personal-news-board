@@ -1347,3 +1347,47 @@ a {
     height: 220px;
   }
 }
+
+/* === TOKEN RAIN === */
+.token-rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.falling-token {
+  position: absolute;
+  top: -10%;
+  pointer-events: none;
+  user-select: none;
+  animation-name: token-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0;
+  text-shadow: 0 0 15px rgba(243, 186, 47, 0.8), 0 0 5px rgba(243, 186, 47, 1);
+}
+
+@keyframes token-fall {
+  0% {
+    transform: translateY(0vh) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(120vh) rotate(360deg);
+    opacity: 0;
+  }
+}
