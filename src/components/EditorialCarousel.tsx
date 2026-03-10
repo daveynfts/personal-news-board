@@ -39,7 +39,9 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
             <div className="carousel-wrapper" style={{
                 position: 'relative',
                 width: '100%',
-                height: '450px',
+                aspectRatio: '16 / 9',
+                maxHeight: 'calc(100vh - 200px)',
+                minHeight: '300px',
                 borderRadius: '16px',
                 overflow: 'hidden',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
