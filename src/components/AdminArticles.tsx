@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { convertToWebP } from '@/lib/convertToWebP';
 
 interface Article {
     id: number;
@@ -41,9 +42,10 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
 
         setUploading(true);
         try {
-            const response = await fetch(`/api/upload?filename=${file.name}`, {
+            const webpFile = await convertToWebP(file);
+            const response = await fetch(`/api/upload?filename=${webpFile.name}`, {
                 method: 'POST',
-                body: file,
+                body: webpFile,
             });
 
             if (response.ok) {

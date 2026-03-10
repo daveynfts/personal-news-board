@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { convertToWebP } from '@/lib/convertToWebP';
 
 interface Post {
     id: number;
@@ -36,9 +37,10 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
 
         setUploading(true);
         try {
-            const response = await fetch(`/api/upload?filename=${file.name}`, {
+            const webpFile = await convertToWebP(file);
+            const response = await fetch(`/api/upload?filename=${webpFile.name}`, {
                 method: 'POST',
-                body: file,
+                body: webpFile,
             });
 
             if (response.ok) {
