@@ -223,11 +223,89 @@ a {
 }
 
 /* === GRID & CARDS === */
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 40px;
+.marquee-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  /* Space for the rainbow glow border */
   margin-bottom: 100px;
+}
+
+.rainbow-glow {
+  position: relative;
+  background: var(--surface-color);
+  z-index: 1;
+}
+
+.rainbow-glow::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(14px);
+  border-radius: 28px;
+  animation: rainbow-bg 15s linear infinite;
+  opacity: 0.8;
+}
+
+.rainbow-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-color);
+  border-radius: var(--radius-lg);
+  z-index: -1;
+}
+
+@keyframes rainbow-bg {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.marquee-content {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  padding: 24px 0;
+}
+
+.left-to-right {
+  animation: scroll-left-to-right 50s linear infinite;
+}
+
+.marquee-wrapper:hover .left-to-right {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-left-to-right {
+
+  /* 40px is the gap. Half of 40px is 20px */
+  0% {
+    transform: translateX(calc(-50% - 20px));
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .post-card {
@@ -240,6 +318,8 @@ a {
   flex-direction: column;
   height: 100%;
   position: relative;
+  width: 380px;
+  flex-shrink: 0;
 }
 
 .post-card::before {
