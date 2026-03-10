@@ -100,6 +100,12 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             const url = editingId ? `/api/articles/${editingId}` : '/api/articles';
             const body = { title, content, coverImage, xSourceUrl, isEditorialPick };
 
+            if (!title.trim() || !content.trim()) {
+                addToast('Title and content are required.', 'error');
+                setLoading(false);
+                return;
+            }
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
@@ -141,7 +147,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
     };
 
     return (
-        <div className="admin-tab-content trans-enter">
+        <div className="admin-page-layout trans-enter">
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -178,7 +184,6 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="Type an engaging title..."
-                            required
                         />
                     </div>
 
@@ -230,7 +235,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                         </div>
                     </div>
 
-                    <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '12px', background: 'var(--surface-color)', padding: '16px', borderRadius: '12px' }}>
+                    <div className="form-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', background: 'var(--surface-color)', padding: '16px', borderRadius: '12px' }}>
                         <input
                             type="checkbox"
                             id="editorialPick"
@@ -263,7 +268,6 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder="Write your article here using Markdown..."
-                                required
                                 rows={15}
                             />
                             {previewMode && (

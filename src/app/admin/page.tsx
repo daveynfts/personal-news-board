@@ -64,7 +64,7 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="admin-page-layout">
+        <div className="admin-container">
             <div className="toast-container">
                 {toasts.map(toast => (
                     <div key={toast.id} className="toast" style={{ borderLeft: `4px solid ${toast.type === 'success' ? 'var(--success-color)' : 'var(--error-color)'}` }}>
@@ -74,26 +74,32 @@ export default function AdminPage() {
                 ))}
             </div>
 
-            <div className="admin-tabs">
-                <button
-                    className={`admin-tab ${activeTab === 'posts' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('posts')}
-                >
-                    Short-form Curation (Posts & Links)
-                </button>
-                <button
-                    className={`admin-tab ${activeTab === 'articles' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('articles')}
-                >
-                    Editorial Articles (Long-form)
-                </button>
+            <div className="admin-header-tabs trans-enter">
+                <div className="app-container">
+                    <div className="admin-tabs">
+                        <button
+                            className={`admin-tab ${activeTab === 'posts' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('posts')}
+                        >
+                            Short-form Curation (Posts & Links)
+                        </button>
+                        <button
+                            className={`admin-tab ${activeTab === 'articles' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('articles')}
+                        >
+                            Editorial Articles (Long-form)
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            {activeTab === 'posts' ? (
-                <AdminPosts addToast={addToast} />
-            ) : (
-                <AdminArticles addToast={addToast} />
-            )}
+            <div className="app-container">
+                {activeTab === 'posts' ? (
+                    <AdminPosts addToast={addToast} />
+                ) : (
+                    <AdminArticles addToast={addToast} />
+                )}
+            </div>
         </div>
     );
 }

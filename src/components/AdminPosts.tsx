@@ -155,7 +155,7 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
     };
 
     return (
-        <div className="admin-tab-content">
+        <div className="admin-page-layout trans-enter">
 
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
