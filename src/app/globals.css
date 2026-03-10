@@ -680,3 +680,76 @@ a {
     padding: 0 20px;
   }
 }
+
+/* === CRYPTO TICKER === */
+.crypto-ticker-container {
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 0;
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+.crypto-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: crypto-ticker-scroll 60s linear infinite;
+  gap: 40px;
+  padding-left: 40px;
+}
+
+.crypto-ticker-container:hover .crypto-ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes crypto-ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-50% - 20px));
+  }
+}
+
+.crypto-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.crypto-icon {
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px;
+  object-fit: contain;
+}
+
+.crypto-name {
+  color: var(--text-muted);
+}
+
+.crypto-price {
+  color: #fff;
+}
+
+.crypto-change {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.crypto-change.positive {
+  color: var(--success-color);
+}
+
+.crypto-change.negative {
+  color: var(--error-color);
+}

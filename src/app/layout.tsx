@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
+import CryptoTicker from '@/components/CryptoTicker';
 
 export const metadata: Metadata = {
   title: 'Personal Board | Elite Curation',
@@ -20,6 +21,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body>
+        <CryptoTicker />
         <div className="app-container">
           <header className="app-header">
             <div className="logo">
