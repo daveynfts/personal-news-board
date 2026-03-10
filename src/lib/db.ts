@@ -96,7 +96,7 @@ export async function getAllArticles(): Promise<Article[]> {
         content: String(row.content),
         coverImage: String(row.coverImage || ''),
         xSourceUrl: String(row.xSourceUrl || ''),
-        isEditorialPick: Boolean(row.isEditorialPick),
+        isEditorialPick: Number(row.isEditorialPick) === 1,
         createdAt: String(row.createdAt || ''),
     }));
 }
@@ -116,7 +116,7 @@ export async function getArticleById(id: number): Promise<Article | null> {
         content: String(row.content),
         coverImage: String(row.coverImage || ''),
         xSourceUrl: String(row.xSourceUrl || ''),
-        isEditorialPick: Boolean(row.isEditorialPick),
+        isEditorialPick: Number(row.isEditorialPick) === 1,
         createdAt: String(row.createdAt || ''),
     };
 }
