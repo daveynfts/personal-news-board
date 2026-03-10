@@ -46,15 +46,17 @@ export default async function Home({ searchParams }: PageProps) {
             <p>No posts found for this category. <br />Add some magic in the admin panel!</p>
           </div>
         ) : (
-          <div className="marquee-wrapper rainbow-glow">
-            <div className="marquee-content left-to-right">
-              {filteredPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-              {/* Duplicate set for infinite scroll effect */}
-              {filteredPosts.map((post) => (
-                <PostCard key={`dup-${post.id}`} post={post} />
-              ))}
+          <div className="rainbow-glow-container">
+            <div className="marquee-wrapper">
+              <div className="marquee-content left-to-right">
+                {filteredPosts.map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+                {/* Duplicate set for infinite scroll effect */}
+                {filteredPosts.map((post) => (
+                  <PostCard key={`dup-${post.id}`} post={post} />
+                ))}
+              </div>
             </div>
           </div>
         )}
