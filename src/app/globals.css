@@ -411,11 +411,26 @@ a {
 }
 
 /* === ADMIN UI === */
+.admin-container {
+  min-height: 100vh;
+}
+
+.admin-header-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(3, 4, 6, 0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0;
+  margin-bottom: 0;
+}
+
 .admin-page-layout {
-  padding: 80px 0;
+  padding: 48px 0 100px;
   display: grid;
-  grid-template-columns: 1fr 1.6fr;
-  gap: 60px;
+  grid-template-columns: 480px 1fr;
+  gap: 40px;
   align-items: start;
 }
 
@@ -424,45 +439,100 @@ a {
   background: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 48px;
+  padding: 36px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .admin-card {
   position: sticky;
-  top: 130px;
+  top: 90px;
+  border: 1px solid rgba(243, 186, 47, 0.12);
+  background: linear-gradient(160deg, #0d0f14 0%, #0a0c11 100%);
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 .admin-card h2,
 .manage-container h2 {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 900;
-  letter-spacing: -0.8px;
-  margin-bottom: 32px;
+  letter-spacing: -0.4px;
+  margin-bottom: 0;
+}
+
+.form-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.form-section-title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
 }
 
 .form-group {
-  margin-bottom: 28px;
+  margin-bottom: 16px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 800;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 12px;
+  letter-spacing: 1.2px;
+  margin-bottom: 8px;
 }
 
 .form-input {
   width: 100%;
-  padding: 16px 22px;
+  padding: 12px 16px;
   background: #06080b;
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 12px;
   color: #fff;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  font-family: var(--font-family);
   transition: var(--transition-smooth);
 }
 
@@ -470,62 +540,158 @@ a {
   outline: none;
   border-color: var(--accent-color);
   background: #0a0c11;
-  box-shadow: 0 0 0 4px var(--accent-glow);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px dashed var(--border-color);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.upload-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: rgba(243, 186, 47, 0.05);
+}
+
+.url-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: var(--success-color);
+  word-break: break-all;
 }
 
 .submit-btn {
   width: 100%;
-  padding: 18px;
+  padding: 16px;
   background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
   color: #000;
-  font-weight: 950;
-  font-size: 1.1rem;
+  font-weight: 900;
+  font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  border-radius: 18px;
+  letter-spacing: 2px;
+  border-radius: 14px;
   cursor: pointer;
   transition: var(--transition-smooth);
   border: none;
-  margin-top: 12px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(243, 186, 47, 0.4);
+  box-shadow: 0 15px 35px rgba(243, 186, 47, 0.45);
 }
 
 .submit-btn:active:not(:disabled) {
   transform: translateY(-1px);
 }
 
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* === MANAGE CONTAINER === */
+.manage-container {
+  background: var(--surface-color);
+}
+
+.manage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
 .post-item-admin {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px;
+  padding: 16px 20px;
   background: var(--surface-secondary);
-  border-radius: 18px;
-  margin-bottom: 20px;
+  border-radius: 14px;
+  margin-bottom: 12px;
   border: 1px solid var(--border-color);
   transition: var(--transition-smooth);
+  gap: 16px;
+}
+
+.post-item-admin:last-child {
+  margin-bottom: 0;
 }
 
 .post-item-admin:hover {
-  transform: scale(1.02);
   background: var(--surface-hover);
+  border-color: rgba(243, 186, 47, 0.2);
+  transform: translateX(4px);
+}
+
+.post-item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.edit-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.edit-btn:hover {
+  background: var(--surface-hover);
+  color: #fff;
   border-color: var(--text-muted);
 }
 
 .delete-btn {
-  padding: 10px 20px;
-  background: rgba(255, 77, 77, 0.1);
+  padding: 8px 16px;
+  background: rgba(255, 77, 77, 0.08);
   color: #ff4d4d;
   border: 1px solid rgba(255, 77, 77, 0.2);
   border-radius: 10px;
-  font-weight: 800;
-  font-size: 0.85rem;
+  font-weight: 700;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: var(--transition-smooth);
 }
@@ -533,32 +699,34 @@ a {
 .delete-btn:hover {
   background: #ff4d4d;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3);
+  box-shadow: 0 6px 16px rgba(255, 77, 77, 0.3);
 }
 
 /* === TOAST & MODAL === */
 .toast-container {
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  bottom: 32px;
+  right: 32px;
   z-index: 2000;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  max-width: 360px;
 }
 
 .toast {
-  padding: 16px 28px;
-  border-radius: 16px;
+  padding: 14px 22px;
+  border-radius: 14px;
   background: var(--surface-color);
   border: 1px solid var(--glass-border);
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.9rem;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
-  gap: 12px;
-  animation: toastIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  gap: 10px;
+  animation: toastIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes toastIn {
@@ -611,14 +779,14 @@ a {
 
 .btn-group {
   display: flex;
-  gap: 16px;
-  margin-top: 32px;
+  gap: 12px;
+  margin-top: 28px;
 }
 
 .btn-secondary,
 .btn-outline {
   flex: 1;
-  padding: 14px;
+  padding: 13px;
   background: var(--surface-secondary);
   color: #fff;
   border: 1px solid var(--border-color);
@@ -648,7 +816,7 @@ a {
 
 .btn-danger {
   flex: 1;
-  padding: 14px;
+  padding: 13px;
   background: #ff4d4d;
   color: #fff;
   border: none;
@@ -661,6 +829,16 @@ a {
 .btn-danger:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3);
+}
+
+@media (max-width: 900px) {
+  .admin-page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-card {
+    position: static;
+  }
 }
 
 @media (max-width: 768px) {
@@ -685,39 +863,41 @@ a {
 
 .admin-tabs {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 12px;
+  gap: 4px;
+  padding: 14px 0;
 }
 
 .admin-tab {
   background: transparent;
   color: var(--text-muted);
   border: none;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  padding: 8px 16px;
+  padding: 10px 20px;
   cursor: pointer;
   transition: var(--transition-smooth);
   position: relative;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
 }
 
 .admin-tab:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .admin-tab.active {
   color: var(--accent-color);
+  background: rgba(243, 186, 47, 0.1);
 }
 
 .admin-tab.active::after {
   content: '';
   position: absolute;
-  bottom: -13px;
+  bottom: -14px;
   left: 0;
   width: 100%;
-  height: 3px;
+  height: 2px;
   background: var(--accent-color);
   border-radius: 4px 4px 0 0;
 }
@@ -731,8 +911,8 @@ a {
 .editor-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background: var(--surface-color);
+  gap: 0;
+  background: #06080b;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
@@ -740,7 +920,7 @@ a {
 
 .editor-container.split {
   flex-direction: row;
-  min-height: 400px;
+  min-height: 380px;
 }
 
 .markdown-input {
@@ -749,10 +929,11 @@ a {
   border-radius: 0 !important;
   background: transparent !important;
   resize: none;
-  padding: 20px !important;
+  padding: 16px !important;
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  min-height: 200px;
 }
 
 .markdown-input:focus {

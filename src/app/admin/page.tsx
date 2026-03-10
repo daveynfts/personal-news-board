@@ -30,7 +30,7 @@ export default function AdminPage() {
 
     if (!isAuthorized) {
         return (
-            <div className="admin-page-layout" style={{ justifyContent: 'center', minHeight: '80vh' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '24px' }}>
                 <div className="toast-container">
                     {toasts.map(toast => (
                         <div key={toast.id} className="toast" style={{ borderLeft: `4px solid ${toast.type === 'success' ? 'var(--success-color)' : 'var(--error-color)'}` }}>
@@ -39,10 +39,11 @@ export default function AdminPage() {
                         </div>
                     ))}
                 </div>
-                <div className="admin-card" style={{ maxWidth: '400px', margin: '0 auto' }}>
+                <div className="admin-card" style={{ width: '100%', maxWidth: '420px' }}>
                     <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                        <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Security Gate</h2>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Restricted access for authorized entities only.</p>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🔐</div>
+                        <h2 style={{ fontSize: '1.6rem', marginBottom: '8px', margin: 0 }}>Security Gate</h2>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '8px' }}>Restricted access. Authorized entities only.</p>
                     </div>
                     <form onSubmit={checkPassword} className="admin-form">
                         <div className="form-group">
@@ -52,11 +53,11 @@ export default function AdminPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                                required
+                                placeholder="Enter your access key..."
+                                autoFocus
                             />
                         </div>
-                        <button type="submit" className="submit-btn" style={{ marginTop: '0' }}>Verify Identity</button>
+                        <button type="submit" className="submit-btn" style={{ marginTop: '8px' }}>🚀 Verify Identity</button>
                     </form>
                 </div>
             </div>
@@ -76,20 +77,29 @@ export default function AdminPage() {
 
             <div className="admin-header-tabs trans-enter">
                 <div className="app-container">
-                    <div className="admin-tabs">
-                        <button
-                            className={`admin-tab ${activeTab === 'posts' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('posts')}
-                        >
-                            Short-form Curation (Posts & Links)
-                        </button>
-                        <button
-                            className={`admin-tab ${activeTab === 'articles' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('articles')}
-                        >
-                            Editorial Articles (Long-form)
-                        </button>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ paddingTop: '16px' }}>
+                            <h1 style={{ fontSize: '1.1rem', fontWeight: 900, letterSpacing: '-0.3px', color: '#fff', margin: 0 }}>
+                                🛸 DaveyNFTs <span style={{ color: 'var(--accent-color)' }}>Admin</span>
+                            </h1>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Content Management Console</p>
+                        </div>
+                        <div className="admin-tabs" style={{ borderBottom: 'none', marginBottom: 0, paddingBottom: 0, paddingTop: '16px' }}>
+                            <button
+                                className={`admin-tab ${activeTab === 'posts' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('posts')}
+                            >
+                                📌 Short-form Curation
+                            </button>
+                            <button
+                                className={`admin-tab ${activeTab === 'articles' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('articles')}
+                            >
+                                ✍️ Editorial Articles
+                            </button>
+                        </div>
                     </div>
+                    <div style={{ borderBottom: '1px solid var(--border-color)', marginTop: '0' }} />
                 </div>
             </div>
 

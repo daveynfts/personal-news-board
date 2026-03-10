@@ -51,7 +51,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             if (response.ok) {
                 const blob = await response.json();
                 setCoverImage(blob.url);
-                addToast('Image uploaded to Vercel Blob.');
+                addToast('Image uploaded successfully.');
             } else {
                 addToast('Upload failed.', 'error');
             }
@@ -95,16 +95,16 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
         e.preventDefault();
         setLoading(true);
 
+        if (!title.trim() || !content.trim()) {
+            addToast('Title and content are required.', 'error');
+            setLoading(false);
+            return;
+        }
+
         try {
             const method = editingId ? 'PUT' : 'POST';
             const url = editingId ? `/api/articles/${editingId}` : '/api/articles';
             const body = { title, content, coverImage, xSourceUrl, isEditorialPick };
-
-            if (!title.trim() || !content.trim()) {
-                addToast('Title and content are required.', 'error');
-                setLoading(false);
-                return;
-            }
 
             const res = await fetch(url, {
                 method,
@@ -133,7 +133,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
         try {
             const res = await fetch(`/api/articles/${showConfirm.id}`, { method: 'DELETE' });
             if (res.ok) {
-                addToast('Article deleted entirely.');
+                addToast('Article deleted.');
                 fetchArticles();
             } else {
                 addToast('Failed to delete article.', 'error');
@@ -151,77 +151,48 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <h3 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Delete Article</h3>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '32px' }}>
-                            Are you certain you want to remove <br />
-                            <span style={{ color: '#fff', fontWeight: 700 }}>&quot;{showConfirm.title}&quot;</span>? <br />
-                            This action is irreversible.
+                        <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🗑️</div>
+                        <h3 style={{ fontSize: '1.4rem', marginBottom: '12px', fontWeight: 900 }}>Delete Article?</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '0.95rem' }}>
+                            You are about to permanently delete:
                         </p>
+                        <p style={{ color: '#fff', fontWeight: 700, fontSize: '1rem', marginBottom: '8px' }}>
+                            &quot;{showConfirm.title}&quot;
+                        </p>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>This action cannot be undone.</p>
                         <div className="btn-group">
-                            <button className="btn-secondary" onClick={() => setShowConfirm(null)}>Abort</button>
+                            <button className="btn-secondary" onClick={() => setShowConfirm(null)}>Cancel</button>
                             <button className="btn-danger" onClick={handleDelete} disabled={loading}>
-                                {loading ? 'Deleting...' : 'Confirm'}
+                                {loading ? 'Deleting...' : 'Delete'}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
 
+            {/* LEFT: FORM */}
             <div className="admin-card">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <h2 style={{ margin: 0 }}>{editingId ? 'Refine Article' : 'Draft New Article'}</h2>
-                        {editingId && <span style={{ fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Editing Active Article</span>}
+                <div className="admin-card-header">
+                    <div className="admin-card-icon">✍️</div>
+                    <div>
+                        <h2>{editingId ? 'Edit Article' : 'Write Article'}</h2>
+                        {editingId && <span style={{ fontSize: '0.75rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Editing Mode</span>}
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="admin-form">
-                    <div className="form-group">
-                        <label>Headline / Title</label>
-                        <input
-                            className="form-input"
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Type an engaging title..."
-                        />
-                    </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="form-section">
+                        <div className="form-section-title">Article Info</div>
                         <div className="form-group">
-                            <label>Cover Image</label>
-                            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                <input
-                                    className="form-input"
-                                    type="url"
-                                    value={coverImage}
-                                    onChange={(e) => setCoverImage(e.target.value)}
-                                    placeholder="External URL (https://...)"
-                                />
-                                <div style={{ position: 'relative' }}>
-                                    <input
-                                        type="file"
-                                        onChange={handleFileUpload}
-                                        accept="image/*"
-                                        style={{ display: 'none' }}
-                                        id="article-file-upload"
-                                        disabled={uploading}
-                                    />
-                                    <label
-                                        htmlFor="article-file-upload"
-                                        className="btn-outline"
-                                        style={{
-                                            display: 'block',
-                                            textAlign: 'center',
-                                            cursor: 'pointer',
-                                            padding: '10px',
-                                            opacity: uploading ? 0.6 : 1
-                                        }}
-                                    >
-                                        {uploading ? 'Uploading to Blob...' : '↑ Upload Image File'}
-                                    </label>
-                                </div>
-                            </div>
+                            <label>Headline / Title</label>
+                            <input
+                                className="form-input"
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Write an engaging title..."
+                            />
                         </div>
                         <div className="form-group">
                             <label>X (Twitter) Source URL</label>
@@ -235,32 +206,79 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                         </div>
                     </div>
 
-                    <div className="form-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', background: 'var(--surface-color)', padding: '16px', borderRadius: '12px' }}>
-                        <input
-                            type="checkbox"
-                            id="editorialPick"
-                            checked={isEditorialPick}
-                            onChange={(e) => setIsEditorialPick(e.target.checked)}
-                            style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)', cursor: 'pointer' }}
-                        />
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label htmlFor="editorialPick" style={{ marginBottom: 0, cursor: 'pointer', color: '#fff' }}>Editorial Pick</label>
-                            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Feature this article prominently in the hero carousel</span>
+                    <div className="form-section">
+                        <div className="form-section-title">Cover Image</div>
+                        <div className="form-group">
+                            <label>Image URL</label>
+                            <input
+                                className="form-input"
+                                type="url"
+                                value={coverImage}
+                                onChange={(e) => setCoverImage(e.target.value)}
+                                placeholder="https://example.com/image.jpg"
+                            />
                         </div>
+                        <input
+                            type="file"
+                            onChange={handleFileUpload}
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="article-file-upload"
+                            disabled={uploading}
+                        />
+                        <label htmlFor="article-file-upload" className="upload-btn">
+                            {uploading ? (
+                                <><span>⏳</span> Converting & uploading...</>
+                            ) : (
+                                <><span>↑</span> Upload from device (auto-converts to WebP)</>
+                            )}
+                        </label>
+                        {coverImage && coverImage.startsWith('http') && (
+                            <div className="url-preview">
+                                ✓ Image ready: {coverImage.length > 50 ? coverImage.substring(0, 50) + '...' : coverImage}
+                            </div>
+                        )}
                     </div>
 
-                    <div className="form-group" style={{ marginTop: '20px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                            <label style={{ margin: 0 }}>Article Body (Markdown Supported)</label>
+                    <div className="form-section" style={{ background: isEditorialPick ? 'rgba(243, 186, 47, 0.05)' : undefined, borderColor: isEditorialPick ? 'rgba(243, 186, 47, 0.3)' : undefined }}>
+                        <div className="form-section-title">Feature Settings</div>
+                        <label style={{
+                            display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer',
+                            padding: '4px 0'
+                        }}>
+                            <input
+                                type="checkbox"
+                                id="editorialPick"
+                                checked={isEditorialPick}
+                                onChange={(e) => setIsEditorialPick(e.target.checked)}
+                                style={{ width: '18px', height: '18px', accentColor: 'var(--accent-color)', cursor: 'pointer', flexShrink: 0 }}
+                            />
+                            <div>
+                                <span style={{ fontWeight: 800, color: isEditorialPick ? 'var(--accent-color)' : '#fff', fontSize: '0.9rem' }}>
+                                    ★ Editorial Pick
+                                </span>
+                                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px', fontWeight: 500 }}>
+                                    Feature this article in the hero carousel on the main site
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div className="form-section">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                            <div className="form-section-title" style={{ margin: 0 }}>Article Body</div>
                             <button
                                 type="button"
                                 className="btn-outline"
                                 onClick={() => setPreviewMode(!previewMode)}
-                                style={{ padding: '4px 12px', fontSize: '0.8rem' }}
+                                style={{ padding: '4px 12px', fontSize: '0.75rem', marginBottom: 0 }}
                             >
-                                {previewMode ? 'Hide Preview' : 'Show Preview'}
+                                {previewMode ? '◧ Hide Preview' : '▣ Show Preview'}
                             </button>
                         </div>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '10px' }}>
+                            Supports Markdown: **bold**, *italic*, # Heading, [link](url), ![img](url)
+                        </p>
 
                         <div className={`editor-container ${previewMode ? 'split' : ''}`}>
                             <textarea
@@ -278,42 +296,65 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
                         <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 2 }}>
-                            {editingId ? 'Update Article' : (loading ? 'Publishing...' : 'Publish Article')}
+                            {loading ? '⏳ Saving...' : editingId ? '✓ Update Article' : '🚀 Publish Article'}
                         </button>
                         {editingId && (
-                            <button type="button" onClick={resetForm} className="btn-outline" style={{ marginTop: '12px' }}>Cancel</button>
+                            <button type="button" onClick={resetForm} className="btn-outline" style={{ marginTop: 0 }}>
+                                Cancel
+                            </button>
                         )}
                     </div>
                 </form>
             </div>
 
+            {/* RIGHT: ARCHIVE */}
             <div className="manage-container">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                    <h2 style={{ margin: 0 }}>Article Archive</h2>
-                    <button onClick={fetchArticles} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>Sync</button>
+                <div className="manage-header">
+                    <div>
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Article Archive</h2>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                            {articles.length} {articles.length === 1 ? 'article' : 'articles'} published
+                        </p>
+                    </div>
+                    <button onClick={fetchArticles} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
                 </div>
-                <div className="admin-posts-list">
+
+                <div>
                     {articles.length === 0 ? (
-                        <div className="empty-state" style={{ padding: '60px', opacity: 0.5 }}>
-                            <p>No articles drafted yet.</p>
+                        <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
+                            <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📝</div>
+                            <p style={{ color: 'var(--text-secondary)' }}>No articles yet. Write your first one!</p>
                         </div>
                     ) : (
                         articles.map((article) => (
                             <div key={article.id} className="post-item-admin">
-                                <div className="admin-post-info" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
                                     {article.isEditorialPick && (
-                                        <span className="type-tag" style={{ background: 'var(--accent-color)', color: '#000', fontWeight: 800, padding: '4px 8px', fontSize: '0.7rem' }}>★ PICK</span>
+                                        <span style={{
+                                            padding: '3px 8px',
+                                            borderRadius: '6px',
+                                            fontSize: '0.7rem',
+                                            fontWeight: 900,
+                                            background: 'var(--accent-color)',
+                                            color: '#000',
+                                            flexShrink: 0,
+                                            letterSpacing: '0.5px',
+                                        }}>★ PICK</span>
                                     )}
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', overflow: 'hidden' }}>
-                                        <strong style={{ fontSize: '1.05rem', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', color: '#fff' }}>{article.title}</strong>
-                                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{article.createdAt ? new Date(article.createdAt).toLocaleDateString() : 'Syncing...'}</span>
+                                    <div style={{ overflow: 'hidden' }}>
+                                        <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', margin: 0 }}>
+                                            {article.title}
+                                        </p>
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                            {article.createdAt ? new Date(article.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
+                                        </span>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', gap: '12px' }}>
-                                    <button onClick={() => startEditing(article)} className="filter-btn" style={{ padding: '10px 18px', borderRadius: '12px', background: 'var(--surface-hover)', fontSize: '0.8rem' }}>Edit</button>
-                                    <button onClick={() => setShowConfirm({ id: article.id, title: article.title })} className="delete-btn">Remove</button>
+                                <div className="post-item-actions">
+                                    <button onClick={() => startEditing(article)} className="edit-btn">Edit</button>
+                                    <button onClick={() => setShowConfirm({ id: article.id, title: article.title })} className="delete-btn">Delete</button>
                                 </div>
                             </div>
                         ))
