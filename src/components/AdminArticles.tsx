@@ -28,11 +28,37 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [showConfirm, setShowConfirm] = useState<{ id: number; title: string } | null>(null);
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [previewMode, setPreviewMode] = useState(true);
 
     useEffect(() => {
         fetchArticles();
     }, []);
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        try {
+            const response = await fetch(`/api/upload?filename=${file.name}`, {
+                method: 'POST',
+                body: file,
+            });
+
+            if (response.ok) {
+                const blob = await response.json();
+                setCoverImage(blob.url);
+                addToast('Image uploaded to Vercel Blob.');
+            } else {
+                addToast('Upload failed.', 'error');
+            }
+        } catch (error) {
+            addToast('Error uploading file.', 'error');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const fetchArticles = async () => {
         try {
@@ -156,14 +182,39 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                         <div className="form-group">
-                            <label>Cover Image (URL)</label>
-                            <input
-                                className="form-input"
-                                type="url"
-                                value={coverImage}
-                                onChange={(e) => setCoverImage(e.target.value)}
-                                placeholder="https://..."
-                            />
+                            <label>Cover Image</label>
+                            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                                <input
+                                    className="form-input"
+                                    type="url"
+                                    value={coverImage}
+                                    onChange={(e) => setCoverImage(e.target.value)}
+                                    placeholder="External URL (https://...)"
+                                />
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        type="file"
+                                        onChange={handleFileUpload}
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="article-file-upload"
+                                        disabled={uploading}
+                                    />
+                                    <label
+                                        htmlFor="article-file-upload"
+                                        className="btn-outline"
+                                        style={{
+                                            display: 'block',
+                                            textAlign: 'center',
+                                            cursor: 'pointer',
+                                            padding: '10px',
+                                            opacity: uploading ? 0.6 : 1
+                                        }}
+                                    >
+                                        {uploading ? 'Uploading to Blob...' : '↑ Upload Image File'}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div className="form-group">
                             <label>X (Twitter) Source URL</label>
