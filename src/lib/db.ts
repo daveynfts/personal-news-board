@@ -39,21 +39,21 @@ export interface Post {
 export async function getAllPosts(): Promise<Post[]> {
     const result = await db.execute('SELECT * FROM posts ORDER BY createdAt DESC');
     return result.rows.map(row => ({
-        id: row.id as number,
-        type: row.type as string,
-        title: row.title as string,
-        url: row.url as string,
-        imageUrl: row.imageUrl as string,
-        createdAt: row.createdAt as string,
+        id: Number(row.id),
+        type: String(row.type),
+        title: String(row.title),
+        url: String(row.url),
+        imageUrl: String(row.imageUrl || ''),
+        createdAt: String(row.createdAt || ''),
     }));
 }
 
-export async function createPost(post: Omit<Post, 'id' | 'createdAt'>): Promise<number | bigint> {
+export async function createPost(post: Omit<Post, 'id' | 'createdAt'>): Promise<number> {
     const result = await db.execute({
         sql: 'INSERT INTO posts (type, title, url, imageUrl) VALUES (?, ?, ?, ?)',
         args: [post.type, post.title, post.url, post.imageUrl || '']
     });
-    return result.lastInsertRowid || 0;
+    return Number(result.lastInsertRowid || 0);
 }
 
 export async function deletePost(id: number): Promise<boolean> {

@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         }
 
         const newId = await createPost({ type, title, url, imageUrl });
-        return NextResponse.json({ id: Array.isArray(newId) ? newId[0] : newId, success: true }, { status: 201 });
+        return NextResponse.json({ id: newId, success: true }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
     }
