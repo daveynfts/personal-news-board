@@ -76,7 +76,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
             <div className="event-calendar-grid">
                 {/* Featured Event Card */}
                 {featuredEvent && (
-                    <div className="featured-event-card trans-up" style={{ alignSelf: 'start', position: 'sticky', top: '120px' }}>
+                    <div key={featuredEvent.id} className="featured-event-card trans-up fade-in-section" style={{ alignSelf: 'start', position: 'sticky', top: '120px', animation: 'fadeIn 0.6s ease-out' }}>
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
                                 <img src={`${featuredEvent.imageUrl}?t=${new Date(featuredEvent.createdAt || Date.now()).getTime()}`} alt={featuredEvent.title} />
