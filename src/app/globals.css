@@ -1636,11 +1636,85 @@ a {
   transform: translateX(5px);
 }
 
-/* --- UPCOMING LIST --- */
+/* --- UPCOMING LIST LIQUID GLASS --- */
 .upcoming-events-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.2);
+  border-left-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+/* Colorful animated glow blobs behind the content for liquid effect */
+.upcoming-events-list::before,
+.upcoming-events-list::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+.upcoming-events-list::before {
+  width: 400px;
+  height: 400px;
+  background: var(--news-color); /* Apple Blue */
+  top: -100px;
+  left: -100px;
+}
+
+.upcoming-events-list::after {
+  width: 500px;
+  height: 500px;
+  background: rgba(191, 90, 242, 0.6); /* Apple Purple */
+  bottom: -150px;
+  right: -100px;
+}
+
+.upcoming-events-list:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.upcoming-events-list:hover::before,
+.upcoming-events-list:hover::after {
+  opacity: 0.8;
+}
+
+.upcoming-events-list:hover::before {
+  animation: liquid-blob 10s infinite alternate ease-in-out;
+}
+
+.upcoming-events-list:hover::after {
+  animation: liquid-blob 12s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes liquid-blob {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate(150px, 80px) scale(1.1) rotate(180deg); }
+  100% { transform: translate(-50px, 150px) scale(0.9) rotate(360deg); }
+}
+
+/* Ensure inner cards don't have too much heavy background so the blobs show through */
+.upcoming-events-list .manage-header {
+  position: relative;
+  z-index: 2;
 }
 
 .list-header {
