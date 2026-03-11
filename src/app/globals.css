@@ -1424,7 +1424,7 @@ a {
 
 .featured-event-card .event-image {
   width: 100%;
-  height: 380px;
+  aspect-ratio: 16 / 9;
   position: relative;
   overflow: hidden;
   background: #000;
@@ -1686,7 +1686,8 @@ a {
     padding: 24px;
   }
   .featured-event-card .event-image {
-    height: 250px;
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 }
 
@@ -1893,7 +1894,7 @@ a {
 
 .timeline-event-thumb {
   width: 140px;
-  height: 140px;
+  aspect-ratio: 16 / 9;
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;

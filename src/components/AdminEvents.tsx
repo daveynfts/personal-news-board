@@ -300,6 +300,15 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                 <><span>↑</span> Upload Banner</>
                             )}
                         </label>
+
+                        {imageUrl && (
+                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
+                                <img src={imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: '0.7rem', color: '#fff' }}>
+                                    16:9 Preview
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>

@@ -236,8 +236,11 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                             )}
                         </label>
                         {coverImage && coverImage.startsWith('http') && (
-                            <div className="url-preview">
-                                ✓ Image ready: {coverImage.length > 50 ? coverImage.substring(0, 50) + '...' : coverImage}
+                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
+                                <img src={coverImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: '0.7rem', color: '#fff' }}>
+                                    16:9 Preview
+                                </div>
                             </div>
                         )}
                     </div>

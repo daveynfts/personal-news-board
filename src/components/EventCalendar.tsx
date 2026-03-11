@@ -59,7 +59,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                 {/* Featured Event Card */}
                 {featuredEvent && (
                     <div className="featured-event-card trans-up" style={{ alignSelf: 'start', position: 'sticky', top: '120px' }}>
-                        <div className="event-image" style={{ height: '300px' }}>
+                        <div className="event-image">
                             {featuredEvent.imageUrl ? (
                                 <img src={featuredEvent.imageUrl} alt={featuredEvent.title} />
                             ) : (
