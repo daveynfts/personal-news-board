@@ -1936,22 +1936,20 @@ a {
 }
 
 .timeline-event-thumb {
-  width: 100px;
-  aspect-ratio: 1 / 1;
+  width: 120px;
+  height: 120px;
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: #000;
+  background: var(--surface-secondary);
   border: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  align-self: center;
 }
 
 .timeline-event-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.5s;
 }
 

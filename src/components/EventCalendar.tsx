@@ -131,7 +131,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                     </div>
                                                     <div className="timeline-event-title">{event.title}</div>
                                                     <div className="timeline-event-host">
-                                                        🤝 <span>By Curated Network</span>
+                                                        🤝 <span>By DaveyNFTs</span>
                                                     </div>
                                                     <div className="timeline-event-location">
                                                         📍 {event.location || 'Online / Link provided'}
