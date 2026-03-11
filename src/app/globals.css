@@ -1664,7 +1664,7 @@ a {
   border-left-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
-  padding: 40px;
+  padding: 32px;
   position: relative;
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -1936,9 +1936,9 @@ a {
 }
 
 .timeline-date-col {
-  width: 110px;
+  width: 90px;
   flex-shrink: 0;
-  padding-right: 24px;
+  padding-right: 16px;
   position: relative;
   text-align: right;
   padding-top: 24px;
@@ -1989,12 +1989,13 @@ a {
 
 .timeline-events-col {
   flex: 1;
-  padding-left: 32px;
+  padding-left: 20px;
   padding-top: 16px;
   padding-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .timeline-event-card {
@@ -2004,13 +2005,14 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px;
   display: flex;
-  gap: 20px;
+  gap: 16px;
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
+  min-width: 0;
 }
 
 .timeline-event-card::before {
@@ -2038,6 +2040,7 @@ a {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .timeline-event-time {
@@ -2048,11 +2051,13 @@ a {
 }
 
 .timeline-event-title {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 12px;
   line-height: 1.35;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .timeline-event-host {
@@ -2137,9 +2142,9 @@ a {
 }
 
 .timeline-event-thumb {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
   overflow: hidden;
   flex-shrink: 0;
   background: var(--surface-secondary);
