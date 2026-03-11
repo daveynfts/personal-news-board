@@ -323,7 +323,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                             {articles.length} {articles.length === 1 ? 'article' : 'articles'} published
                         </p>
                     </div>
-                    <button onClick={fetchArticles} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
+                    <button onClick={async () => { await fetchArticles(); addToast('Synced latest articles.'); }} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
                 </div>
 
                 <div>

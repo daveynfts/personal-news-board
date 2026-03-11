@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAllPosts, createPost, deletePost, db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
@@ -20,6 +23,7 @@ export async function POST(request: Request) {
         }
 
         const newId = await createPost({ type, title, url, imageUrl });
+        revalidatePath('/');
         return NextResponse.json({ id: newId, success: true }, { status: 201 });
     } catch {
         return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
@@ -37,6 +41,7 @@ export async function DELETE(request: Request) {
 
         const success = await deletePost(parseInt(id, 10));
         if (success) {
+            revalidatePath('/');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -61,6 +66,7 @@ export async function PUT(request: Request) {
         });
 
         if (result.rowsAffected > 0) {
+            revalidatePath('/');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });

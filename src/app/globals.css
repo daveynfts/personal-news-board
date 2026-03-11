@@ -442,10 +442,11 @@ a {
 
 .admin-card h2,
 .manage-container h2 {
-  font-size: 1.4rem;
-  font-weight: 900;
-  letter-spacing: -0.4px;
-  margin-bottom: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin: 0;
+  color: var(--text-primary);
 }
 
 .form-section {

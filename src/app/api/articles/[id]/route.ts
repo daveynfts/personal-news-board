@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getArticleById, updateArticle, deleteArticle } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(
     request: Request,
@@ -32,6 +35,7 @@ export async function PUT(
 
         if (!success) return NextResponse.json({ error: 'Article not found or no changes made' }, { status: 404 });
 
+        revalidatePath('/');
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to update article:', error);
@@ -50,6 +54,7 @@ export async function DELETE(
         const success = await deleteArticle(id);
         if (!success) return NextResponse.json({ error: 'Article not found' }, { status: 404 });
 
+        revalidatePath('/');
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to delete article:', error);

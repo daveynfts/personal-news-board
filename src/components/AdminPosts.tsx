@@ -282,7 +282,7 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
                             {posts.length} {posts.length === 1 ? 'post' : 'posts'} in your feed
                         </p>
                     </div>
-                    <button onClick={fetchPosts} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
+                    <button onClick={async () => { await fetchPosts(); addToast('Synced latest posts.'); }} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
                 </div>
 
                 <div>

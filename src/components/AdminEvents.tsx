@@ -334,7 +334,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                             <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past ({pastEvents.length})</button>
                         </div>
                     </div>
-                    <button onClick={fetchEvents} className="btn-outline" style={{ padding: '8px 16px', fontSize: '0.8rem', height: 'fit-content' }}>↻ Sync</button>
+                    <button onClick={async () => { await fetchEvents(); addToast('Synced latest events.'); }} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
                 </div>
 
                 <div className="timeline-wrapper">

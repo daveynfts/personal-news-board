@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAllEvents, createEvent, updateEvent, deleteEvent } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
@@ -21,6 +24,7 @@ export async function POST(request: Request) {
         }
 
         const id = await createEvent({ title, description, date, location, link, imageUrl });
+        revalidatePath('/');
         return NextResponse.json({ id, success: true }, { status: 201 });
     } catch (error) {
         console.error('Failed to create event:', error);
@@ -39,6 +43,7 @@ export async function PUT(request: Request) {
 
         const success = await updateEvent(Number(id), { title, description, date, location, link, imageUrl });
         if (success) {
+            revalidatePath('/');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Event not found' }, { status: 404 });
@@ -60,6 +65,7 @@ export async function DELETE(request: Request) {
 
         const success = await deleteEvent(Number(id));
         if (success) {
+            revalidatePath('/');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Event not found' }, { status: 404 });
