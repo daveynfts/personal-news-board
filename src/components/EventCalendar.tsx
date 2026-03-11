@@ -1,7 +1,8 @@
 'use client';
 
 import { CalendarEvent } from '@/lib/db';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface EventCalendarProps {
     events: CalendarEvent[];
@@ -9,6 +10,7 @@ interface EventCalendarProps {
 
 export default function EventCalendar({ events }: EventCalendarProps) {
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+    const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
 
     // Filter events
     const today = new Date();
@@ -28,8 +30,24 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         );
     }
 
-    const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : pastEvents[0];
+    const featuredEventsList = upcomingEvents.length > 0 ? upcomingEvents : pastEvents;
+    
+    // Ensure index is within bounds in case data changes
+    const displayFeaturedIndex = currentFeaturedIndex >= featuredEventsList.length ? 0 : currentFeaturedIndex;
+    const featuredEvent = featuredEventsList[displayFeaturedIndex] || null;
     const displayEvents = activeTab === 'upcoming' ? upcomingEvents : pastEvents;
+    
+    // Auto-rotate featured event every 7 seconds
+    useEffect(() => {
+        if (featuredEventsList.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentFeaturedIndex(prev => (prev + 1) % featuredEventsList.length);
+        }, 7000);
+        return () => clearInterval(interval);
+    }, [featuredEventsList.length]);
+
+    const handleNextFeatured = () => setCurrentFeaturedIndex(prev => (prev + 1) % featuredEventsList.length);
+    const handlePrevFeatured = () => setCurrentFeaturedIndex(prev => (prev - 1 + featuredEventsList.length) % featuredEventsList.length);
     
     // Group events for timeline
     const groupedEvents = displayEvents.reduce((acc, event) => {
@@ -74,15 +92,25 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                             <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, var(--surface-secondary), transparent)', pointerEvents: 'none' }} />
                         </div>
                         <div className="event-info" style={{ display: 'flex', flexDirection: 'column', padding: '36px', background: 'var(--surface-secondary)' }}>
-                            <div className="event-type" style={{ color: 'var(--accent-color)', fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '16px' }}>
-                                ⭐ FEATURED EVENT
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                <div className="event-type" style={{ color: 'var(--accent-color)', fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', margin: 0 }}>
+                                    ⭐ FEATURED EVENT
+                                </div>
+                                {featuredEventsList.length > 1 && (
+                                    <div className="featured-controls" style={{ display: 'flex', gap: '8px' }}>
+                                        <button onClick={handlePrevFeatured} className="carousel-control" aria-label="Previous">←</button>
+                                        <button onClick={handleNextFeatured} className="carousel-control" aria-label="Next">→</button>
+                                    </div>
+                                )}
                             </div>
                             <h3 style={{ fontSize: '1.8rem', fontWeight: 950, marginBottom: '16px', lineHeight: 1.2, letterSpacing: '-0.5px' }}>
                                 {featuredEvent.title}
                             </h3>
-                            <p className="event-desc" style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '24px', flex: 1, lineHeight: 1.6 }}>
-                                {featuredEvent.description || 'No description provided.'}
-                            </p>
+                            <div className="event-desc-markdown" style={{ flex: 1, marginBottom: '24px', overflowY: 'auto', paddingRight: '12px' }}>
+                                <ReactMarkdown>
+                                    {featuredEvent.description || 'No description provided.'}
+                                </ReactMarkdown>
+                            </div>
                             <div className="event-meta" style={{ display: 'flex', gap: '20px', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', color: 'var(--text-muted)' }}>
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>📍 <span style={{ color: '#fff' }}>{featuredEvent.location || 'Online'}</span></span>
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>⏰ <span style={{ color: '#fff' }}>{formatDate(featuredEvent.date).time}</span></span>
