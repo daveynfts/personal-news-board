@@ -1,4 +1,4 @@
-import { createClient } from '@libsql/client';
+import { createClient, type InValue } from '@libsql/client';
 
 // Connect to the Turso database
 // In Vercel, these must be set in Environment Variables
@@ -31,6 +31,19 @@ async function initDb() {
         coverImage TEXT,
         xSourceUrl TEXT,
         isEditorialPick BOOLEAN DEFAULT 0,
+        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        date TEXT NOT NULL,
+        location TEXT,
+        link TEXT,
+        imageUrl TEXT,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -131,7 +144,7 @@ export async function createArticle(article: Omit<Article, 'id' | 'createdAt'>):
 
 export async function updateArticle(id: number, article: Partial<Article>): Promise<boolean> {
     const setClauses: string[] = [];
-    const args: any[] = [];
+    const args: InValue[] = [];
 
     if (article.title !== undefined) { setClauses.push('title = ?'); args.push(article.title); }
     if (article.content !== undefined) { setClauses.push('content = ?'); args.push(article.content); }
@@ -151,6 +164,69 @@ export async function updateArticle(id: number, article: Partial<Article>): Prom
 export async function deleteArticle(id: number): Promise<boolean> {
     const result = await db.execute({
         sql: 'DELETE FROM articles WHERE id = ?',
+        args: [id]
+    });
+    return result.rowsAffected > 0;
+}
+
+// --- EVENTS ---
+
+export interface CalendarEvent {
+    id?: number;
+    title: string;
+    description?: string;
+    date: string;
+    location?: string;
+    link?: string;
+    imageUrl?: string;
+    createdAt?: string;
+}
+
+export async function getAllEvents(): Promise<CalendarEvent[]> {
+    const result = await db.execute('SELECT * FROM events ORDER BY date ASC');
+    return result.rows.map(row => ({
+        id: Number(row.id),
+        title: String(row.title),
+        description: String(row.description || ''),
+        date: String(row.date),
+        location: String(row.location || ''),
+        link: String(row.link || ''),
+        imageUrl: String(row.imageUrl || ''),
+        createdAt: String(row.createdAt || ''),
+    }));
+}
+
+export async function createEvent(event: Omit<CalendarEvent, 'id' | 'createdAt'>): Promise<number> {
+    const result = await db.execute({
+        sql: 'INSERT INTO events (title, description, date, location, link, imageUrl) VALUES (?, ?, ?, ?, ?, ?)',
+        args: [event.title, event.description || '', event.date, event.location || '', event.link || '', event.imageUrl || '']
+    });
+    return Number(result.lastInsertRowid || 0);
+}
+
+export async function updateEvent(id: number, event: Partial<CalendarEvent>): Promise<boolean> {
+    const setClauses: string[] = [];
+    const args: InValue[] = [];
+
+    if (event.title !== undefined) { setClauses.push('title = ?'); args.push(event.title); }
+    if (event.description !== undefined) { setClauses.push('description = ?'); args.push(event.description); }
+    if (event.date !== undefined) { setClauses.push('date = ?'); args.push(event.date); }
+    if (event.location !== undefined) { setClauses.push('location = ?'); args.push(event.location); }
+    if (event.link !== undefined) { setClauses.push('link = ?'); args.push(event.link); }
+    if (event.imageUrl !== undefined) { setClauses.push('imageUrl = ?'); args.push(event.imageUrl); }
+
+    if (setClauses.length === 0) return false;
+
+    args.push(id);
+    const sql = `UPDATE events SET ${setClauses.join(', ')} WHERE id = ?`;
+
+    const result = await db.execute({ sql, args });
+    return result.rowsAffected > 0;
+}
+
+export async function deleteEvent(id: number): Promise<boolean> {
+    const result = await db.execute({
+        sql: 'DELETE FROM events WHERE id = ?',
         args: [id]
     });
     return result.rowsAffected > 0;

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface CoinData {
     id: string;
@@ -50,8 +51,7 @@ export default async function CryptoTicker() {
 
                     return (
                         <div key={coin.id} className="crypto-item">
-                            {/* Using standard img to avoid Next.js external domain config requirements for now */}
-                            <img
+                            <Image
                                 src={`https://assets.coincap.io/assets/icons/${coin.symbol.toLowerCase()}@2x.png`}
                                 alt={coin.symbol}
                                 width={20}
@@ -74,7 +74,7 @@ export default async function CryptoTicker() {
 
                     return (
                         <div key={`dup-${coin.id}`} className="crypto-item">
-                            <img
+                            <Image
                                 src={`https://assets.coincap.io/assets/icons/${coin.symbol.toLowerCase()}@2x.png`}
                                 alt={coin.symbol}
                                 width={20}

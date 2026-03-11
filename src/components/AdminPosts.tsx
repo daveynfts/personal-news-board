@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { convertToWebP } from '@/lib/convertToWebP';
 
 interface Post {
@@ -27,10 +27,6 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
 
-    useEffect(() => {
-        fetchPosts();
-    }, []);
-
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -50,22 +46,26 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
             } else {
                 addToast('Upload failed.', 'error');
             }
-        } catch (error) {
+        } catch {
             addToast('Error uploading file.', 'error');
         } finally {
             setUploading(false);
         }
     };
 
-    const fetchPosts = async () => {
+    const fetchPosts = useCallback(async () => {
         try {
             const res = await fetch('/api/posts');
             const data = await res.json();
             setPosts(Array.isArray(data) ? data : []);
-        } catch (err) {
+        } catch {
             addToast('Failed to sync posts.', 'error');
         }
-    };
+    }, [addToast]);
+
+    useEffect(() => {
+        fetchPosts();
+    }, [fetchPosts]);
 
     const resetForm = () => {
         setEditingId(null);

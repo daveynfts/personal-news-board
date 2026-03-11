@@ -1,30 +1,32 @@
 'use client';
 
+import Image from 'next/image';
+import { useState } from 'react';
 import type { Post } from '@/lib/db';
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop';
 
 export default function PostCard({ post }: { post: Post }) {
     const isX = post.type === 'X';
     const isNews = post.type === 'News';
-    const isBlog = post.type === 'Blog';
-
     const typeColor = isX ? 'var(--x-color)' : isNews ? 'var(--news-color)' : 'var(--blog-color)';
 
     // Fallback image if none provided
-    const displayImage = post.imageUrl || 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop';
+    const [imgSrc, setImgSrc] = useState(post.imageUrl || FALLBACK_IMAGE);
 
     return (
         <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card">
-            <div className="post-card-media">
+            <div className="post-card-media" style={{ position: 'relative' }}>
                 <div className="type-tag" style={{ backgroundColor: typeColor }}>
                     {post.type}
                 </div>
-                <img
-                    src={displayImage}
+                <Image
+                    src={imgSrc}
                     alt={post.title}
+                    fill
                     className="post-image"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop';
-                    }}
+                    style={{ objectFit: 'cover' }}
+                    onError={() => setImgSrc(FALLBACK_IMAGE)}
                 />
             </div>
             <div className="post-card-body">

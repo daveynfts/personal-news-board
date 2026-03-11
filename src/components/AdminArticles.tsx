@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { convertToWebP } from '@/lib/convertToWebP';
 
@@ -32,10 +32,6 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
     const [uploading, setUploading] = useState(false);
     const [previewMode, setPreviewMode] = useState(true);
 
-    useEffect(() => {
-        fetchArticles();
-    }, []);
-
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -55,22 +51,26 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             } else {
                 addToast('Upload failed.', 'error');
             }
-        } catch (error) {
+        } catch {
             addToast('Error uploading file.', 'error');
         } finally {
             setUploading(false);
         }
     };
 
-    const fetchArticles = async () => {
+    const fetchArticles = useCallback(async () => {
         try {
             const res = await fetch('/api/articles');
             const data = await res.json();
             setArticles(Array.isArray(data) ? data : []);
-        } catch (err) {
+        } catch {
             addToast('Failed to sync articles', 'error');
         }
-    };
+    }, [addToast]);
+
+    useEffect(() => {
+        fetchArticles();
+    }, [fetchArticles]);
 
     const resetForm = () => {
         setEditingId(null);
@@ -138,7 +138,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             } else {
                 addToast('Failed to delete article.', 'error');
             }
-        } catch (err) {
+        } catch {
             addToast('An error occurred.', 'error');
         } finally {
             setLoading(false);

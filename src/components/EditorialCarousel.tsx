@@ -22,8 +22,6 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
 
     if (!articles || articles.length === 0) return null;
 
-    const currentArticle = articles[currentIndex];
-
     const handlePrevious = () => {
         setCurrentIndex((prev) => (prev === 0 ? articles.length - 1 : prev - 1));
     };

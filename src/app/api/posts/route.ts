@@ -5,7 +5,7 @@ export async function GET() {
     try {
         const posts = await getAllPosts();
         return NextResponse.json(posts);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
     }
 }
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
         const newId = await createPost({ type, title, url, imageUrl });
         return NextResponse.json({ id: newId, success: true }, { status: 201 });
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
     }
 }
@@ -41,7 +41,7 @@ export async function DELETE(request: Request) {
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });
         }
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
     }
 }
@@ -65,7 +65,7 @@ export async function PUT(request: Request) {
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });
         }
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
     }
 }

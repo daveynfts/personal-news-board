@@ -1,6 +1,8 @@
-import { getAllPosts, getAllArticles } from '@/lib/db';
+import { getAllPosts, getAllArticles, getAllEvents } from '@/lib/db';
 import PostCard from '@/components/PostCard';
 import EditorialCarousel from '@/components/EditorialCarousel';
+import EventCalendar from '@/components/EventCalendar';
+import Container from '@/components/Container';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -13,6 +15,7 @@ export default async function Home({ searchParams }: PageProps) {
   const { filter } = await searchParams;
   const allPosts = await getAllPosts();
   const allArticles = await getAllArticles();
+  const allEvents = await getAllEvents();
 
   const filteredPosts = filter && filter !== 'all'
     ? allPosts.filter(p => p.type.toLowerCase() === filter.toLowerCase())
@@ -25,10 +28,16 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className="home-container">
-      <section className="hero">
-        <h2>Your Curated Universe.</h2>
-        <p>A personal collection of top news, insightful blogs, and interesting X threads, built for elite curation.</p>
-      </section>
+      {allEvents.length > 0 ? (
+        <Container style={{ marginTop: '40px' }}>
+          <EventCalendar events={allEvents} />
+        </Container>
+      ) : (
+        <section className="hero">
+          <h2>Your Curated Universe.</h2>
+          <p>A personal collection of top news, insightful blogs, and interesting X threads, built for elite curation.</p>
+        </section>
+      )}
 
       {/* EDITORIAL CAROUSEL */}
       {(!filter || filter === 'all') && editorialPicks.length > 0 && (

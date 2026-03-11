@@ -1,29 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 
 const TOKENS = ['₿', 'Ξ', '🌕', '🚀', '💎', '📈', '🪙', '💸', '💰', '🔥'];
 
+// Pre-generate fixed drop configs; randomness is locked at module load to avoid re-renders
+const DROP_CONFIGS = Array.from({ length: 45 }).map((_, i) => ({
+    id: i,
+    token: TOKENS[Math.floor(Math.random() * TOKENS.length)],
+    left: `${Math.random() * 100}vw`,
+    duration: `${Math.random() * 4 + 4}s`,
+    delay: `${Math.random() * 5}s`,
+    size: `${Math.random() * 1.5 + 1}rem`,
+}));
+
 export default function TokenRain() {
     const [isRaining, setIsRaining] = useState(false);
-    const [drops, setDrops] = useState<Array<{ id: number; token: string; left: string; duration: string; delay: string; size: string }>>([]);
 
-    useEffect(() => {
-        if (isRaining) {
-            // Generate 40-50 tokens
-            const newDrops = Array.from({ length: 45 }).map((_, i) => ({
-                id: i,
-                token: TOKENS[Math.floor(Math.random() * TOKENS.length)],
-                left: `${Math.random() * 100}vw`,
-                duration: `${Math.random() * 4 + 4}s`, // 4s to 8s
-                delay: `${Math.random() * 5}s`, // up to 5s delay
-                size: `${Math.random() * 1.5 + 1}rem` // 1rem to 2.5rem
-            }));
-            setDrops(newDrops);
-        } else {
-            setDrops([]);
-        }
-    }, [isRaining]);
+    const drops = useMemo(() => (isRaining ? DROP_CONFIGS : []), [isRaining]);
 
     return (
         <>

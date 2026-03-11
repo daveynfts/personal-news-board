@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import AdminPosts from '@/components/AdminPosts';
 import AdminArticles from '@/components/AdminArticles';
+import AdminEvents from '@/components/AdminEvents';
 
 export default function AdminPage() {
     const [password, setPassword] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
-    const [activeTab, setActiveTab] = useState<'posts' | 'articles'>('posts');
+    const [activeTab, setActiveTab] = useState<'posts' | 'articles' | 'events'>('posts');
     const [toasts, setToasts] = useState<{ id: string; message: string; type: 'success' | 'error' }[]>([]);
 
     const addToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -97,6 +98,12 @@ export default function AdminPage() {
                             >
                                 ✍️ Editorial Articles
                             </button>
+                            <button
+                                className={`admin-tab ${activeTab === 'events' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('events')}
+                            >
+                                📅 Events Calendar
+                            </button>
                         </div>
                     </div>
                     <div style={{ borderBottom: '1px solid var(--border-color)', marginTop: '0' }} />
@@ -104,11 +111,9 @@ export default function AdminPage() {
             </div>
 
             <div className="app-container">
-                {activeTab === 'posts' ? (
-                    <AdminPosts addToast={addToast} />
-                ) : (
-                    <AdminArticles addToast={addToast} />
-                )}
+                {activeTab === 'posts' && <AdminPosts addToast={addToast} />}
+                {activeTab === 'articles' && <AdminArticles addToast={addToast} />}
+                {activeTab === 'events' && <AdminEvents addToast={addToast} />}
             </div>
         </div>
     );
