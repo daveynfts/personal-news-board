@@ -16,21 +16,22 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
     const [location, setLocation] = useState('');
     const [link, setLink] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [timelineImageUrl, setTimelineImageUrl] = useState('');
     const [events, setEvents] = useState<CalendarEvent[]>([]);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [showConfirm, setShowConfirm] = useState<{ id: number; title: string } | null>(null);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-    const [cropFile, setCropFile] = useState<{ src: string, file: File } | null>(null);
+    const [cropFile, setCropFile] = useState<{ src: string, file: File, type: 'cover' | 'timeline' } | null>(null);
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'cover' | 'timeline' = 'cover') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         // Show cropper first
         const objUrl = URL.createObjectURL(file);
-        setCropFile({ src: objUrl, file });
+        setCropFile({ src: objUrl, file, type });
         
         e.target.value = ''; // Reset input to allow re-uploading the same file
     };
@@ -50,7 +51,11 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
 
             if (response.ok) {
                 const blob = await response.json();
-                setImageUrl(blob.url);
+                if (cropFile?.type === 'timeline') {
+                    setTimelineImageUrl(blob.url);
+                } else {
+                    setImageUrl(blob.url);
+                }
                 addToast('Image uploaded successfully.');
             } else {
                 const errData = await response.json().catch(() => ({}));
@@ -92,6 +97,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
         setLocation('');
         setLink('');
         setImageUrl('');
+        setTimelineImageUrl('');
     };
 
     const startEditing = (event: CalendarEvent) => {
@@ -110,6 +116,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
         setLocation(event.location || '');
         setLink(event.link || '');
         setImageUrl(event.imageUrl || '');
+        setTimelineImageUrl(event.timelineImageUrl || '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -130,7 +137,8 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                 date: new Date(date).toISOString(),
                 location,
                 link,
-                imageUrl
+                imageUrl,
+                timelineImageUrl
             };
 
             const res = await fetch('/api/events', {
@@ -223,7 +231,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                 <ImageCropperModal
                     imageSrc={cropFile.src}
                     fileName={cropFile.file.name}
-                    aspectRatio={16 / 9}
+                    aspectRatio={cropFile.type === 'timeline' ? 1 : 16 / 9}
                     onCropComplete={handleCropComplete}
                     onCancel={handleCropCancel}
                 />
@@ -302,7 +310,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                     </div>
 
                     <div className="form-section">
-                        <div className="form-section-title">Cover Image</div>
+                        <div className="form-section-title">Cover Image (16:9)</div>
 
                         <div className="form-group">
                             <label>Image URL</label>
@@ -317,17 +325,17 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
 
                         <input
                             type="file"
-                            onChange={handleFileUpload}
+                            onChange={(e) => handleFileUpload(e, 'cover')}
                             accept="image/*"
                             style={{ display: 'none' }}
-                            id="event-file-upload"
+                            id="event-file-upload-cover"
                             disabled={uploading}
                         />
-                        <label htmlFor="event-file-upload" className="upload-btn">
+                        <label htmlFor="event-file-upload-cover" className="upload-btn">
                             {uploading ? (
                                 <><span>⏳</span> Uploading...</>
                             ) : (
-                                <><span>↑</span> Upload Banner</>
+                                <><span>↑</span> Upload Banner (16:9)</>
                             )}
                         </label>
 
@@ -336,6 +344,46 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                 <img src={imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: '0.7rem', color: '#fff' }}>
                                     16:9 Preview
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="form-section">
+                        <div className="form-section-title">Timeline Image (1:1)</div>
+
+                        <div className="form-group">
+                            <label>Image URL</label>
+                            <input
+                                className="form-input"
+                                type="url"
+                                value={timelineImageUrl}
+                                onChange={(e) => setTimelineImageUrl(e.target.value)}
+                                placeholder="https://example.com/timeline-image.jpg"
+                            />
+                        </div>
+
+                        <input
+                            type="file"
+                            onChange={(e) => handleFileUpload(e, 'timeline')}
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="event-file-upload-timeline"
+                            disabled={uploading}
+                        />
+                        <label htmlFor="event-file-upload-timeline" className="upload-btn">
+                            {uploading ? (
+                                <><span>⏳</span> Uploading...</>
+                            ) : (
+                                <><span>↑</span> Upload Thumbnail (1:1)</>
+                            )}
+                        </label>
+
+                        {timelineImageUrl && (
+                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '1/1', width: '120px', background: '#000' }}>
+                                <img src={timelineImageUrl} alt="Preview Timeline" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{ position: 'absolute', top: '4px', right: '4px', padding: '2px 4px', background: 'rgba(0,0,0,0.6)', borderRadius: '4px', fontSize: '0.6rem', color: '#fff' }}>
+                                    1:1
                                 </div>
                             </div>
                         )}
@@ -403,9 +451,9 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                                     <button onClick={() => setShowConfirm({ id: event.id!, title: event.title })} className="delete-btn">Remove</button>
                                                 </div>
                                             </div>
-                                            {event.imageUrl && (
+                                            {(event.timelineImageUrl || event.imageUrl) && (
                                                 <div className="timeline-event-thumb">
-                                                    <img src={event.imageUrl} alt={event.title} />
+                                                    <img src={event.timelineImageUrl || event.imageUrl} alt={event.title} />
                                                 </div>
                                             )}
                                         </div>

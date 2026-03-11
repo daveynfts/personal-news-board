@@ -17,13 +17,13 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { title, description, date, location, link, imageUrl } = body;
+        const { title, description, date, location, link, imageUrl, timelineImageUrl } = body;
 
         if (!title || !date) {
             return NextResponse.json({ error: 'Title and date are required' }, { status: 400 });
         }
 
-        const id = await createEvent({ title, description, date, location, link, imageUrl });
+        const id = await createEvent({ title, description, date, location, link, imageUrl, timelineImageUrl });
         revalidatePath('/');
         return NextResponse.json({ id, success: true }, { status: 201 });
     } catch (error) {
@@ -35,13 +35,13 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
     try {
         const body = await request.json();
-        const { id, title, description, date, location, link, imageUrl } = body;
+        const { id, title, description, date, location, link, imageUrl, timelineImageUrl } = body;
 
         if (!id || !title || !date) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const success = await updateEvent(Number(id), { title, description, date, location, link, imageUrl });
+        const success = await updateEvent(Number(id), { title, description, date, location, link, imageUrl, timelineImageUrl });
         if (success) {
             revalidatePath('/');
             return NextResponse.json({ success: true });

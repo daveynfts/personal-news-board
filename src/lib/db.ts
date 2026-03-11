@@ -44,9 +44,16 @@ async function initDb() {
         location TEXT,
         link TEXT,
         imageUrl TEXT,
+        timelineImageUrl TEXT,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    try {
+        await db.execute('ALTER TABLE events ADD COLUMN timelineImageUrl TEXT');
+    } catch {
+        // Ignore if column already exists
+    }
 }
 
 // Fire and forget initialization for simpler entry
@@ -179,6 +186,7 @@ export interface CalendarEvent {
     location?: string;
     link?: string;
     imageUrl?: string;
+    timelineImageUrl?: string;
     createdAt?: string;
 }
 
@@ -192,14 +200,15 @@ export async function getAllEvents(): Promise<CalendarEvent[]> {
         location: String(row.location || ''),
         link: String(row.link || ''),
         imageUrl: String(row.imageUrl || ''),
+        timelineImageUrl: String(row.timelineImageUrl || ''),
         createdAt: String(row.createdAt || ''),
     }));
 }
 
 export async function createEvent(event: Omit<CalendarEvent, 'id' | 'createdAt'>): Promise<number> {
     const result = await db.execute({
-        sql: 'INSERT INTO events (title, description, date, location, link, imageUrl) VALUES (?, ?, ?, ?, ?, ?)',
-        args: [event.title, event.description || '', event.date, event.location || '', event.link || '', event.imageUrl || '']
+        sql: 'INSERT INTO events (title, description, date, location, link, imageUrl, timelineImageUrl) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        args: [event.title, event.description || '', event.date, event.location || '', event.link || '', event.imageUrl || '', event.timelineImageUrl || '']
     });
     return Number(result.lastInsertRowid || 0);
 }
@@ -214,6 +223,7 @@ export async function updateEvent(id: number, event: Partial<CalendarEvent>): Pr
     if (event.location !== undefined) { setClauses.push('location = ?'); args.push(event.location); }
     if (event.link !== undefined) { setClauses.push('link = ?'); args.push(event.link); }
     if (event.imageUrl !== undefined) { setClauses.push('imageUrl = ?'); args.push(event.imageUrl); }
+    if (event.timelineImageUrl !== undefined) { setClauses.push('timelineImageUrl = ?'); args.push(event.timelineImageUrl); }
 
     if (setClauses.length === 0) return false;
 

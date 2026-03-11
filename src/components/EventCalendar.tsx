@@ -147,9 +147,9 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                         )}
                                                     </div>
                                                 </div>
-                                                {event.imageUrl && (
+                                                {(event.timelineImageUrl || event.imageUrl) && (
                                                     <div className="timeline-event-thumb">
-                                                        <img src={`${event.imageUrl}?t=${new Date(event.createdAt || Date.now()).getTime()}`} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                        <img src={`${event.timelineImageUrl || event.imageUrl}?t=${new Date(event.createdAt || Date.now()).getTime()}`} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                     </div>
                                                 )}
                                             </div>
