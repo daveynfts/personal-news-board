@@ -1656,13 +1656,13 @@ a {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(40px) saturate(200%);
   -webkit-backdrop-filter: blur(40px) saturate(200%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top-color: rgba(255, 255, 255, 0.2);
   border-left-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
   padding: 40px;
   position: relative;
@@ -1677,9 +1677,9 @@ a {
   content: '';
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(70px);
   z-index: -1;
-  opacity: 0;
+  opacity: 0.35; /* ALWAYS visible but subtle */
   transition: opacity 0.8s ease;
   pointer-events: none;
 }
@@ -1709,15 +1709,15 @@ a {
 
 .upcoming-events-list:hover::before,
 .upcoming-events-list:hover::after {
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-.upcoming-events-list:hover::before {
-  animation: liquid-blob 10s infinite alternate ease-in-out;
+.upcoming-events-list::before {
+  animation: liquid-blob 15s infinite alternate ease-in-out;
 }
 
-.upcoming-events-list:hover::after {
-  animation: liquid-blob 12s infinite alternate-reverse ease-in-out;
+.upcoming-events-list::after {
+  animation: liquid-blob 18s infinite alternate-reverse ease-in-out;
 }
 
 @keyframes liquid-blob {
@@ -1964,7 +1964,7 @@ a {
   background: var(--text-muted);
   border-radius: 50%;
   z-index: 2;
-  box-shadow: 0 0 0 4px var(--bg-color);
+  box-shadow: 0 0 0 4px var(--bg-color); /* Cutout from the line */
   transition: var(--transition-smooth);
 }
 
@@ -1998,16 +1998,17 @@ a {
 }
 
 .timeline-event-card {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04); /* Brighter glass base */
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   padding: 20px;
   display: flex;
   gap: 20px;
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
 }
@@ -2070,11 +2071,11 @@ a {
 
 .timeline-event-location {
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .timeline-event-actions {
@@ -2099,8 +2100,9 @@ a {
 }
 
 .status-badge.going {
-  background: rgba(74, 222, 128, 0.15);
-  color: var(--success-color);
+  background: rgba(48, 209, 88, 0.15); /* Apple green glass */
+  color: #30d158;
+  border: 1px solid rgba(48, 209, 88, 0.3);
 }
 
 .status-badge.past {
@@ -2109,27 +2111,29 @@ a {
 }
 
 .rsvp-btn {
-  padding: 4px 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: 900;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08); /* Apple button style */
+  color: #fff;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   transition: var(--transition-smooth);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   height: max-content;
   white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .rsvp-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 1);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
 .timeline-event-thumb {
