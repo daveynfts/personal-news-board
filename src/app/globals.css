@@ -1894,6 +1894,10 @@ a {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  height: max-content;
 }
 
 .status-badge.going {
@@ -1904,6 +1908,29 @@ a {
 .status-badge.past {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
+}
+
+.rsvp-btn {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: var(--transition-smooth);
+  border: 1px solid var(--border-color);
+  height: max-content;
+}
+
+.rsvp-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .timeline-event-thumb {

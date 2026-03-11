@@ -141,7 +141,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                             {activeTab === 'upcoming' ? 'Going' : 'Ended'}
                                                         </div>
                                                         {event.link && (
-                                                            <a href={event.link} target="_blank" rel="noopener noreferrer" className="edit-btn" style={{ textDecoration: 'none', background: 'transparent', display: 'flex', alignItems: 'center', padding: '6px 16px' }}>
+                                                            <a href={event.link} target="_blank" rel="noopener noreferrer" className="rsvp-btn">
                                                                 RSVP ↗
                                                             </a>
                                                         )}
