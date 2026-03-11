@@ -72,43 +72,46 @@ export default async function Home({ searchParams }: PageProps) {
       )}
 
       {/* CURATION FEED (POSTS) */}
-      <h2 className="section-title" style={{ marginBottom: '24px', textAlign: 'center' }}>DaveyNFTs&apos; Picks</h2>
-      <div className="filter-container">
-        {categories.map((cat) => (
-          <Link
-            key={cat}
-            href={cat === 'All' ? '/' : `/?filter=${cat.toLowerCase()}`}
-            className={`filter-btn ${(!filter && cat === 'All') || filter === cat.toLowerCase() ? 'active' : ''}`}
-          >
-            {cat}
-          </Link>
-        ))}
-      </div>
+      <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
+        <h2 className="section-title" style={{ marginBottom: '32px' }}>DaveyNFTs&apos; Picks</h2>
+        
+        <div className="filter-container" style={{ justifyContent: 'flex-start', marginBottom: '32px' }}>
+          {categories.map((cat) => (
+            <Link
+              key={cat}
+              href={cat === 'All' ? '/' : `/?filter=${cat.toLowerCase()}`}
+              className={`filter-btn ${(!filter && cat === 'All') || filter === cat.toLowerCase() ? 'active' : ''}`}
+            >
+              {cat}
+            </Link>
+          ))}
+        </div>
 
-      <section className="feed" style={{ marginTop: '20px' }}>
-        {filteredPosts.length === 0 ? (
-          <div className="empty-state">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px', opacity: 0.5 }}>
-              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="9" x2="9" y1="21" y2="9" />
-            </svg>
-            <p>No posts found for this category. <br />Add some magic in the admin panel!</p>
-          </div>
-        ) : (
-          <div className="rainbow-glow-container">
-            <div className="marquee-wrapper">
-              <div className="marquee-content left-to-right">
-                {filteredPosts.map((post) => (
-                  <PostCard key={post.id} post={post} />
-                ))}
-                {/* Duplicate set for infinite scroll effect */}
-                {filteredPosts.map((post) => (
-                  <PostCard key={`dup-${post.id}`} post={post} />
-                ))}
+        <section className="feed">
+          {filteredPosts.length === 0 ? (
+            <div className="empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px', opacity: 0.5 }}>
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="9" x2="9" y1="21" y2="9" />
+              </svg>
+              <p>No posts found for this category. <br />Add some magic in the admin panel!</p>
+            </div>
+          ) : (
+            <div className="rainbow-glow-container">
+              <div className="marquee-wrapper">
+                <div className="marquee-content left-to-right">
+                  {filteredPosts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                  {/* Duplicate set for infinite scroll effect */}
+                  {filteredPosts.map((post) => (
+                    <PostCard key={`dup-${post.id}`} post={post} />
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </section>
+          )}
+        </section>
+      </Container>
     </div>
   );
 }
