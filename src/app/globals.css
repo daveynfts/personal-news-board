@@ -1898,6 +1898,7 @@ a {
   display: inline-flex;
   align-items: center;
   height: max-content;
+  white-space: nowrap;
 }
 
 .status-badge.going {
@@ -1925,6 +1926,7 @@ a {
   transition: var(--transition-smooth);
   border: 1px solid var(--border-color);
   height: max-content;
+  white-space: nowrap;
 }
 
 .rsvp-btn:hover {
@@ -1934,19 +1936,22 @@ a {
 }
 
 .timeline-event-thumb {
-  width: 140px;
-  aspect-ratio: 16 / 9;
+  width: 100px;
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: var(--surface-secondary);
+  background: #000;
   border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .timeline-event-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s;
 }
 
