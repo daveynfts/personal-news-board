@@ -81,9 +81,8 @@ a {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(3, 4, 6, 0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--glass-border);
+  background: var(--bg-color); /* Removed blur as requested */
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo {
@@ -419,8 +418,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(3, 4, 6, 0.92);
-  backdrop-filter: blur(20px);
+  background: var(--bg-color); /* Removed blur here as well */
   border-bottom: 1px solid var(--border-color);
   padding: 0;
   margin-bottom: 0;
@@ -1415,6 +1413,47 @@ a {
   transition: var(--transition-smooth);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
   position: relative;
+  z-index: 1;
+}
+
+/* Glowing Rotating Line around Featured Event */
+.featured-event-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 40%,
+    var(--accent-color) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: calc(var(--radius-lg) + 2px);
+  z-index: -2;
+  animation: rotate-glow 4s linear infinite;
+  opacity: 0.8;
+}
+
+.featured-event-card::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: var(--surface-secondary);
+  border-radius: calc(var(--radius-lg) - 1px);
+  z-index: -1;
+}
+
+@keyframes rotate-glow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .featured-event-card:hover {
