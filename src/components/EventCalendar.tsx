@@ -98,8 +98,12 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 </div>
                                 {featuredEventsList.length > 1 && (
                                     <div className="featured-controls" style={{ display: 'flex', gap: '8px' }}>
-                                        <button onClick={handlePrevFeatured} className="carousel-control" aria-label="Previous">←</button>
-                                        <button onClick={handleNextFeatured} className="carousel-control" aria-label="Next">→</button>
+                                        <button onClick={handlePrevFeatured} className="carousel-control" aria-label="Previous">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                                        </button>
+                                        <button onClick={handleNextFeatured} className="carousel-control" aria-label="Next">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                                        </button>
                                     </div>
                                 )}
                             </div>

@@ -1098,9 +1098,30 @@ a {
 }
 
 /* === CAROUSEL CONTROLS === */
+.carousel-control {
+  width: 32px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1c1c1e;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .carousel-control:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: translateY(-50%) scale(1.05) !important;
+  background: #ffffff;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-control:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* === ARTICLE FULL PAGE === */
