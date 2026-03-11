@@ -89,9 +89,9 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 <span className="month">{formatDate(featuredEvent.date).month}</span>
                                 <span className="day">{formatDate(featuredEvent.date).day}</span>
                             </div>
-                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, var(--surface-secondary), transparent)', pointerEvents: 'none' }} />
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, rgba(0,0,0,0.4), transparent)', pointerEvents: 'none' }} />
                         </div>
-                        <div className="event-info" style={{ display: 'flex', flexDirection: 'column', padding: '36px', background: 'var(--surface-secondary)' }}>
+                        <div className="event-info" style={{ display: 'flex', flexDirection: 'column', padding: '36px', background: 'transparent' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                                 <div className="event-type" style={{ color: 'var(--accent-color)', fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', margin: 0 }}>
                                     ⭐ FEATURED EVENT
