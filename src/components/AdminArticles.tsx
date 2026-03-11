@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { convertToWebP } from '@/lib/convertToWebP';
+import ImageCropperModal from './ImageCropperModal';
 
 interface Article {
     id: number;
@@ -31,14 +32,27 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [previewMode, setPreviewMode] = useState(true);
+    const [cropFile, setCropFile] = useState<{ src: string, file: File } | null>(null);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        // Show cropper first
+        const objUrl = URL.createObjectURL(file);
+        setCropFile({ src: objUrl, file });
+        
+        e.target.value = ''; // Reset input to allow re-uploading the same file
+    };
+
+    const handleCropComplete = async (croppedFile: File) => {
+        if (cropFile) {
+            URL.revokeObjectURL(cropFile.src);
+        }
+        setCropFile(null);
         setUploading(true);
         try {
-            const webpFile = await convertToWebP(file);
+            const webpFile = await convertToWebP(croppedFile);
             const response = await fetch(`/api/upload?filename=${encodeURIComponent(webpFile.name)}`, {
                 method: 'POST',
                 body: webpFile,
@@ -56,8 +70,14 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             addToast(`Error uploading: ${err instanceof Error ? err.message : 'Unknown'}`, 'error');
         } finally {
             setUploading(false);
-            e.target.value = ''; // Reset input to allow re-uploading the same file
         }
+    };
+
+    const handleCropCancel = () => {
+        if (cropFile) {
+            URL.revokeObjectURL(cropFile.src);
+        }
+        setCropFile(null);
     };
 
     const fetchArticles = useCallback(async () => {
@@ -170,6 +190,16 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {cropFile && (
+                <ImageCropperModal
+                    imageSrc={cropFile.src}
+                    fileName={cropFile.file.name}
+                    aspectRatio={16 / 9}
+                    onCropComplete={handleCropComplete}
+                    onCancel={handleCropCancel}
+                />
             )}
 
             {/* LEFT: FORM */}
