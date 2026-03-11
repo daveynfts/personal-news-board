@@ -39,7 +39,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
         setUploading(true);
         try {
             const webpFile = await convertToWebP(file);
-            const response = await fetch(`/api/upload?filename=${webpFile.name}`, {
+            const response = await fetch(`/api/upload?filename=${encodeURIComponent(webpFile.name)}`, {
                 method: 'POST',
                 body: webpFile,
             });
@@ -49,12 +49,14 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                 setCoverImage(blob.url);
                 addToast('Image uploaded successfully.');
             } else {
-                addToast('Upload failed.', 'error');
+                const errData = await response.json().catch(() => ({}));
+                addToast(`Upload failed: ${errData.error || response.statusText}`, 'error');
             }
-        } catch {
-            addToast('Error uploading file.', 'error');
+        } catch (err: unknown) {
+            addToast(`Error uploading: ${err instanceof Error ? err.message : 'Unknown'}`, 'error');
         } finally {
             setUploading(false);
+            e.target.value = ''; // Reset input to allow re-uploading the same file
         }
     };
 
