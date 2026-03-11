@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Post } from '@/lib/db';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop';
@@ -12,7 +12,13 @@ export default function PostCard({ post }: { post: Post }) {
     const typeColor = isX ? 'var(--x-color)' : isNews ? 'var(--news-color)' : 'var(--blog-color)';
 
     // Fallback image if none provided
-    const [imgSrc, setImgSrc] = useState(post.imageUrl || FALLBACK_IMAGE);
+    const [imgError, setImgError] = useState(false);
+
+    useEffect(() => {
+        setImgError(false);
+    }, [post.imageUrl]);
+
+    const displayImg = !imgError && post.imageUrl ? post.imageUrl : FALLBACK_IMAGE;
 
     return (
         <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card">
@@ -21,12 +27,12 @@ export default function PostCard({ post }: { post: Post }) {
                     {post.type}
                 </div>
                 <Image
-                    src={imgSrc}
+                    src={displayImg}
                     alt={post.title}
                     fill
                     className="post-image"
                     style={{ objectFit: 'cover' }}
-                    onError={() => setImgSrc(FALLBACK_IMAGE)}
+                    onError={() => setImgError(true)}
                 />
             </div>
             <div className="post-card-body">
