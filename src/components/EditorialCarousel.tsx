@@ -58,7 +58,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                             <div className="carousel-bg" style={{
                                 position: 'absolute',
                                 top: 0, left: 0, right: 0, bottom: 0,
-                                backgroundImage: `url(${article.coverImage || '/placeholder.jpg'})`,
+                                backgroundImage: `url(${article.coverImage ? `${article.coverImage}?t=${new Date(article.createdAt || Date.now()).getTime()}` : '/placeholder.jpg'})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 zIndex: 1

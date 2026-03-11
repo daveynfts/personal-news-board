@@ -13,10 +13,15 @@ export default function PostCard({ post }: { post: Post }) {
 
     // Fallback image if none provided
     const [imgError, setImgError] = useState(false);
+    const [lastUrl, setLastUrl] = useState(post.imageUrl);
 
     useEffect(() => {
-        setImgError(false);
-    }, [post.imageUrl]);
+        // Reset error if URL changed
+        if (post.imageUrl !== lastUrl) {
+            setImgError(false);
+            setLastUrl(post.imageUrl);
+        }
+    }, [post.imageUrl, lastUrl]);
 
     const displayImg = !imgError && post.imageUrl ? post.imageUrl : FALLBACK_IMAGE;
 

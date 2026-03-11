@@ -61,7 +61,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     <div className="featured-event-card trans-up" style={{ alignSelf: 'start', position: 'sticky', top: '120px' }}>
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
-                                <img src={featuredEvent.imageUrl} alt={featuredEvent.title} />
+                                <img src={`${featuredEvent.imageUrl}?t=${new Date(featuredEvent.createdAt || Date.now()).getTime()}`} alt={featuredEvent.title} />
                             ) : (
                                 <div className="event-image-placeholder">
                                     <span>📅</span>
@@ -149,7 +149,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                 </div>
                                                 {event.imageUrl && (
                                                     <div className="timeline-event-thumb">
-                                                        <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                        <img src={`${event.imageUrl}?t=${new Date(event.createdAt || Date.now()).getTime()}`} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                     </div>
                                                 )}
                                             </div>

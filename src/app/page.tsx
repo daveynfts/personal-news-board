@@ -1,4 +1,5 @@
 import { getAllPosts, getAllArticles, getAllEvents } from '@/lib/db';
+import { unstable_noStore as noStore } from 'next/cache';
 import PostCard from '@/components/PostCard';
 import EditorialCarousel from '@/components/EditorialCarousel';
 import EventCalendar from '@/components/EventCalendar';
@@ -12,6 +13,7 @@ interface PageProps {
 }
 
 export default async function Home({ searchParams }: PageProps) {
+  noStore();
   const { filter } = await searchParams;
   const allPosts = await getAllPosts();
   const allArticles = await getAllArticles();
