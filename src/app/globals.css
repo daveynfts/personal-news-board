@@ -1875,13 +1875,13 @@ a {
   background: var(--text-muted);
   border-radius: 50%;
   z-index: 2;
-  box-shadow: 0 0 0 4px var(--surface-color);
+  box-shadow: 0 0 0 4px var(--bg-color);
   transition: var(--transition-smooth);
 }
 
 .timeline-group:hover .timeline-dot {
   background: var(--accent-color);
-  box-shadow: 0 0 0 4px rgba(243, 186, 47, 0.2);
+  box-shadow: 0 0 0 4px var(--accent-glow);
 }
 
 .timeline-date-text {
@@ -1909,20 +1909,39 @@ a {
 }
 
 .timeline-event-card {
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 20px;
   display: flex;
   gap: 20px;
-  transition: var(--transition-smooth);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-event-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .timeline-event-card:hover {
-  background: var(--surface-hover);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateX(4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.timeline-event-card:hover::before {
+  opacity: 1;
 }
 
 .timeline-event-content {
