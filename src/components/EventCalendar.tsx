@@ -73,8 +73,13 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     return (
         <section className="event-calendar-section">
+            <div className="section-header-premium trans-up">
+                <h2 className="section-title">Events & Timeline</h2>
+                <div className="section-divider"></div>
+            </div>
+
             <div className="event-calendar-grid">
-                {/* Featured Event Card */}
+                {/* Left: Featured - No more internal title, it's now in the header or shared area if needed */}
                 {featuredEvent && (
                     <div key={featuredEvent.id} className="featured-event-card trans-up">
                         <div className="event-image">
@@ -128,21 +133,19 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 </a>
                             )}
                         </div>
-
                     </div>
                 )}
                 
-                {/* Timeline Side */}
+                {/* Right: Timeline Side */}
                 <div className="upcoming-events-list trans-up">
-                    <div className="manage-header" style={{ marginBottom: '32px' }}>
-                        <div>
-                            <h2 style={{ margin: 0, fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.05em', color: '#fff', background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0.6))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Timeline</h2>
-                            <div className="timeline-tabs">
-                                <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming</button>
-                                <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
-                            </div>
+                    <div className="manage-header">
+                        <h2 className="timeline-section-title">Timeline</h2>
+                        <div className="timeline-tabs">
+                            <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming</button>
+                            <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
                         </div>
                     </div>
+
 
 
                     <div className="timeline-wrapper">
