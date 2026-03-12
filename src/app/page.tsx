@@ -50,26 +50,31 @@ export default async function Home({ searchParams }: PageProps) {
 
       {/* ARTICLE ARCHIVE */}
       {(!filter || filter === 'all') && standardArticles.length > 0 && (
-        <section className="articles-archive" style={{ margin: '0 auto 60px', width: '100%', maxWidth: '1200px' }}>
-          <h2 className="section-title" style={{ marginBottom: '24px' }}>Latest Features</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-            {standardArticles.map(article => (
-              <Link href={`/article/${article.id}`} key={article.id} style={{ textDecoration: 'none' }}>
-                <div className="post-card trans-up" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  {article.coverImage && (
-                    <div style={{ height: '160px', width: '100%', backgroundImage: `url(${article.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', borderBottom: '1px solid var(--border-color)' }} />
-                  )}
-                  <div className="post-content" style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <span className="type-tag" style={{ background: 'var(--text-color)', color: 'var(--bg-color)', width: 'fit-content', marginBottom: '12px' }}>Editorial</span>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '8px', color: '#fff' }}>{article.title}</h3>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 'auto' }}>
-                      {new Date(article.createdAt || '').toLocaleDateString()}
-                    </span>
+        <section className="articles-archive">
+          <Container>
+            <h2 className="section-title">Latest Features</h2>
+            <div className="grid-auto-300">
+              {standardArticles.map(article => (
+                <Link href={`/article/${article.id}`} key={article.id} style={{ textDecoration: 'none' }}>
+                  <div className="post-card">
+                    {article.coverImage && (
+                      <div 
+                        className="feature-card-media"
+                        style={{ backgroundImage: `url(${article.coverImage})` }} 
+                      />
+                    )}
+                    <div className="post-card-body">
+                      <span className="type-tag" style={{ borderLeft: '4px solid var(--blog-color)', position: 'static', marginBottom: '16px', display: 'inline-block' }}>Editorial</span>
+                      <h3 className="post-title">{article.title}</h3>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 'auto' }}>
+                        {new Date(article.createdAt || '').toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          </Container>
         </section>
       )}
 

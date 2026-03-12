@@ -76,7 +76,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
             <div className="event-calendar-grid">
                 {/* Featured Event Card */}
                 {featuredEvent && (
-                    <div key={featuredEvent.id} className="featured-event-card trans-up fade-in-section" style={{ alignSelf: 'start', position: 'sticky', top: '120px', animation: 'fadeIn 0.6s ease-out' }}>
+                    <div key={featuredEvent.id} className="featured-event-card trans-up">
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
                                 <img src={`${featuredEvent.imageUrl}?t=${new Date(featuredEvent.createdAt || Date.now()).getTime()}`} alt={featuredEvent.title} />
@@ -89,15 +89,14 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 <span className="month">{formatDate(featuredEvent.date).month}</span>
                                 <span className="day">{formatDate(featuredEvent.date).day}</span>
                             </div>
-                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, rgba(0,0,0,0.4), transparent)', pointerEvents: 'none' }} />
                         </div>
-                        <div className="event-info" style={{ display: 'flex', flexDirection: 'column', padding: '36px', background: 'transparent' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                <div className="event-type" style={{ color: 'var(--accent-color)', fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', margin: 0 }}>
+                        <div className="event-info">
+                            <div className="event-info-header">
+                                <div className="event-type">
                                     ⭐ FEATURED EVENT
                                 </div>
                                 {featuredEventsList.length > 1 && (
-                                    <div className="featured-controls" style={{ display: 'flex', gap: '8px' }}>
+                                    <div className="featured-controls">
                                         <button onClick={handlePrevFeatured} className="carousel-control" aria-label="Previous">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                                         </button>
@@ -107,20 +106,20 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                     </div>
                                 )}
                             </div>
-                            <h3 style={{ fontSize: '1.8rem', fontWeight: 950, marginBottom: '16px', lineHeight: 1.2, letterSpacing: '-0.5px' }}>
+                            <h3 className="event-title">
                                 {featuredEvent.title}
                             </h3>
-                            <div className="event-desc-markdown" style={{ flex: 1, marginBottom: '24px', overflowY: 'auto', paddingRight: '12px' }}>
+                            <div className="event-desc-markdown">
                                 <ReactMarkdown>
                                     {featuredEvent.description || 'No description provided.'}
                                 </ReactMarkdown>
                             </div>
-                            <div className="event-meta" style={{ display: 'flex', gap: '20px', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', color: 'var(--text-muted)' }}>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>📍 <span style={{ color: '#fff' }}>{featuredEvent.location || 'Online'}</span></span>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>⏰ <span style={{ color: '#fff' }}>{formatDate(featuredEvent.date).time}</span></span>
+                            <div className="event-meta">
+                                <span>📍 {featuredEvent.location || 'Online'}</span>
+                                <span>⏰ {formatDate(featuredEvent.date).time}</span>
                             </div>
                             {featuredEvent.link && (
-                                <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="submit-btn" style={{ textDecoration: 'none', width: '100%', padding: '12px 24px', borderRadius: '12px', fontSize: '0.9rem' }}>
+                                <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="submit-btn" style={{ marginTop: 'auto' }}>
                                     Register Now
                                 </a>
                             )}
@@ -130,11 +129,11 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                 
                 {/* Timeline List */}
                 <div className="upcoming-events-list">
-                    <div className="manage-header" style={{ marginBottom: '32px', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
+                    <div className="manage-header">
                         <div>
-                            <h2 style={{ fontSize: '1.8rem', fontWeight: 950, letterSpacing: '-0.8px', color: '#fff', margin: 0 }}>Events Timeline</h2>
+                            <h2 className="section-title" style={{ margin: 0 }}>Events Timeline</h2>
                         </div>
-                        <div className="timeline-tabs" style={{ margin: 0 }}>
+                        <div className="timeline-tabs">
                             <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming</button>
                             <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
                         </div>

@@ -7,7 +7,7 @@ import Container from './Container';
 export default function Header() {
   return (
     <header className="app-header">
-      <Container className="header-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Container className="header-inner">
         <div className="logo">
           <div className="logo-icon">
             <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
