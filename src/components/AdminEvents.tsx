@@ -207,23 +207,24 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
 
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>📅</div>
-                        <h3 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 900 }}>Remove Event?</h3>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1rem', lineHeight: 1.5 }}>
+                    <div className="apple-modal" onClick={e => e.stopPropagation()}>
+                        <div style={{ fontSize: '3.5rem', marginBottom: '24px' }}>📅</div>
+                        <h3 style={{ fontSize: '1.75rem', marginBottom: '12px', fontWeight: 900, background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Remove Event?</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1.05rem', lineHeight: 1.5 }}>
                             You are about to remove <br/>
                             <strong style={{ color: '#fff' }}>&quot;{showConfirm.title}&quot;</strong>
                         </p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '32px' }}>This action is irreversible.</p>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                            <button className="edit-btn" style={{ padding: '14px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
-                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px' }} onClick={handleDelete} disabled={loading}>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '32px' }}>This action is irreversible.</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                            <button className="edit-btn" style={{ padding: '16px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
+                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '16px', marginTop: 0 }} onClick={handleDelete} disabled={loading}>
                                 {loading ? 'Removing...' : 'Remove'}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
 
             {cropFile && (
                 <ImageCropperModal

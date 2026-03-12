@@ -64,7 +64,7 @@ export default async function Home({ searchParams }: PageProps) {
                       />
                     )}
                     <div className="post-card-body">
-                      <span className="type-tag" style={{ borderLeft: '4px solid var(--blog-color)', position: 'static', marginBottom: '16px', display: 'inline-block' }}>Editorial</span>
+                      <span className="type-tag" style={{ background: 'var(--blog-color)', position: 'static', marginBottom: '16px', display: 'inline-block' }}>Editorial</span>
                       <h3 className="post-title">{article.title}</h3>
                       <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 'auto' }}>
                         {new Date(article.createdAt || '').toLocaleDateString()}
@@ -82,7 +82,7 @@ export default async function Home({ searchParams }: PageProps) {
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
         <h2 className="section-title" style={{ marginBottom: '32px' }}>DaveyNFTs&apos; Picks</h2>
         
-        <div className="filter-container" style={{ justifyContent: 'flex-start', marginBottom: '32px' }}>
+        <div className="filter-container" style={{ margin: '0 auto 48px' }}>
           {categories.map((cat) => (
             <Link
               key={cat}

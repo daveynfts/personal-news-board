@@ -119,7 +119,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 <span>⏰ {formatDate(featuredEvent.date).time}</span>
                             </div>
                             {featuredEvent.link && (
-                                <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="submit-btn" style={{ marginTop: 'auto' }}>
+                                <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="event-main-btn">
                                     Register Now
                                 </a>
                             )}

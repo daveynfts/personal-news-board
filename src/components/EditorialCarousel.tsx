@@ -36,7 +36,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
             <Container>
                 <h2 className="section-title">Editorial Picks</h2>
 
-                <div className="carousel-wrapper">
+                <div className="editorial-carousel-premium">
                     <div className="carousel-slides" style={{
                         display: 'flex',
                         width: '100%',
@@ -54,47 +54,21 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     zIndex: 1
-                                }}>
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0, left: 0, right: 0, bottom: 0,
-                                        background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)'
-                                    }} />
-                                </div>
+                                }} />
 
                                 {/* Content */}
-                                <div className="carousel-content">
-                                    <span style={{
-                                        display: 'inline-block',
-                                        padding: '6px 14px',
-                                        background: 'rgba(255,255,255,0.1)',
-                                        backdropFilter: 'blur(8px)',
-                                        border: '1px solid rgba(255,255,255,0.2)',
-                                        color: '#fff',
-                                        fontWeight: 800,
-                                        fontSize: '0.7rem',
-                                        borderRadius: '40px',
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '0.1em',
-                                        marginBottom: '16px'
-                                    }}>
+                                <div className="carousel-slide-content">
+                                    <span className="carousel-tag">
                                         Featured Article
                                     </span>
 
                                     <Link href={`/article/${article.id}`} style={{ textDecoration: 'none' }}>
-                                        <h3 style={{
-                                            fontSize: '3rem',
-                                            fontWeight: 800,
-                                            color: '#fff',
-                                            margin: '0 0 16px',
-                                            lineHeight: 1.1,
-                                            letterSpacing: '-0.04em'
-                                        }}>
+                                        <h3 className="carousel-title">
                                             {article.title}
                                         </h3>
                                     </Link>
 
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '24px', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
+                                    <div className="carousel-footer">
                                         <span>{new Date(article.createdAt || '').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                         {article.xSourceUrl && (
                                             <a href={article.xSourceUrl} target="_blank" rel="noopener noreferrer" style={{
@@ -111,20 +85,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                                                 Source X
                                             </a>
                                         )}
-                                        <Link href={`/article/${article.id}`} style={{
-                                            marginLeft: 'auto',
-                                            color: '#fff',
-                                            fontWeight: 700,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '8px',
-                                            textDecoration: 'none',
-                                            background: 'rgba(255,255,255,0.15)',
-                                            padding: '8px 20px',
-                                            borderRadius: '40px',
-                                            backdropFilter: 'blur(8px)',
-                                            border: '1px solid rgba(255,255,255,0.2)'
-                                        }}>
+                                        <Link href={`/article/${article.id}`} className="carousel-read-btn">
                                             Read Article <span style={{ fontSize: '1.2rem' }}>→</span>
                                         </Link>
                                     </div>
@@ -136,21 +97,15 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                     {/* Controls */}
                     {articles.length > 1 && (
                         <>
-                            <button onClick={handlePrevious} className="carousel-control prev" style={{
+                            <button onClick={handlePrevious} className="carousel-nav-btn prev" style={{
                                 position: 'absolute', top: '50%', left: '32px', transform: 'translateY(-50%)',
-                                width: '56px', height: '56px', borderRadius: '50%',
-                                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
-                                color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                cursor: 'pointer', zIndex: 20, backdropFilter: 'blur(12px)', transition: 'var(--transition-premium)'
+                                zIndex: 20
                             }} aria-label="Previous Article">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                             </button>
-                            <button onClick={handleNext} className="carousel-control next" style={{
+                            <button onClick={handleNext} className="carousel-nav-btn next" style={{
                                 position: 'absolute', top: '50%', right: '32px', transform: 'translateY(-50%)',
-                                width: '56px', height: '56px', borderRadius: '50%',
-                                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
-                                color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                cursor: 'pointer', zIndex: 20, backdropFilter: 'blur(12px)', transition: 'var(--transition-premium)'
+                                zIndex: 20
                             }} aria-label="Next Article">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                             </button>
@@ -160,7 +115,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                     {/* Indicators */}
                     {articles.length > 1 && (
                         <div style={{
-                            position: 'absolute', bottom: '32px', left: '48px',
+                            position: 'absolute', bottom: '32px', left: '60px',
                             display: 'flex', gap: '8px', zIndex: 20
                         }}>
                             {articles.map((_, idx) => (
@@ -176,4 +131,5 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
             </Container>
         </div>
     );
+
 }

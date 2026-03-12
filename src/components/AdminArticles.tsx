@@ -172,23 +172,24 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
         <div className="admin-page-layout trans-enter">
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🗑️</div>
-                        <h3 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 900 }}>Delete Article?</h3>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1rem', lineHeight: 1.5 }}>
+                    <div className="apple-modal" onClick={e => e.stopPropagation()}>
+                        <div style={{ fontSize: '3.5rem', marginBottom: '24px' }}>🗑️</div>
+                        <h3 style={{ fontSize: '1.75rem', marginBottom: '12px', fontWeight: 900, background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Delete Article?</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1.05rem', lineHeight: 1.5 }}>
                             You are about to permanently delete <br/>
                             <strong style={{ color: '#fff' }}>&quot;{showConfirm.title}&quot;</strong>
                         </p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '32px' }}>This action cannot be undone.</p>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                            <button className="edit-btn" style={{ padding: '14px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
-                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px' }} onClick={handleDelete} disabled={loading}>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '32px' }}>This action cannot be undone.</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                            <button className="edit-btn" style={{ padding: '16px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
+                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '16px', marginTop: 0 }} onClick={handleDelete} disabled={loading}>
                                 {loading ? 'Deleting...' : 'Delete'}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
 
             {cropFile && (
                 <ImageCropperModal
@@ -267,31 +268,25 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                             )}
                         </div>
 
-                        <div style={{ 
-                            padding: '16px', 
-                            background: isEditorialPick ? 'rgba(0, 122, 255, 0.05)' : 'rgba(255, 255, 255, 0.02)', 
-                            borderRadius: '16px',
-                            border: `1px solid ${isEditorialPick ? 'rgba(0, 122, 255, 0.3)' : 'rgba(255, 255, 255, 0.05)'}`,
-                            transition: 'var(--transition-premium)'
-                        }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
+                        <div className={`editorial-toggle-container ${isEditorialPick ? 'active' : ''}`}>
+                            <label>
                                 <input
                                     type="checkbox"
-                                    id="editorialPick"
+                                    className="editorial-toggle-checkbox"
                                     checked={isEditorialPick}
                                     onChange={(e) => setIsEditorialPick(e.target.checked)}
-                                    style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)', cursor: 'pointer' }}
                                 />
                                 <div>
-                                    <span style={{ fontWeight: 800, color: isEditorialPick ? 'var(--accent-color)' : '#fff', fontSize: '0.9rem' }}>
+                                    <span style={{ fontWeight: 800, color: isEditorialPick ? 'var(--accent-color)' : '#fff', fontSize: '1rem', letterSpacing: '-0.02em' }}>
                                         ★ Editorial Pick
                                     </span>
-                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px', margin: 0 }}>
-                                        Featured in hero carousel
+                                    <p style={{ fontSize: '0.8rem', color: isEditorialPick ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)', marginTop: '2px', margin: 0 }}>
+                                        Push to featured hero carousel
                                     </p>
                                 </div>
                             </label>
                         </div>
+
 
                         <div className="form-group">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
