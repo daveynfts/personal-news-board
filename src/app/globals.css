@@ -1754,19 +1754,22 @@ a {
 }
 
 .featured-event-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.2);
+  border-left-color: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-xl);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: var(--transition-premium);
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   z-index: 1;
 }
+
 
 .featured-event-card::before {
   content: '';
@@ -1786,10 +1789,11 @@ a {
   border-radius: 50%;
   filter: blur(80px);
   z-index: -1;
-  opacity: 0;
+  opacity: 0.35; /* Matched with right section */
   transition: opacity 0.8s ease;
   pointer-events: none;
 }
+
 
 .featured-event-card::before {
   width: 400px;
@@ -1809,8 +1813,9 @@ a {
 
 .featured-event-card:hover::before,
 .featured-event-card:hover::after {
-  opacity: 0.8;
+  opacity: 0.85;
 }
+
 
 .featured-event-card:hover::before {
   animation: liquid-blob 10s infinite alternate ease-in-out;
@@ -1882,9 +1887,10 @@ a {
 }
 
 .featured-event-card .event-info {
-  padding: 40px;
+  padding: 32px; /* Matched with upcoming-events-list padding */
   flex: 1;
 }
+
 
 .event-type {
   font-size: 0.75rem;
@@ -2004,13 +2010,14 @@ a {
   border-top-color: rgba(255, 255, 255, 0.2);
   border-left-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl); /* Matched with left section */
   padding: 32px;
   position: relative;
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   z-index: 1;
 }
+
 
 /* Colorful animated glow blobs behind the content for liquid effect */
 .upcoming-events-list::before,
