@@ -92,8 +92,8 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                         </div>
                         <div className="event-info">
                             <div className="event-info-header">
-                                <div className="event-type">
-                                    ⭐ FEATURED EVENT
+                                <div className="event-type-badge">
+                                    <span>⭐</span> FEATURED EVENT
                                 </div>
                                 {featuredEventsList.length > 1 && (
                                     <div className="featured-controls">
@@ -114,9 +114,13 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                     {featuredEvent.description || 'No description provided.'}
                                 </ReactMarkdown>
                             </div>
-                            <div className="event-meta">
-                                <span>📍 {featuredEvent.location || 'Online'}</span>
-                                <span>⏰ {formatDate(featuredEvent.date).time}</span>
+                            <div className="event-meta-premium">
+                                <div className="meta-item-badge">
+                                    📍 <span>{featuredEvent.location || 'Online'}</span>
+                                </div>
+                                <div className="meta-item-badge">
+                                    ⏰ <span>{formatDate(featuredEvent.date).time}</span>
+                                </div>
                             </div>
                             {featuredEvent.link && (
                                 <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="event-main-btn">
@@ -124,20 +128,22 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 </a>
                             )}
                         </div>
+
                     </div>
                 )}
                 
-                {/* Timeline List */}
-                <div className="upcoming-events-list">
-                    <div className="manage-header">
+                {/* Timeline Side */}
+                <div className="upcoming-events-list trans-up">
+                    <div className="manage-header" style={{ marginBottom: '32px' }}>
                         <div>
-                            <h2 className="section-title" style={{ margin: 0 }}>Events Timeline</h2>
-                        </div>
-                        <div className="timeline-tabs">
-                            <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming</button>
-                            <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
+                            <h2 style={{ margin: 0, fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.05em', color: '#fff', background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0.6))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Timeline</h2>
+                            <div className="timeline-tabs">
+                                <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming</button>
+                                <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
+                            </div>
                         </div>
                     </div>
+
 
                     <div className="timeline-wrapper">
                         {displayEvents.length === 0 ? (
