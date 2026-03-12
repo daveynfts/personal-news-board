@@ -40,25 +40,25 @@ export default function AdminPage() {
                         </div>
                     ))}
                 </div>
-                <div className="admin-card" style={{ width: '100%', maxWidth: '420px' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🔐</div>
-                        <h2 style={{ fontSize: '1.6rem', marginBottom: '8px', margin: 0 }}>Security Gate</h2>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '8px' }}>Restricted access. Authorized entities only.</p>
+                <div className="admin-card" style={{ maxWidth: '420px', textAlign: 'center' }}>
+                    <div style={{ marginBottom: '32px' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔐</div>
+                        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>Security Gate</h2>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Authorized entities only. Enter access key.</p>
                     </div>
                     <form onSubmit={checkPassword} className="admin-form">
-                        <div className="form-group">
+                        <div className="form-group" style={{ textAlign: 'left' }}>
                             <label>Internal Key</label>
                             <input
                                 className="form-input"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your access key..."
+                                placeholder="••••••••"
                                 autoFocus
                             />
                         </div>
-                        <button type="submit" className="submit-btn" style={{ marginTop: '8px' }}>🚀 Verify Identity</button>
+                        <button type="submit" className="submit-btn" style={{ width: '100%', marginTop: '8px' }}>🚀 Verify Identity</button>
                     </form>
                 </div>
             </div>
@@ -78,35 +78,34 @@ export default function AdminPage() {
 
             <div className="admin-header-tabs trans-enter">
                 <div className="app-container">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ paddingTop: '16px' }}>
-                            <h1 style={{ fontSize: '1.1rem', fontWeight: 900, letterSpacing: '-0.3px', color: '#fff', margin: 0 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0' }}>
+                        <div>
+                            <h1 style={{ fontSize: '1.2rem', fontWeight: 900, letterSpacing: '-0.5px', color: '#fff', margin: 0 }}>
                                 🛸 DaveyNFTs <span style={{ color: 'var(--accent-color)' }}>Admin</span>
                             </h1>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Content Management Console</p>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>Management Console</p>
                         </div>
-                        <div className="admin-tabs" style={{ borderBottom: 'none', marginBottom: 0, paddingBottom: 0, paddingTop: '16px' }}>
+                        <div className="admin-tabs">
                             <button
                                 className={`admin-tab ${activeTab === 'posts' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('posts')}
                             >
-                                📌 Short-form Curation
+                                📌 Posts
                             </button>
                             <button
                                 className={`admin-tab ${activeTab === 'articles' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('articles')}
                             >
-                                ✍️ Editorial Articles
+                                ✍️ Editorial
                             </button>
                             <button
                                 className={`admin-tab ${activeTab === 'events' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('events')}
                             >
-                                📅 Events Calendar
+                                📅 Events
                             </button>
                         </div>
                     </div>
-                    <div style={{ borderBottom: '1px solid var(--border-color)', marginTop: '0' }} />
                 </div>
             </div>
 

@@ -208,18 +208,16 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🗑️</div>
-                        <h3 style={{ fontSize: '1.4rem', marginBottom: '12px', fontWeight: 900 }}>Remove Event?</h3>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '0.95rem' }}>
-                            You are about to remove:
+                        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>📅</div>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 900 }}>Remove Event?</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1rem', lineHeight: 1.5 }}>
+                            You are about to remove <br/>
+                            <strong style={{ color: '#fff' }}>&quot;{showConfirm.title}&quot;</strong>
                         </p>
-                        <p style={{ color: '#fff', fontWeight: 700, fontSize: '1rem', marginBottom: '8px' }}>
-                            &quot;{showConfirm.title}&quot;
-                        </p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>This action is irreversible.</p>
-                        <div className="btn-group">
-                            <button className="btn-secondary" onClick={() => setShowConfirm(null)}>Cancel</button>
-                            <button className="btn-danger" onClick={handleDelete} disabled={loading}>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '32px' }}>This action is irreversible.</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                            <button className="edit-btn" style={{ padding: '14px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
+                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px' }} onClick={handleDelete} disabled={loading}>
                                 {loading ? 'Removing...' : 'Remove'}
                             </button>
                         </div>
@@ -242,16 +240,13 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                 <div className="admin-card-header">
                     <div className="admin-card-icon">📅</div>
                     <div>
-                        <h2>{editingId ? 'Edit Event' : 'Add New Event'}</h2>
-                        {editingId && <span style={{ fontSize: '0.75rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Editing Mode</span>}
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>{editingId ? 'Edit Event' : 'Add New Event'}</h2>
+                        {editingId && <span style={{ fontSize: '0.7rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Active Session</span>}
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="admin-form">
-
-                    <div className="form-section">
-                        <div className="form-section-title">Event Details</div>
-
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <div className="form-group">
                             <label>Event Title</label>
                             <input
@@ -264,30 +259,31 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label>Date & Time</label>
-                            <input
-                                className="form-input"
-                                type="datetime-local"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                required
-                            />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                            <div className="form-group">
+                                <label>Date & Time</label>
+                                <input
+                                    className="form-input"
+                                    type="datetime-local"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Location</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    placeholder="Dubai, UAE or Zoom"
+                                />
+                            </div>
                         </div>
 
                         <div className="form-group">
-                            <label>Location (Optional)</label>
-                            <input
-                                className="form-input"
-                                type="text"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                placeholder="E.g. Dubai, UAE or Zoom"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Description (Optional)</label>
+                            <label>Description</label>
                             <textarea
                                 className="form-input"
                                 value={description}
@@ -298,7 +294,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                         </div>
 
                         <div className="form-group">
-                            <label>Registration Link (Optional)</label>
+                            <label>Registration Link</label>
                             <input
                                 className="form-input"
                                 type="url"
@@ -307,97 +303,77 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                 placeholder="https://lu.ma/event-id"
                             />
                         </div>
-                    </div>
 
-                    <div className="form-section">
-                        <div className="form-section-title">Cover Image (16:9)</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                            <div className="form-group">
+                                <label>Cover Banner (16:9)</label>
+                                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                                    <input
+                                        className="form-input"
+                                        type="url"
+                                        value={imageUrl}
+                                        onChange={(e) => setImageUrl(e.target.value)}
+                                        placeholder="URL..."
+                                        style={{ flex: 1 }}
+                                    />
+                                    <input
+                                        type="file"
+                                        onChange={(e) => handleFileUpload(e, 'cover')}
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="event-file-upload-cover"
+                                    />
+                                    <label htmlFor="event-file-upload-cover" className="edit-btn" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                        ↑
+                                    </label>
+                                </div>
+                                {imageUrl && (
+                                    <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '16/9', background: '#000' }}>
+                                        <img src={imageUrl} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </div>
+                                )}
+                            </div>
 
-                        <div className="form-group">
-                            <label>Image URL</label>
-                            <input
-                                className="form-input"
-                                type="url"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                                placeholder="https://example.com/image.jpg"
-                            />
+                            <div className="form-group">
+                                <label>Timeline Thumbnail (1:1)</label>
+                                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                                    <input
+                                        className="form-input"
+                                        type="url"
+                                        value={timelineImageUrl}
+                                        onChange={(e) => setTimelineImageUrl(e.target.value)}
+                                        placeholder="URL..."
+                                        style={{ flex: 1 }}
+                                    />
+                                    <input
+                                        type="file"
+                                        onChange={(e) => handleFileUpload(e, 'timeline')}
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="event-file-upload-timeline"
+                                    />
+                                    <label htmlFor="event-file-upload-timeline" className="edit-btn" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                        ↑
+                                    </label>
+                                </div>
+                                {timelineImageUrl && (
+                                    <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '1/1', width: '60px', background: '#000' }}>
+                                        <img src={timelineImageUrl} alt="Thumb" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
-                        <input
-                            type="file"
-                            onChange={(e) => handleFileUpload(e, 'cover')}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="event-file-upload-cover"
-                            disabled={uploading}
-                        />
-                        <label htmlFor="event-file-upload-cover" className="upload-btn">
-                            {uploading ? (
-                                <><span>⏳</span> Uploading...</>
-                            ) : (
-                                <><span>↑</span> Upload Banner (16:9)</>
-                            )}
-                        </label>
-
-                        {imageUrl && (
-                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
-                                <img src={imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: '0.7rem', color: '#fff' }}>
-                                    16:9 Preview
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="form-section">
-                        <div className="form-section-title">Timeline Image (1:1)</div>
-
-                        <div className="form-group">
-                            <label>Image URL</label>
-                            <input
-                                className="form-input"
-                                type="url"
-                                value={timelineImageUrl}
-                                onChange={(e) => setTimelineImageUrl(e.target.value)}
-                                placeholder="https://example.com/timeline-image.jpg"
-                            />
-                        </div>
-
-                        <input
-                            type="file"
-                            onChange={(e) => handleFileUpload(e, 'timeline')}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="event-file-upload-timeline"
-                            disabled={uploading}
-                        />
-                        <label htmlFor="event-file-upload-timeline" className="upload-btn">
-                            {uploading ? (
-                                <><span>⏳</span> Uploading...</>
-                            ) : (
-                                <><span>↑</span> Upload Thumbnail (1:1)</>
-                            )}
-                        </label>
-
-                        {timelineImageUrl && (
-                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '1/1', width: '120px', background: '#000' }}>
-                                <img src={timelineImageUrl} alt="Preview Timeline" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', top: '4px', right: '4px', padding: '2px 4px', background: 'rgba(0,0,0,0.6)', borderRadius: '4px', fontSize: '0.6rem', color: '#fff' }}>
-                                    1:1
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-                        <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 2 }}>
-                            {loading ? '⏳ Saving...' : editingId ? '✓ Update Event' : '🚀 Add Event'}
-                        </button>
-                        {editingId && (
-                            <button type="button" onClick={resetForm} className="btn-outline" style={{ marginTop: 0 }}>
-                                Cancel
+                        <div style={{ display: 'flex', gap: '12px', paddingTop: '8px' }}>
+                            <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 1 }}>
+                                {loading ? '⏳ Processing...' : editingId ? '✓ Update Event' : '🚀 Add to Calendar'}
                             </button>
-                        )}
+                            {editingId && (
+                                <button type="button" onClick={resetForm} className="edit-btn">
+                                    Cancel
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </form>
             </div>
@@ -406,54 +382,51 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
             <div className="manage-container">
                 <div className="manage-header" style={{ marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
                     <div>
-                        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.5px' }}>Events Timeline</h2>
-                        <div className="timeline-tabs">
-                            <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming ({upcomingEvents.length})</button>
-                            <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past ({pastEvents.length})</button>
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Timeline</h2>
+                        <div className="admin-header-tabs" style={{ marginTop: '12px' }}>
+                            <button type="button" className={`admin-tab ${activeTab === 'upcoming' ? 'active' : ''}`} onClick={() => setActiveTab('upcoming')}>Upcoming ({upcomingEvents.length})</button>
+                            <button type="button" className={`admin-tab ${activeTab === 'past' ? 'active' : ''}`} onClick={() => setActiveTab('past')}>Archive ({pastEvents.length})</button>
                         </div>
                     </div>
-                    <button onClick={async () => { await fetchEvents(); addToast('Synced latest events.'); }} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
+                    <button onClick={async () => { await fetchEvents(); addToast('Timeline synced.'); }} className="edit-btn" style={{ fontSize: '0.75rem' }}>↻ Sync</button>
                 </div>
 
                 <div className="timeline-wrapper">
                     {displayEvents.length === 0 ? (
-                        <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
-                            <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📅</div>
-                            <p style={{ color: 'var(--text-secondary)' }}>No {activeTab} events found.</p>
+                        <div style={{ padding: '80px 40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                            <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📅</div>
+                            <p>No {activeTab} events.</p>
                         </div>
                     ) : (
                         Object.entries(groupedEvents).map(([dateKey, { dayKey, events }]) => (
                             <div key={dateKey} className="timeline-group">
-                                <div className="timeline-date-col">
+                                <div className="timeline-date-col" style={{ width: '100px' }}>
                                     <div className="timeline-dot"></div>
-                                    <div className="timeline-date-text">{dateKey}</div>
-                                    <div className="timeline-day-text">{dayKey}</div>
+                                    <div className="timeline-date-text" style={{ fontSize: '1rem', fontWeight: 900 }}>{dateKey}</div>
+                                    <div className="timeline-day-text" style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>{dayKey}</div>
                                 </div>
                                 <div className="timeline-events-col">
                                     {events.map((event) => (
-                                        <div key={event.id} className="timeline-event-card">
+                                        <div key={event.id} className="timeline-event-card" style={{ border: '1px solid var(--glass-border)' }}>
                                             <div className="timeline-event-content">
-                                                <div className="timeline-event-time">
+                                                <div className="timeline-event-time" style={{ color: 'var(--accent-color)', fontWeight: 800 }}>
                                                     {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </div>
-                                                <div className="timeline-event-title">{event.title}</div>
-                                                <div className="timeline-event-host">
-                                                    🤝 <span>By Platform Admin</span>
+                                                <div className="timeline-event-title" style={{ fontSize: '1.1rem', fontWeight: 800 }}>{event.title}</div>
+                                                <div className="timeline-event-location" style={{ fontSize: '0.8rem', opacity: 0.8 }}>
+                                                    📍 {event.location || 'Location TBD'}
                                                 </div>
-                                                <div className="timeline-event-location">
-                                                    📍 {event.location || 'Online / Link provided'}
-                                                </div>
-                                                <div className="timeline-event-actions">
-                                                    <div className={`status-badge ${activeTab === 'upcoming' ? 'going' : 'past'}`}>
-                                                        {activeTab === 'upcoming' ? 'Going' : 'Ended'}
-                                                    </div>
+                                                <div className="timeline-event-actions" style={{ marginTop: '16px' }}>
+                                                    <span className={`status-badge ${activeTab === 'upcoming' ? 'going' : 'past'}`}>
+                                                        {activeTab === 'upcoming' ? 'Active' : 'Archived'}
+                                                    </span>
                                                     <button onClick={() => startEditing(event)} className="edit-btn">Edit</button>
-                                                    <button onClick={() => setShowConfirm({ id: event.id!, title: event.title })} className="delete-btn">Remove</button>
+                                                    <button onClick={() => setShowConfirm({ id: event.id!, title: event.title })} className="delete-btn">Delete</button>
                                                 </div>
                                             </div>
                                             {(event.timelineImageUrl || event.imageUrl) && (
-                                                <div className="timeline-event-thumb">
-                                                    <img src={event.timelineImageUrl || event.imageUrl} alt={event.title} />
+                                                <div className="timeline-event-thumb" style={{ width: '80px', height: '80px', borderRadius: '12px' }}>
+                                                    <img src={event.timelineImageUrl || event.imageUrl} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                 </div>
                                             )}
                                         </div>

@@ -174,18 +174,16 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🗑️</div>
-                        <h3 style={{ fontSize: '1.4rem', marginBottom: '12px', fontWeight: 900 }}>Remove Post?</h3>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '0.95rem' }}>
-                            You are about to remove:
+                        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🗑️</div>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 900 }}>Remove Post?</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1rem', lineHeight: 1.5 }}>
+                            You are about to remove <br/>
+                            <strong style={{ color: '#fff' }}>&quot;{showConfirm.title}&quot;</strong>
                         </p>
-                        <p style={{ color: '#fff', fontWeight: 700, fontSize: '1rem', marginBottom: '8px' }}>
-                            &quot;{showConfirm.title}&quot;
-                        </p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>This action is irreversible.</p>
-                        <div className="btn-group">
-                            <button className="btn-secondary" onClick={() => setShowConfirm(null)}>Cancel</button>
-                            <button className="btn-danger" onClick={handleDelete} disabled={loading}>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '32px' }}>This action cannot be undone.</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                            <button className="edit-btn" style={{ padding: '14px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
+                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px' }} onClick={handleDelete} disabled={loading}>
                                 {loading ? 'Removing...' : 'Remove'}
                             </button>
                         </div>
@@ -208,22 +206,20 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
                 <div className="admin-card-header">
                     <div className="admin-card-icon">📌</div>
                     <div>
-                        <h2>{editingId ? 'Edit Post' : 'Add New Post'}</h2>
-                        {editingId && <span style={{ fontSize: '0.75rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Editing Mode</span>}
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>{editingId ? 'Edit Post' : 'Add New Post'}</h2>
+                        {editingId && <span style={{ fontSize: '0.7rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Active Session</span>}
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="admin-form">
 
-                    <div className="form-section">
-                        <div className="form-section-title">Content Details</div>
-
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <div className="form-group">
                             <label>Category</label>
                             <select className="form-input" value={type} onChange={(e) => setType(e.target.value)}>
                                 <option value="News">📰 News Report</option>
-                                <option value="Blog">✍️ Blog / Deep Dive</option>
-                                <option value="X">𝕏 X / Twitter Thread</option>
+                                <option value="Blog">✍️ Deep Dive</option>
+                                <option value="X">𝕏 Intelligence</option>
                             </select>
                         </div>
 
@@ -234,7 +230,7 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Write an engaging headline..."
+                                placeholder="Headline of the story..."
                             />
                         </div>
 
@@ -245,60 +241,54 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
                                 type="url"
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}
-                                placeholder="https://example.com/article"
+                                placeholder="https://..."
                             />
                         </div>
-                    </div>
-
-                    <div className="form-section">
-                        <div className="form-section-title">Cover Image (16:9 recommended)</div>
 
                         <div className="form-group">
-                            <label>Image URL</label>
-                            <input
-                                className="form-input"
-                                type="url"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                                placeholder="https://example.com/image.jpg"
-                            />
+                            <label>Cover Image (16:9)</label>
+                            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                <input
+                                    className="form-input"
+                                    type="url"
+                                    value={imageUrl}
+                                    onChange={(e) => setImageUrl(e.target.value)}
+                                    placeholder="Image URL..."
+                                    style={{ flex: 1 }}
+                                />
+                                <input
+                                    type="file"
+                                    onChange={handleFileUpload}
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    id="post-file-upload"
+                                    disabled={uploading}
+                                />
+                                <label htmlFor="post-file-upload" className="edit-btn" style={{ whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                                    {uploading ? '⏳' : '↑ Upload'}
+                                </label>
+                            </div>
+
+                            {imageUrl && imageUrl.startsWith('http') && (
+                                <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
+                                    <img src={imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 900, color: '#fff', textTransform: 'uppercase' }}>
+                                        Preview
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
-                        <input
-                            type="file"
-                            onChange={handleFileUpload}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="post-file-upload"
-                            disabled={uploading}
-                        />
-                        <label htmlFor="post-file-upload" className="upload-btn">
-                            {uploading ? (
-                                <><span>⏳</span> Converting & uploading...</>
-                            ) : (
-                                <><span>↑</span> Upload from device (auto-converts to WebP)</>
-                            )}
-                        </label>
-
-                        {imageUrl && imageUrl.startsWith('http') && (
-                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
-                                <img src={imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: '0.7rem', color: '#fff' }}>
-                                    16:9 Preview
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-                        <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 2 }}>
-                            {loading ? '⏳ Saving...' : editingId ? '✓ Update Post' : '🚀 Publish Post'}
-                        </button>
-                        {editingId && (
-                            <button type="button" onClick={resetForm} className="btn-outline" style={{ marginTop: 0 }}>
-                                Cancel
+                        <div style={{ display: 'flex', gap: '12px', paddingTop: '8px' }}>
+                            <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 1 }}>
+                                {loading ? '⏳ Processing...' : editingId ? '✓ Save Changes' : '🚀 Publish to Feed'}
                             </button>
-                        )}
+                            {editingId && (
+                                <button type="button" onClick={resetForm} className="edit-btn">
+                                    Cancel
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </form>
             </div>
@@ -307,42 +297,37 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
             <div className="manage-container">
                 <div className="manage-header">
                     <div>
-                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Curation Archive</h2>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                            {posts.length} {posts.length === 1 ? 'post' : 'posts'} in your feed
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Archive</h2>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', fontWeight: 600 }}>
+                            {posts.length} Curated Entries
                         </p>
                     </div>
-                    <button onClick={async () => { await fetchPosts(); addToast('Synced latest posts.'); }} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
+                    <button onClick={async () => { await fetchPosts(); addToast('Database synced.'); }} className="edit-btn" style={{ fontSize: '0.75rem' }}>↻ Sync</button>
                 </div>
 
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
                     {posts.length === 0 ? (
-                        <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
-                            <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📭</div>
-                            <p style={{ color: 'var(--text-secondary)' }}>No posts yet. Publish your first one!</p>
+                        <div style={{ padding: '80px 40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                            <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📭</div>
+                            <p>Feed is currently empty.</p>
                         </div>
                     ) : (
                         posts.map((post) => (
                             <div key={post.id} className="post-item-admin">
-                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
-                                    <span style={{
-                                        padding: '3px 8px',
-                                        borderRadius: '6px',
-                                        fontSize: '0.7rem',
-                                        fontWeight: 900,
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '1px',
-                                        background: typeColors[post.type] || 'var(--accent-color)',
+                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px', overflow: 'hidden' }}>
+                                    <span className="status-badge" style={{
+                                        background: post.type === 'X' ? 'var(--x-color)' : post.type === 'News' ? 'var(--news-color)' : 'var(--blog-color)',
                                         color: post.type === 'X' ? '#fff' : '#000',
-                                        flexShrink: 0,
+                                        fontSize: '0.65rem',
+                                        padding: '4px 8px'
                                     }}>{post.type}</span>
                                     <div style={{ overflow: 'hidden' }}>
-                                        <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', margin: 0 }}>
+                                        <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', margin: 0 }}>
                                             {post.title}
                                         </p>
-                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
-                                        </span>
+                                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0, marginTop: '2px' }}>
+                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Syncing...'}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="post-item-actions">

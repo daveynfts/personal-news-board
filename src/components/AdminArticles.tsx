@@ -173,18 +173,16 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🗑️</div>
-                        <h3 style={{ fontSize: '1.4rem', marginBottom: '12px', fontWeight: 900 }}>Delete Article?</h3>
-                        <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '0.95rem' }}>
-                            You are about to permanently delete:
+                        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🗑️</div>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 900 }}>Delete Article?</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1rem', lineHeight: 1.5 }}>
+                            You are about to permanently delete <br/>
+                            <strong style={{ color: '#fff' }}>&quot;{showConfirm.title}&quot;</strong>
                         </p>
-                        <p style={{ color: '#fff', fontWeight: 700, fontSize: '1rem', marginBottom: '8px' }}>
-                            &quot;{showConfirm.title}&quot;
-                        </p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>This action cannot be undone.</p>
-                        <div className="btn-group">
-                            <button className="btn-secondary" onClick={() => setShowConfirm(null)}>Cancel</button>
-                            <button className="btn-danger" onClick={handleDelete} disabled={loading}>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '32px' }}>This action cannot be undone.</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                            <button className="edit-btn" style={{ padding: '14px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
+                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px' }} onClick={handleDelete} disabled={loading}>
                                 {loading ? 'Deleting...' : 'Delete'}
                             </button>
                         </div>
@@ -207,15 +205,13 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                 <div className="admin-card-header">
                     <div className="admin-card-icon">✍️</div>
                     <div>
-                        <h2>{editingId ? 'Edit Article' : 'Write Article'}</h2>
-                        {editingId && <span style={{ fontSize: '0.75rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Editing Mode</span>}
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>{editingId ? 'Edit Article' : 'Write Article'}</h2>
+                        {editingId && <span style={{ fontSize: '0.7rem', color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Active Session</span>}
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="admin-form">
-
-                    <div className="form-section">
-                        <div className="form-section-title">Article Info</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <div className="form-group">
                             <label>Headline / Title</label>
                             <input
@@ -226,6 +222,7 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                                 placeholder="Write an engaging title..."
                             />
                         </div>
+
                         <div className="form-group">
                             <label>X (Twitter) Source URL</label>
                             <input
@@ -236,110 +233,108 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                                 placeholder="https://x.com/..."
                             />
                         </div>
-                    </div>
 
-                    <div className="form-section">
-                        <div className="form-section-title">Cover Image (16:9 recommended)</div>
                         <div className="form-group">
-                            <label>Image URL</label>
-                            <input
-                                className="form-input"
-                                type="url"
-                                value={coverImage}
-                                onChange={(e) => setCoverImage(e.target.value)}
-                                placeholder="https://example.com/image.jpg"
-                            />
-                        </div>
-                        <input
-                            type="file"
-                            onChange={handleFileUpload}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="article-file-upload"
-                            disabled={uploading}
-                        />
-                        <label htmlFor="article-file-upload" className="upload-btn">
-                            {uploading ? (
-                                <><span>⏳</span> Converting & uploading...</>
-                            ) : (
-                                <><span>↑</span> Upload from device (auto-converts to WebP)</>
-                            )}
-                        </label>
-                        {coverImage && coverImage.startsWith('http') && (
-                            <div style={{ marginTop: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
-                                <img src={coverImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: '0.7rem', color: '#fff' }}>
-                                    16:9 Preview
-                                </div>
+                            <label>Cover Image (16:9)</label>
+                            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                <input
+                                    className="form-input"
+                                    type="url"
+                                    value={coverImage}
+                                    onChange={(e) => setCoverImage(e.target.value)}
+                                    placeholder="Image URL..."
+                                    style={{ flex: 1 }}
+                                />
+                                <input
+                                    type="file"
+                                    onChange={handleFileUpload}
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    id="article-file-upload"
+                                    disabled={uploading}
+                                />
+                                <label htmlFor="article-file-upload" className="edit-btn" style={{ whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                                    {uploading ? '⏳' : '↑ Upload'}
+                                </label>
                             </div>
-                        )}
-                    </div>
+                            {coverImage && coverImage.startsWith('http') && (
+                                <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
+                                    <img src={coverImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <div style={{ position: 'absolute', bottom: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 900, color: '#fff', textTransform: 'uppercase' }}>
+                                        Preview
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
-                    <div className="form-section" style={{ background: isEditorialPick ? 'rgba(243, 186, 47, 0.05)' : undefined, borderColor: isEditorialPick ? 'rgba(243, 186, 47, 0.3)' : undefined }}>
-                        <div className="form-section-title">Feature Settings</div>
-                        <label style={{
-                            display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer',
-                            padding: '4px 0'
+                        <div style={{ 
+                            padding: '16px', 
+                            background: isEditorialPick ? 'rgba(0, 122, 255, 0.05)' : 'rgba(255, 255, 255, 0.02)', 
+                            borderRadius: '16px',
+                            border: `1px solid ${isEditorialPick ? 'rgba(0, 122, 255, 0.3)' : 'rgba(255, 255, 255, 0.05)'}`,
+                            transition: 'var(--transition-premium)'
                         }}>
-                            <input
-                                type="checkbox"
-                                id="editorialPick"
-                                checked={isEditorialPick}
-                                onChange={(e) => setIsEditorialPick(e.target.checked)}
-                                style={{ width: '18px', height: '18px', accentColor: 'var(--accent-color)', cursor: 'pointer', flexShrink: 0 }}
-                            />
-                            <div>
-                                <span style={{ fontWeight: 800, color: isEditorialPick ? 'var(--accent-color)' : '#fff', fontSize: '0.9rem' }}>
-                                    ★ Editorial Pick
-                                </span>
-                                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px', fontWeight: 500 }}>
-                                    Feature this article in the hero carousel on the main site
-                                </p>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div className="form-section">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                            <div className="form-section-title" style={{ margin: 0 }}>Article Body</div>
-                            <button
-                                type="button"
-                                className="btn-outline"
-                                onClick={() => setPreviewMode(!previewMode)}
-                                style={{ padding: '4px 12px', fontSize: '0.75rem', marginBottom: 0 }}
-                            >
-                                {previewMode ? '◧ Hide Preview' : '▣ Show Preview'}
-                            </button>
-                        </div>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '10px' }}>
-                            Supports Markdown: **bold**, *italic*, # Heading, [link](url), ![img](url)
-                        </p>
-
-                        <div className={`editor-container ${previewMode ? 'split' : ''}`}>
-                            <textarea
-                                className="form-input markdown-input"
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                placeholder="Write your article here using Markdown..."
-                                rows={15}
-                            />
-                            {previewMode && (
-                                <div className="markdown-preview">
-                                    <ReactMarkdown>{content || '*Preview will appear here...*'}</ReactMarkdown>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
+                                <input
+                                    type="checkbox"
+                                    id="editorialPick"
+                                    checked={isEditorialPick}
+                                    onChange={(e) => setIsEditorialPick(e.target.checked)}
+                                    style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)', cursor: 'pointer' }}
+                                />
+                                <div>
+                                    <span style={{ fontWeight: 800, color: isEditorialPick ? 'var(--accent-color)' : '#fff', fontSize: '0.9rem' }}>
+                                        ★ Editorial Pick
+                                    </span>
+                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px', margin: 0 }}>
+                                        Featured in hero carousel
+                                    </p>
                                 </div>
+                            </label>
+                        </div>
+
+                        <div className="form-group">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                <label style={{ margin: 0 }}>Content Body (Markdown)</label>
+                                <button
+                                    type="button"
+                                    className="edit-btn"
+                                    onClick={() => setPreviewMode(!previewMode)}
+                                    style={{ padding: '4px 12px', fontSize: '0.7rem' }}
+                                >
+                                    {previewMode ? '◧ Hide Preview' : '▣ Show Preview'}
+                                </button>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <textarea
+                                    className="form-input"
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    placeholder="Write your story..."
+                                    rows={12}
+                                    style={{ fontFamily: 'monospace', fontSize: '0.9rem', lineHeight: 1.6 }}
+                                />
+                                {previewMode && (
+                                    <div className="manage-container" style={{ padding: '24px', maxHeight: '400px', overflowY: 'auto' }}>
+                                        <div className="article-body" style={{ fontSize: '0.95rem' }}>
+                                            <ReactMarkdown>{content || '*Preview will appear here...*'}</ReactMarkdown>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '12px', paddingTop: '8px' }}>
+                            <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 1 }}>
+                                {loading ? '⏳ Processing...' : editingId ? '✓ Save Changes' : '🚀 Publish Article'}
+                            </button>
+                            {editingId && (
+                                <button type="button" onClick={resetForm} className="edit-btn">
+                                    Cancel
+                                </button>
                             )}
                         </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-                        <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 2 }}>
-                            {loading ? '⏳ Saving...' : editingId ? '✓ Update Article' : '🚀 Publish Article'}
-                        </button>
-                        {editingId && (
-                            <button type="button" onClick={resetForm} className="btn-outline" style={{ marginTop: 0 }}>
-                                Cancel
-                            </button>
-                        )}
                     </div>
                 </form>
             </div>
@@ -348,43 +343,34 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
             <div className="manage-container">
                 <div className="manage-header">
                     <div>
-                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Article Archive</h2>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                            {articles.length} {articles.length === 1 ? 'article' : 'articles'} published
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Archive</h2>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', fontWeight: 600 }}>
+                            {articles.length} Published Pieces
                         </p>
                     </div>
-                    <button onClick={async () => { await fetchArticles(); addToast('Synced latest articles.'); }} className="filter-btn" style={{ padding: '8px 16px', fontSize: '0.8rem' }}>↻ Sync</button>
+                    <button onClick={async () => { await fetchArticles(); addToast('Library synced.'); }} className="edit-btn" style={{ fontSize: '0.75rem' }}>↻ Sync</button>
                 </div>
 
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
                     {articles.length === 0 ? (
-                        <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
-                            <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📝</div>
-                            <p style={{ color: 'var(--text-secondary)' }}>No articles yet. Write your first one!</p>
+                        <div style={{ padding: '80px 40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                            <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📝</div>
+                            <p>No articles yet.</p>
                         </div>
                     ) : (
                         articles.map((article) => (
                             <div key={article.id} className="post-item-admin">
-                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
+                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px', overflow: 'hidden' }}>
                                     {article.isEditorialPick && (
-                                        <span style={{
-                                            padding: '3px 8px',
-                                            borderRadius: '6px',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 900,
-                                            background: 'var(--accent-color)',
-                                            color: '#000',
-                                            flexShrink: 0,
-                                            letterSpacing: '0.5px',
-                                        }}>★ PICK</span>
+                                        <span className="status-badge going" style={{ fontSize: '0.6rem', padding: '2px 8px' }}>★ PICK</span>
                                     )}
                                     <div style={{ overflow: 'hidden' }}>
-                                        <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', margin: 0 }}>
+                                        <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', margin: 0 }}>
                                             {article.title}
                                         </p>
-                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                                            {article.createdAt ? new Date(article.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
-                                        </span>
+                                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0, marginTop: '2px' }}>
+                                            {article.createdAt ? new Date(article.createdAt).toLocaleDateString() : 'Syncing...'}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="post-item-actions">
