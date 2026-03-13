@@ -19,17 +19,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     const upcomingEvents = events.filter(e => new Date(e.date) >= today).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     const pastEvents = events.filter(e => new Date(e.date) < today).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    if (events.length === 0) {
-        return (
-            <div className="event-hero-empty">
-                <div className="event-hero-content">
-                    <h1>Your Curated Universe.</h1>
-                    <p>A personal collection of top news, insightful blogs, and interesting X threads. No upcoming events scheduled.</p>
-                </div>
-            </div>
-        );
-    }
-
     const featuredEventsList = upcomingEvents.length > 0 ? upcomingEvents : pastEvents;
     
     // Ensure index is within bounds in case data changes
@@ -45,6 +34,17 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         }, 7000);
         return () => clearInterval(interval);
     }, [featuredEventsList.length]);
+
+    if (events.length === 0) {
+        return (
+            <div className="event-hero-empty">
+                <div className="event-hero-content">
+                    <h1>Your Curated Universe.</h1>
+                    <p>A personal collection of top news, insightful blogs, and interesting X threads. No upcoming events scheduled.</p>
+                </div>
+            </div>
+        );
+    }
 
     const handleNextFeatured = () => setCurrentFeaturedIndex(prev => (prev + 1) % featuredEventsList.length);
     const handlePrevFeatured = () => setCurrentFeaturedIndex(prev => (prev - 1 + featuredEventsList.length) % featuredEventsList.length);
@@ -84,7 +84,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     <div key={featuredEvent.id} className="featured-event-card trans-up">
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
-                                <img src={`${featuredEvent.imageUrl}?t=${new Date(featuredEvent.createdAt || Date.now()).getTime()}`} alt={featuredEvent.title} />
+                                <img src={`${featuredEvent.imageUrl}?t=${featuredEvent.createdAt ? new Date(featuredEvent.createdAt).getTime() : 0}`} alt={featuredEvent.title} />
                             ) : (
                                 <div className="event-image-placeholder">
                                     <span>📅</span>
@@ -189,7 +189,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                 </div>
                                                 {(event.timelineImageUrl || event.imageUrl) && (
                                                     <div className="timeline-event-thumb">
-                                                        <img src={`${event.timelineImageUrl || event.imageUrl}?t=${new Date(event.createdAt || Date.now()).getTime()}`} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                        <img src={`${event.timelineImageUrl || event.imageUrl}?t=${event.createdAt ? new Date(event.createdAt).getTime() : 0}`} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                     </div>
                                                 )}
                                             </div>

@@ -106,7 +106,7 @@ export default function ImageCropperModal({
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
     const [isSaving, setIsSaving] = useState(false);
 
-    const onCropCompleteEvent = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+    const onCropCompleteEvent = useCallback((_croppedArea: { x: number; y: number; width: number; height: number }, croppedAreaPixels: { x: number; y: number; width: number; height: number }) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
