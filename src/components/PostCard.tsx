@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Post } from '@/lib/db';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop';
@@ -26,12 +26,10 @@ export default function PostCard({ post }: { post: Post }) {
     // Fallback image if none provided
     const [imgError, setImgError] = useState(false);
     
-    // Derived state: reset error if URL changed
-    const [prevUrl, setPrevUrl] = useState(post.imageUrl);
-    if (post.imageUrl !== prevUrl) {
-        setPrevUrl(post.imageUrl);
+    // Reset error state when imageUrl changes
+    useEffect(() => {
         setImgError(false);
-    }
+    }, [post.imageUrl]);
 
     const hasValidImage = !imgError && isValidImageUrl(post.imageUrl);
     const displayImg = hasValidImage ? post.imageUrl! : FALLBACK_IMAGE;

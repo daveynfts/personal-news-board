@@ -22,7 +22,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [showConfirm, setShowConfirm] = useState<{ id: number; title: string } | null>(null);
     const [loading, setLoading] = useState(false);
-    const [, setUploading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
     const [cropFile, setCropFile] = useState<{ src: string, file: File, type: 'cover' | 'timeline' } | null>(null);
 
@@ -38,6 +38,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
     };
 
     const handleCropComplete = async (croppedFile: File) => {
+        const cropType = cropFile?.type; // Save type BEFORE clearing state
         if (cropFile) {
             URL.revokeObjectURL(cropFile.src);
         }
@@ -52,7 +53,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
 
             if (response.ok) {
                 const blob = await response.json();
-                if (cropFile?.type === 'timeline') {
+                if (cropType === 'timeline') {
                     setTimelineImageUrl(blob.url);
                 } else {
                     setImageUrl(blob.url);
@@ -321,6 +322,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                     <input
                                         type="file"
                                         onChange={(e) => handleFileUpload(e, 'cover')}
+                                    disabled={uploading}
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         id="event-file-upload-cover"
@@ -350,6 +352,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                     <input
                                         type="file"
                                         onChange={(e) => handleFileUpload(e, 'timeline')}
+                                    disabled={uploading}
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         id="event-file-upload-timeline"

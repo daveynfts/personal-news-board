@@ -19,13 +19,22 @@ export default function AdminPage() {
         }, 4000);
     };
 
-    const checkPassword = (e: React.FormEvent) => {
+    const checkPassword = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === '123456A@a') {
-            setIsAuthorized(true);
-            addToast('Access granted. Welcome, Davey.');
-        } else {
-            addToast('Invalid credentials. Access denied.', 'error');
+        try {
+            const res = await fetch('/api/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password }),
+            });
+            if (res.ok) {
+                setIsAuthorized(true);
+                addToast('Access granted. Welcome, Davey.');
+            } else {
+                addToast('Invalid credentials. Access denied.', 'error');
+            }
+        } catch {
+            addToast('Authentication failed.', 'error');
         }
     };
 
