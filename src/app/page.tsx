@@ -7,11 +7,38 @@ import Container from '@/components/Container';
 import FilterBar from '@/components/FilterBar';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
   searchParams: Promise<{ filter?: string }>;
+}
+
+// ── Homepage SEO ─────────────────────────────────────────────────────────────
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const { filter } = await searchParams;
+
+  // Map filter slug → human-readable label for richer title/description
+  const filterLabels: Record<string, { label: string; desc: string }> = {
+    news:  { label: 'Top News',        desc: 'Breaking news and top headlines curated by DaveyNFTs.' },
+    blog:  { label: 'Blog Picks',      desc: 'Insightful blog posts and long-form reads selected by DaveyNFTs.' },
+    x:     { label: 'X Thread Picks',  desc: 'The best X (Twitter) threads and takes, curated by DaveyNFTs.' },
+  };
+
+  const activeFilter = filter && filter !== 'all' ? filterLabels[filter.toLowerCase()] : null;
+
+  return buildMetadata({
+    title: activeFilter ? activeFilter.label : undefined,  // undefined → DEFAULT_TITLE
+    description: activeFilter
+      ? activeFilter.desc
+      : 'A premium, personal collection of top news, insightful blogs, and curated X threads. Discover elite web3 content.',
+    canonicalPath: activeFilter ? `/?filter=${filter}` : '/',
+    type: 'website',
+    keywords: ['crypto news', 'web3', 'blockchain', 'DaveyNFTs', 'NFT', 'DeFi', 'curated news', filter ?? 'all'].filter(Boolean),
+    allowIndexing: true,
+  });
 }
 
 export default async function Home({ searchParams }: PageProps) {
