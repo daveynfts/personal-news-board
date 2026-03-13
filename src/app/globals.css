@@ -129,7 +129,7 @@ a {
   padding: 12px 0;
   position: sticky;
   top: 0;
-  z-index: 2000;
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(25px) saturate(200%);
   -webkit-backdrop-filter: blur(25px) saturate(200%);
@@ -1815,7 +1815,7 @@ a {
     0 40px 80px -20px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 
@@ -2088,7 +2088,7 @@ a {
   position: relative;
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-  z-index: 1;
+  z-index: 10;
   min-height: 100%;
 }
 
@@ -2494,6 +2494,8 @@ a {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  z-index: 2;
+  position: relative;
 }
 
 .timeline-event-time {
@@ -2603,6 +2605,8 @@ a {
   background: var(--surface-secondary);
   border: 1px solid var(--border-color);
   align-self: center;
+  position: relative;
+  z-index: 2;
 }
 
 .timeline-event-thumb img {
