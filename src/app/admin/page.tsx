@@ -48,14 +48,16 @@ export default function AdminPage() {
                     </div>
                     <form onSubmit={checkPassword} className="admin-form">
                         <div className="form-group" style={{ textAlign: 'left' }}>
-                            <label>Internal Key</label>
+                            <label htmlFor="admin-password">Internal Key</label>
                             <input
+                                id="admin-password"
                                 className="form-input"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••"
                                 autoFocus
+                                autoComplete="current-password"
                             />
                         </div>
                         <button type="submit" className="submit-btn" style={{ width: '100%', marginTop: '8px' }}>🚀 Verify Identity</button>

@@ -33,6 +33,7 @@
   
   --font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --transition-premium: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 * {
@@ -96,18 +97,7 @@ a {
   gap: 32px;
 }
 
-.section-title {
-  font-size: 3.2rem;
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  margin: 0;
-  background: linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0.6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-  line-height: 1;
-}
+/* .section-title is defined below with underline decoration */
 
 .section-header-premium {
   margin-bottom: 48px;
@@ -516,19 +506,7 @@ a {
 }
 
 /* === ADMIN UI === */
-.admin-container {
-  min-height: 100vh;
-}
-
-.admin-header-tabs {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bg-color); /* Removed blur here as well */
-  border-bottom: 1px solid var(--border-color);
-  padding: 0;
-  margin-bottom: 0;
-}
+/* .admin-container and .admin-header-tabs are defined below with full glass UI styles */
 
 .articles-archive {
   margin: 0 auto 100px;
@@ -851,20 +829,7 @@ a {
   padding: 40px 0;
 }
 
-.featured-event-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  box-shadow: var(--glass-shadow);
-  display: flex;
-  flex-direction: column;
-  align-self: start;
-  position: sticky;
-  top: 120px;
-}
+/* .featured-event-card full definition is below */
 
 .event-info {
   display: flex;
@@ -1047,28 +1012,7 @@ a {
   transition: var(--transition-smooth);
 }
 
-.event-main-btn {
-  display: block;
-  width: 100%;
-  padding: 16px;
-  background: #fff;
-  color: #000;
-  text-align: center;
-  border-radius: 16px;
-  font-weight: 800;
-  font-size: 1rem;
-  letter-spacing: -0.01em;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  margin-top: auto;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
-}
-
-.event-main-btn:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-  background: #fff;
-  color: #000;
-}
+/* .event-main-btn full definition is below */
 
 .btn-danger:hover {
   transform: translateY(-2px);
@@ -1101,54 +1045,20 @@ a {
   .app-container {
     padding: 0 20px;
   }
+
+  .main-nav {
+    gap: 8px;
+  }
+
+  .nav-link {
+    padding: 10px 12px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
 }
 
-/* === ADMIN UI ENHANCEMENTS === */
-
-.admin-tabs {
-  display: flex;
-  gap: 4px;
-  padding: 14px 0;
-}
-
-.admin-tab {
-  background: transparent;
-  color: var(--text-muted);
-  border: none;
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-  position: relative;
-  border-radius: 10px;
-  letter-spacing: 0.3px;
-}
-
-.admin-tab:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.admin-tab.active {
-  color: var(--accent-color);
-  background: rgba(243, 186, 47, 0.1);
-}
-
-.admin-tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -14px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--accent-color);
-  border-radius: 4px 4px 0 0;
-}
-
-.admin-tab-content {
-  animation: fade-in 0.4s ease-out forwards;
-}
+/* === ADMIN UI ENHANCEMENTS (see full definition below) === */
 
 /* === MARKDOWN EDITOR === */
 
@@ -1329,6 +1239,8 @@ a {
   background: rgba(255, 255, 255, 0.1);
   padding: 2px;
   object-fit: contain;
+  flex-shrink: 0;
+  align-self: center;
 }
 
 .crypto-name {
@@ -1367,9 +1279,9 @@ a {
   position: absolute;
   bottom: -6px;
   left: 0;
-  width: 40px;
+  width: 100%;
   height: 3px;
-  background: var(--accent-color);
+  background: linear-gradient(to right, var(--accent-color), transparent);
   border-radius: 4px;
 }
 

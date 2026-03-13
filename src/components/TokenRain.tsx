@@ -29,9 +29,9 @@ export default function TokenRain() {
                     bottom: '30px',
                     right: '30px',
                     zIndex: 9999,
-                    background: isRaining ? 'var(--accent-color)' : 'rgba(10, 12, 17, 0.8)',
-                    color: isRaining ? '#000' : 'var(--text-secondary)',
-                    border: `1px solid ${isRaining ? 'var(--accent-color)' : 'var(--border-color)'}`,
+                    background: isRaining ? 'var(--accent-color)' : 'rgba(15, 18, 25, 0.85)',
+                    color: isRaining ? '#000' : 'rgba(255, 255, 255, 0.9)',
+                    border: `1.5px solid ${isRaining ? 'var(--accent-color)' : 'rgba(255, 255, 255, 0.25)'}`,
                     padding: '12px',
                     borderRadius: '50%',
                     width: '56px',
@@ -41,9 +41,10 @@ export default function TokenRain() {
                     justifyContent: 'center',
                     fontSize: '1.5rem',
                     cursor: 'pointer',
-                    boxShadow: isRaining ? '0 0 20px rgba(243, 186, 47, 0.5)' : '0 8px 16px rgba(0,0,0,0.5)',
+                    boxShadow: isRaining ? '0 0 20px rgba(243, 186, 47, 0.5)' : '0 8px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)',
                     transition: 'all 0.3s ease',
-                    backdropFilter: 'blur(10px)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
                 }}
                 title={isRaining ? "Stop the Rain" : "Make it Rain Tokens!"}
             >
