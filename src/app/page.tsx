@@ -31,7 +31,7 @@ export default async function Home({ searchParams }: PageProps) {
   return (
     <div className="home-container">
       {allEvents.length > 0 ? (
-        <Container style={{ marginTop: '40px' }}>
+        <Container style={{ marginTop: '16px' }}>
           <EventCalendar events={allEvents} />
         </Container>
       ) : (
