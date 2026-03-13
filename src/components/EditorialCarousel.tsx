@@ -12,12 +12,12 @@ interface EditorialCarouselProps {
 export default function EditorialCarousel({ articles }: EditorialCarouselProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Auto-slide every 5 seconds
+    // Auto-slide every 6 seconds
     useEffect(() => {
         if (articles.length <= 1) return;
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % articles.length);
-        }, 5000);
+        }, 6000);
         return () => clearInterval(interval);
     }, [articles.length]);
 
@@ -31,105 +31,99 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
         setCurrentIndex((prev) => (prev + 1) % articles.length);
     };
 
+    const currentArticle = articles[currentIndex];
+
     return (
-        <div className="editorial-carousel-container trans-enter">
+        <div className="editorial-carousel-container">
             <Container>
-                <h2 className="section-title">Editorial Picks</h2>
+                <h2 className="section-title" style={{ marginBottom: '24px' }}>Editorial Picks</h2>
 
                 <div className="editorial-carousel-premium">
-                    <div className="carousel-slides" style={{
-                        display: 'flex',
-                        width: '100%',
-                        height: '100%',
-                        transition: 'transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)',
-                        transform: `translateX(-${currentIndex * 100}%)`
-                    }}>
-                        {articles.map((article) => (
-                            <div key={article.id} className="carousel-slide" style={{ minWidth: '100%', height: '100%', position: 'relative' }}>
-                                {/* Background Image with Overlay */}
-                                <div className="carousel-bg" style={{
-                                    position: 'absolute',
-                                    top: 0, left: 0, right: 0, bottom: 0,
-                                    backgroundImage: `url(${article.coverImage ? `${article.coverImage}?t=${article.createdAt ? new Date(article.createdAt).getTime() : 0}` : '/placeholder.jpg'})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    zIndex: 1
-                                }} />
+                    {/* Background Image - crossfade style */}
+                    {articles.map((article, idx) => (
+                        <div
+                            key={article.id}
+                            className="carousel-bg-layer"
+                            style={{
+                                position: 'absolute',
+                                inset: 0,
+                                backgroundImage: `url(${article.coverImage ? `${article.coverImage}?t=${article.createdAt ? new Date(article.createdAt).getTime() : 0}` : '/placeholder.jpg'})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center top',
+                                opacity: idx === currentIndex ? 1 : 0,
+                                transition: 'opacity 1s cubic-bezier(0.4, 0, 0.2, 1)',
+                                zIndex: 1
+                            }}
+                        />
+                    ))}
 
-                                {/* Content */}
-                                <div className="carousel-slide-content">
-                                    <span className="carousel-tag">
-                                        Featured Article
+                    {/* Dark overlay for text readability */}
+                    <div className="carousel-overlay" />
+
+                    {/* Content overlay */}
+                    <div className="carousel-slide-content">
+                        <div className="carousel-content-inner">
+                            <span className="carousel-tag">
+                                ★ Featured Article
+                            </span>
+
+                            <Link href={`/article/${currentArticle.id}`} style={{ textDecoration: 'none' }}>
+                                <h3 className="carousel-title">
+                                    {currentArticle.title}
+                                </h3>
+                            </Link>
+
+                            <div className="carousel-footer">
+                                <div className="carousel-meta">
+                                    <span className="carousel-date">
+                                        {new Date(currentArticle.createdAt || '').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                     </span>
-
-                                    <Link href={`/article/${article.id}`} style={{ textDecoration: 'none' }}>
-                                        <h3 className="carousel-title">
-                                            {article.title}
-                                        </h3>
-                                    </Link>
-
-                                    <div className="carousel-footer">
-                                        <span>{new Date(article.createdAt || '').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                                        {article.xSourceUrl && (
-                                            <a href={article.xSourceUrl} target="_blank" rel="noopener noreferrer" style={{
-                                                color: '#fff',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '8px',
-                                                textDecoration: 'none',
-                                                fontWeight: 600
-                                            }}>
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
-                                                </svg>
-                                                Source X
-                                            </a>
-                                        )}
-                                        <Link href={`/article/${article.id}`} className="carousel-read-btn">
-                                            Read Article <span style={{ fontSize: '1.2rem' }}>→</span>
-                                        </Link>
-                                    </div>
+                                    {currentArticle.xSourceUrl && (
+                                        <a href={currentArticle.xSourceUrl} target="_blank" rel="noopener noreferrer" className="carousel-x-link">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
+                                            </svg>
+                                            Source
+                                        </a>
+                                    )}
                                 </div>
+                                <Link href={`/article/${currentArticle.id}`} className="carousel-read-btn">
+                                    Read Article <span style={{ fontSize: '1.1rem' }}>→</span>
+                                </Link>
                             </div>
-                        ))}
+                        </div>
+
+                        {/* Indicators inline with content */}
+                        {articles.length > 1 && (
+                            <div className="carousel-indicators">
+                                {articles.map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setCurrentIndex(idx)}
+                                        className={`carousel-dot ${idx === currentIndex ? 'active' : ''}`}
+                                        aria-label={`Go to slide ${idx + 1}`}
+                                    />
+                                ))}
+                                <span className="carousel-counter">
+                                    {currentIndex + 1} / {articles.length}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Controls */}
+                    {/* Nav arrows */}
                     {articles.length > 1 && (
                         <>
-                            <button onClick={handlePrevious} className="carousel-nav-btn prev" style={{
-                                position: 'absolute', top: '50%', left: '32px', transform: 'translateY(-50%)',
-                                zIndex: 20
-                            }} aria-label="Previous Article">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                            <button onClick={handlePrevious} className="carousel-nav-btn prev" aria-label="Previous Article">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                             </button>
-                            <button onClick={handleNext} className="carousel-nav-btn next" style={{
-                                position: 'absolute', top: '50%', right: '32px', transform: 'translateY(-50%)',
-                                zIndex: 20
-                            }} aria-label="Next Article">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                            <button onClick={handleNext} className="carousel-nav-btn next" aria-label="Next Article">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                             </button>
                         </>
-                    )}
-
-                    {/* Indicators */}
-                    {articles.length > 1 && (
-                        <div style={{
-                            position: 'absolute', bottom: '32px', left: '60px',
-                            display: 'flex', gap: '8px', zIndex: 20
-                        }}>
-                            {articles.map((_, idx) => (
-                                <button key={idx} onClick={() => setCurrentIndex(idx)} style={{
-                                    width: idx === currentIndex ? '32px' : '8px', height: '4px', borderRadius: '2px',
-                                    background: idx === currentIndex ? '#fff' : 'rgba(255,255,255,0.3)',
-                                    border: 'none', cursor: 'pointer', transition: 'all 0.4s'
-                                }} aria-label={`Go to slide ${idx + 1}`} />
-                            ))}
-                        </div>
                     )}
                 </div>
             </Container>
         </div>
     );
-
 }
