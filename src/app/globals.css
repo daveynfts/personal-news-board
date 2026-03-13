@@ -1,18 +1,18 @@
 :root {
-  --bg-color: #000000;
+  --bg-color: #030305;
   --surface-color: rgba(255, 255, 255, 0.04);
   --surface-secondary: rgba(255, 255, 255, 0.07);
   --surface-hover: rgba(255, 255, 255, 0.1);
   
   /* Apple Liquid Glass Variables */
-  --glass-bg: rgba(18, 18, 22, 0.3);
+  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-highlight: rgba(255, 255, 255, 0.2);
+  --glass-highlight: rgba(255, 255, 255, 0.25);
   --glass-blur: 24px;
-  --glass-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
   
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.75);
+  --text-primary: #F5F5F7;
+  --text-secondary: rgba(255, 255, 255, 0.65);
   --text-muted: rgba(255, 255, 255, 0.45);
   
   --accent-color: #ffffff;
@@ -31,9 +31,13 @@
   --radius-md: 16px;
   --radius-sm: 8px;
   
-  --font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --transition-premium: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  --transition-smooth: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  --font-family: "SF Pro Display", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  /* Apple Spring Physics */
+  --spring-snappy: cubic-bezier(0.175, 0.885, 0.32, 1.15); /* Back-out / Overshoot */
+  --spring-fluid: cubic-bezier(0.23, 1, 0.32, 1); /* Ease-out-quint / Smooth decel */
+  --transition-premium: all 0.6s var(--spring-snappy);
+  --transition-smooth: all 0.4s var(--spring-fluid);
 }
 
 * {
@@ -97,6 +101,40 @@ a {
   gap: 32px;
 }
 
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); /* 12-column grid for precise spanning */
+  gap: 32px;
+  grid-auto-flow: dense;
+}
+
+.bento-featured {
+  grid-column: span 12;
+}
+
+@media (min-width: 900px) {
+  .bento-featured {
+    grid-column: span 8;
+    grid-row: span 2;
+  }
+}
+
+.bento-standard {
+  grid-column: span 12;
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .bento-standard {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 900px) {
+  .bento-standard {
+    grid-column: span 4;
+  }
+}
+
 /* .section-title is defined below with underline decoration */
 
 .section-header-premium {
@@ -116,27 +154,36 @@ a {
 
 
 .app-header {
-  padding: 12px 0;
+  padding: 10px 24px;
   position: sticky;
-  top: 0;
+  top: 16px;
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  background: rgba(20, 20, 25, 0.4);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  transition: var(--transition-smooth);
+  box-shadow: 0 16px 32px -12px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.15);
+  max-width: 1000px;
+  margin: 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .app-header:hover {
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom-color: rgba(255, 255, 255, 0.15);
+  background: rgba(30, 30, 35, 0.5);
+  border-top-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.25);
 }
-
 
 .header-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .logo {
@@ -477,7 +524,7 @@ a {
   border-left-color: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: var(--transition-premium);
+  transition: transform 0.6s var(--spring-snappy), box-shadow 0.6s var(--spring-fluid), background 0.4s ease, border-color 0.4s ease;
   box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2);
   display: flex;
   flex-direction: column;
@@ -485,6 +532,21 @@ a {
   position: relative;
   width: 380px;
   flex-shrink: 0;
+}
+
+/* Base Liquid Light Sweep Layer */
+.post-card::before {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: -100%; 
+  width: 50%; 
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s var(--spring-fluid);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .post-card::after {
@@ -502,14 +564,14 @@ a {
 }
 
 .post-card:hover {
-  transform: translateY(-10px) scale(1.02);
+  transform: translateY(-8px) scale(1.03);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(30, 30, 40, 0.4) 100%);
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .post-card:hover::before {
-  opacity: 1;
+  left: 200%; /* Sweeps the light across the card */
 }
 
 .post-card-media {
@@ -536,18 +598,18 @@ a {
   top: 16px;
   left: 16px;
   padding: 6px 14px;
-  border-radius: 8px;
+  border-radius: 20px;
   font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
   color: #fff;
   z-index: 10;
   letter-spacing: 0.1em;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.4);
 }
 
 

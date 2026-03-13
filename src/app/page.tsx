@@ -53,24 +53,32 @@ export default async function Home({ searchParams }: PageProps) {
         </section>
       )}
 
-      {/* ARTICLE ARCHIVE */}
+      {/* ARTICLE ARCHIVE - Bento Box Hero Section */}
       {(!filter || filter === 'all') && standardArticles.length > 0 && (
         <section className="articles-archive">
           <Container>
             <h2 className="section-title">Latest Features</h2>
-            <div className="grid-auto-300">
-              {standardArticles.map(article => (
-                <Link href={`/article/${article.id}`} key={article.id} style={{ textDecoration: 'none' }}>
-                  <div className="post-card">
+            <div className="bento-grid">
+              {standardArticles.map((article, index) => (
+                <Link 
+                  href={`/article/${article.id}`} 
+                  key={article.id} 
+                  className={`bento-item ${index === 0 ? 'bento-featured' : 'bento-standard'}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <div className="post-card" style={{ width: '100%' }}>
                     {article.coverImage && (
                       <div 
                         className="feature-card-media"
-                        style={{ backgroundImage: `url(${article.coverImage})` }} 
+                        style={{ 
+                          backgroundImage: `url(${article.coverImage})`,
+                          height: index === 0 ? '400px' : '200px' 
+                        }} 
                       />
                     )}
                     <div className="post-card-body">
-                      <span className="type-tag" style={{ background: 'var(--blog-color)', position: 'static', marginBottom: '16px', display: 'inline-block' }}>Editorial</span>
-                      <h3 className="post-title">{article.title}</h3>
+                      <span className="type-tag" style={{ background: 'var(--blog-color)', position: index === 0 ? 'absolute' : 'static', marginBottom: index === 0 ? '0' : '16px', display: 'inline-block' }}>Editorial</span>
+                      <h3 className="post-title" style={{ fontSize: index === 0 ? '2.5rem' : '1.4rem' }}>{article.title}</h3>
                       <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 'auto' }}>
                         {new Date(article.createdAt || '').toLocaleDateString()}
                       </span>
