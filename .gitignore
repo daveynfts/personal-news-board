@@ -48,3 +48,6 @@ next-env.d.ts
 
 # database
 *.sqlite
+
+# local uploads
+/public/uploads/

@@ -6,6 +6,18 @@ import type { Post } from '@/lib/db';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop';
 
+// Check if a URL looks like a valid image source (not a social media page URL)
+function isValidImageUrl(url?: string): boolean {
+    if (!url || !url.startsWith('http')) return false;
+    // Reject common non-image URLs (social media profile/page links)
+    const nonImagePatterns = [
+        /^https?:\/\/(www\.)?x\.com\/[^/]+\/(photo|status)/,
+        /^https?:\/\/(www\.)?twitter\.com\/[^/]+\/(photo|status)/,
+    ];
+    if (nonImagePatterns.some(p => p.test(url))) return false;
+    return true;
+}
+
 export default function PostCard({ post }: { post: Post }) {
     const isX = post.type === 'X';
     const isNews = post.type === 'News';
@@ -21,7 +33,8 @@ export default function PostCard({ post }: { post: Post }) {
         setImgError(false);
     }
 
-    const displayImg = !imgError && post.imageUrl ? post.imageUrl : FALLBACK_IMAGE;
+    const hasValidImage = !imgError && isValidImageUrl(post.imageUrl);
+    const displayImg = hasValidImage ? post.imageUrl! : FALLBACK_IMAGE;
 
     return (
         <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card">
@@ -35,6 +48,7 @@ export default function PostCard({ post }: { post: Post }) {
                     fill
                     className="post-image"
                     onError={() => setImgError(true)}
+                    unoptimized
                 />
             </div>
             <div className="post-card-body">

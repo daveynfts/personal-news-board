@@ -24,15 +24,19 @@ const fallbackData: CoinData[] = [
 
 async function getCryptoData(): Promise<CoinData[]> {
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
         const res = await fetch('https://api.coincap.io/v2/assets?limit=20', {
-            next: { revalidate: 60 } // Cache data for 60 seconds
+            next: { revalidate: 60 },
+            signal: controller.signal,
         });
+        clearTimeout(timeoutId);
         if (!res.ok) throw new Error('Failed to fetch crypto data');
         const json = await res.json();
         return json.data;
-    } catch (error) {
-        console.error('Crypto fetch error, returning fallback data:', error);
-        return fallbackData; // Fallback so the ticker never breaks
+    } catch {
+        // Silently fallback - this is expected when offline or API is unreachable
+        return fallbackData;
     }
 }
 
