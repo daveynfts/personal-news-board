@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { convertToWebP } from '@/lib/convertToWebP';
 import ImageCropperModal from './ImageCropperModal';
+import Image from 'next/image';
 
 interface Post {
     id: number;
@@ -162,11 +163,6 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
         }
     };
 
-    const typeColors: Record<string, string> = {
-        News: 'var(--news-color)',
-        Blog: 'var(--blog-color)',
-        X: 'var(--x-color)',
-    };
 
     return (
         <div className="admin-page-layout trans-enter">
@@ -271,8 +267,8 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
 
                             {imageUrl && imageUrl.startsWith('http') && (
                                 <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
-                                    <img src={imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 900, color: '#fff', textTransform: 'uppercase' }}>
+                                    <Image src={imageUrl} alt="Preview" fill style={{ objectFit: 'cover' }} unoptimized />
+                                    <div style={{ position: 'absolute', top: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 900, color: '#fff', textTransform: 'uppercase', zIndex: 1 }}>
                                         Preview
                                     </div>
                                 </div>

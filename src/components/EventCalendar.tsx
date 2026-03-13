@@ -3,6 +3,7 @@
 import { CalendarEvent } from '@/lib/db';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import Image from 'next/image';
 
 interface EventCalendarProps {
     events: CalendarEvent[];
@@ -84,7 +85,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     <div key={featuredEvent.id} className="featured-event-card trans-up">
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
-                                <img src={`${featuredEvent.imageUrl}?t=${featuredEvent.createdAt ? new Date(featuredEvent.createdAt).getTime() : 0}`} alt={featuredEvent.title} />
+                                <Image src={`${featuredEvent.imageUrl}?t=${featuredEvent.createdAt ? new Date(featuredEvent.createdAt).getTime() : 0}`} alt={featuredEvent.title} fill style={{ objectFit: 'cover' }} unoptimized />
                             ) : (
                                 <div className="event-image-placeholder">
                                     <span>📅</span>
@@ -188,8 +189,8 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                     </div>
                                                 </div>
                                                 {(event.timelineImageUrl || event.imageUrl) && (
-                                                    <div className="timeline-event-thumb">
-                                                        <img src={`${event.timelineImageUrl || event.imageUrl}?t=${event.createdAt ? new Date(event.createdAt).getTime() : 0}`} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    <div className="timeline-event-thumb" style={{ position: 'relative', overflow: 'hidden' }}>
+                                                        <Image src={`${event.timelineImageUrl || event.imageUrl}?t=${event.createdAt ? new Date(event.createdAt).getTime() : 0}`} alt={event.title} fill style={{ objectFit: 'cover' }} unoptimized />
                                                     </div>
                                                 )}
                                             </div>

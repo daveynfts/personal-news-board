@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { convertToWebP } from '@/lib/convertToWebP';
 import ImageCropperModal from './ImageCropperModal';
+import Image from 'next/image';
 
 interface Article {
     id: number;
@@ -260,8 +261,8 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                             </div>
                             {coverImage && coverImage.startsWith('http') && (
                                 <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
-                                    <img src={coverImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    <div style={{ position: 'absolute', bottom: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 900, color: '#fff', textTransform: 'uppercase' }}>
+                                    <Image src={coverImage} alt="Preview" fill style={{ objectFit: 'cover' }} unoptimized />
+                                    <div style={{ position: 'absolute', bottom: '8px', right: '8px', padding: '4px 8px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 900, color: '#fff', textTransform: 'uppercase', zIndex: 1 }}>
                                         Preview
                                     </div>
                                 </div>

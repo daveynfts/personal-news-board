@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { convertToWebP } from '@/lib/convertToWebP';
 import { CalendarEvent } from '@/lib/db';
 import ImageCropperModal from './ImageCropperModal';
+import Image from 'next/image';
 
 interface AdminEventsProps {
     addToast: (message: string, type?: 'success' | 'error') => void;
@@ -21,7 +22,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [showConfirm, setShowConfirm] = useState<{ id: number; title: string } | null>(null);
     const [loading, setLoading] = useState(false);
-    const [uploading, setUploading] = useState(false);
+    const [, setUploading] = useState(false);
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
     const [cropFile, setCropFile] = useState<{ src: string, file: File, type: 'cover' | 'timeline' } | null>(null);
 
@@ -329,8 +330,8 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                     </label>
                                 </div>
                                 {imageUrl && (
-                                    <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '16/9', background: '#000' }}>
-                                        <img src={imageUrl} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '16/9', background: '#000', position: 'relative' }}>
+                                        <Image src={imageUrl} alt="Banner" fill style={{ objectFit: 'cover' }} unoptimized />
                                     </div>
                                 )}
                             </div>
@@ -358,8 +359,8 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                     </label>
                                 </div>
                                 {timelineImageUrl && (
-                                    <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '1/1', width: '60px', background: '#000' }}>
-                                        <img src={timelineImageUrl} alt="Thumb" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '1/1', width: '60px', background: '#000', position: 'relative' }}>
+                                        <Image src={timelineImageUrl} alt="Thumb" fill style={{ objectFit: 'cover' }} unoptimized />
                                     </div>
                                 )}
                             </div>
@@ -426,8 +427,8 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                                 </div>
                                             </div>
                                             {(event.timelineImageUrl || event.imageUrl) && (
-                                                <div className="timeline-event-thumb" style={{ width: '80px', height: '80px', borderRadius: '12px' }}>
-                                                    <img src={event.timelineImageUrl || event.imageUrl} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                <div className="timeline-event-thumb" style={{ width: '80px', height: '80px', borderRadius: '12px', position: 'relative', overflow: 'hidden' }}>
+                                                    <Image src={event.timelineImageUrl || event.imageUrl || ''} alt={event.title} fill style={{ objectFit: 'cover' }} unoptimized />
                                                 </div>
                                             )}
                                         </div>
