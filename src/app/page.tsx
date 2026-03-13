@@ -35,10 +35,15 @@ export default async function Home({ searchParams }: PageProps) {
           <EventCalendar events={allEvents} />
         </Container>
       ) : (
-        <section className="hero">
-          <h2>Your Curated Universe.</h2>
-          <p>A personal collection of top news, insightful blogs, and interesting X threads, built for elite curation.</p>
-        </section>
+        <div className="hero-wrapper" style={{ margin: '40px auto 60px', padding: '0 20px' }}>
+          <div className="liquid-blob blob-1"></div>
+          <div className="liquid-blob blob-2"></div>
+          <div className="liquid-blob blob-3"></div>
+          <section className="hero hero-glass-container">
+            <h2>Your Curated Universe.</h2>
+            <p>A personal collection of top news, insightful blogs, and interesting X threads, built for elite curation.</p>
+          </section>
+        </div>
       )}
 
       {/* EDITORIAL CAROUSEL */}
