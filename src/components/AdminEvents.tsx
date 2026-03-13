@@ -155,7 +155,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                 fetchEvents();
             } else {
                 const data = await res.json();
-                addToast(data.error || 'Conservation failed.', 'error');
+                addToast(data.error || 'Operation failed.', 'error');
             }
         } catch (err: unknown) {
             addToast(err instanceof Error ? err.message : 'An unknown error occurred.', 'error');
@@ -322,7 +322,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                     <input
                                         type="file"
                                         onChange={(e) => handleFileUpload(e, 'cover')}
-                                    disabled={uploading}
+                                        disabled={uploading}
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         id="event-file-upload-cover"
@@ -352,7 +352,7 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                     <input
                                         type="file"
                                         onChange={(e) => handleFileUpload(e, 'timeline')}
-                                    disabled={uploading}
+                                        disabled={uploading}
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         id="event-file-upload-timeline"

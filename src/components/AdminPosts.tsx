@@ -169,7 +169,7 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
 
             {showConfirm && (
                 <div className="modal-overlay" onClick={() => setShowConfirm(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                    <div className="apple-modal" onClick={e => e.stopPropagation()}>
                         <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🗑️</div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 900 }}>Remove Post?</h3>
                         <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '1rem', lineHeight: 1.5 }}>
@@ -179,7 +179,7 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '32px' }}>This action cannot be undone.</p>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                             <button className="edit-btn" style={{ padding: '14px' }} onClick={() => setShowConfirm(null)}>Cancel</button>
-                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px' }} onClick={handleDelete} disabled={loading}>
+                            <button className="submit-btn" style={{ background: '#ff453a', color: '#fff', padding: '14px', marginTop: 0 }} onClick={handleDelete} disabled={loading}>
                                 {loading ? 'Removing...' : 'Remove'}
                             </button>
                         </div>
