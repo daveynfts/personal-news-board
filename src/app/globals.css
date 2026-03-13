@@ -1748,31 +1748,201 @@ a {
   border-radius: 4px;
 }
 
-/* === CAROUSEL CONTROLS === */
+/* === CAROUSEL CONTROLS — Liquid Glass Dark Variant === */
+
+/* Shimmer keyframe (shared, idempotent if already defined) */
+@keyframes glass-shimmer {
+  0%   { transform: skewX(-20deg) translateX(-180%); opacity: 0; }
+  30%  { opacity: 0.8; }
+  70%  { opacity: 0.8; }
+  100% { transform: skewX(-20deg) translateX(300%); opacity: 0; }
+}
+
+/* Idle glow pulse — dark variant (dimmer than editorial) */
+@keyframes glass-ctrl-pulse {
+  0%, 100% { box-shadow:
+    0 4px 16px -4px rgba(0, 0, 0, 0.6),
+    0 1px 4px -1px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    inset 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+  50% { box-shadow:
+    0 6px 20px -4px rgba(0, 0, 0, 0.7),
+    0 1px 4px -1px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    inset 1px 0 0 rgba(255, 255, 255, 0.12),
+    0 0 12px 1px rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* Container for the prev/next pair */
+.featured-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .carousel-control {
-  width: 32px;
-  height: 28px;
+  /* Dimensions — compact circle */
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  /* === DARK GLASS MATERIALITY ===
+     Sits inside a dark glass card → use deeper tints, less white, more depth */
+  background:
+    radial-gradient(
+      ellipse 88% 48% at 50% 0%,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0) 70%
+    ),
+    linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.04) 45%,
+      rgba(255, 255, 255, 0.01) 70%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
+
+  /* Asymmetric edge lighting — top/left catch light */
+  border: 1px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.30);
+  border-left-color: rgba(255, 255, 255, 0.18);
+  border-right-color: rgba(255, 255, 255, 0.07);
+  border-bottom-color: rgba(0, 0, 0, 0.22);
+
+  /* Depth shadow stack */
+  box-shadow:
+    0 4px 16px -4px rgba(0, 0, 0, 0.6),
+    0 1px 4px -1px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    inset 1px 0 0 rgba(255, 255, 255, 0.08);
+
+  /* Icon */
+  color: rgba(255, 255, 255, 0.88);
+
+  /* Layout */
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.9);
-  color: #1c1c1e;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+
+  /* Spring physics */
+  transition:
+    transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.175),
+    box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+    background 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 0.3s ease;
+
+  /* Idle pulse */
+  animation: glass-ctrl-pulse 3.5s ease-in-out infinite;
 }
 
+/* Shimmer sweep layer */
+.carousel-control::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg) translateX(-180%);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Upper hemisphere micro-gloss */
+.carousel-control::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 7px;
+  right: 7px;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 50% 50% 0 0 / 80% 80% 0 0;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+/* === HOVER — amplified glass === */
 .carousel-control:hover {
-  background: #ffffff;
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.14);
+  animation: none;
+
+  background:
+    radial-gradient(
+      ellipse 88% 48% at 50% 0%,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0) 70%
+    ),
+    linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.02) 70%,
+      rgba(0, 0, 0, 0.08) 100%
+    );
+
+  border-top-color: rgba(255, 255, 255, 0.48);
+  border-left-color: rgba(255, 255, 255, 0.28);
+  border-right-color: rgba(255, 255, 255, 0.12);
+  border-bottom-color: rgba(0, 0, 0, 0.15);
+
+  box-shadow:
+    0 8px 28px -6px rgba(0, 0, 0, 0.7),
+    0 2px 8px -2px rgba(0, 0, 0, 0.55),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    inset 1px 0 0 rgba(255, 255, 255, 0.16),
+    0 0 16px 2px rgba(255, 255, 255, 0.05);
+
+  color: #fff;
 }
 
+/* Trigger shimmer on hover */
+.carousel-control:hover::before {
+  animation: glass-shimmer 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* === ACTIVE / PRESS — spring compress === */
 .carousel-control:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transform: scale(0.90) !important;
+  box-shadow:
+    0 2px 8px -2px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 2px 5px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.1s ease;
+}
+
+/* === FOCUS VISIBLE — glass ring === */
+.carousel-control:focus-visible {
+  outline: none;
+  box-shadow:
+    0 4px 16px -4px rgba(0, 0, 0, 0.6),
+    0 0 0 2px rgba(255, 255, 255, 0.12),
+    0 0 0 4px rgba(255, 255, 255, 0.45);
 }
 
 /* === EDITORIAL CAROUSEL PREMIUM === */
