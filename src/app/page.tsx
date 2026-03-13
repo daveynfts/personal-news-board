@@ -4,7 +4,9 @@ import PostCard from '@/components/PostCard';
 import EditorialCarousel from '@/components/EditorialCarousel';
 import EventCalendar from '@/components/EventCalendar';
 import Container from '@/components/Container';
+import FilterBar from '@/components/FilterBar';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +28,6 @@ export default async function Home({ searchParams }: PageProps) {
   const editorialPicks = allArticles.filter(a => a.isEditorialPick);
   const standardArticles = allArticles.filter(a => !a.isEditorialPick);
 
-  const categories = ['All', 'News', 'Blog', 'X'];
 
   return (
     <div className="home-container">
@@ -95,17 +96,15 @@ export default async function Home({ searchParams }: PageProps) {
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
         <h2 className="section-title" style={{ marginBottom: '32px' }}>DaveyNFTs&apos; Picks</h2>
         
-        <div className="filter-container" style={{ margin: '0 auto 48px' }}>
-          {categories.map((cat) => (
-            <Link
-              key={cat}
-              href={cat === 'All' ? '/' : `/?filter=${cat.toLowerCase()}`}
-              className={`filter-btn ${(!filter && cat === 'All') || filter === cat.toLowerCase() ? 'active' : ''}`}
-            >
-              {cat}
-            </Link>
-          ))}
-        </div>
+        <Suspense fallback={
+          <div className="filter-container" style={{ margin: '0 auto 48px' }}>
+            {['All', 'News', 'Blog', 'X'].map(cat => (
+              <span key={cat} className="filter-btn">{cat}</span>
+            ))}
+          </div>
+        }>
+          <FilterBar />
+        </Suspense>
 
         <section className="feed">
           {filteredPosts.length === 0 ? (

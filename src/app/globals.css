@@ -4,12 +4,21 @@
   --surface-secondary: rgba(255, 255, 255, 0.07);
   --surface-hover: rgba(255, 255, 255, 0.1);
   
-  /* Apple Liquid Glass Variables */
+  /* Liquid Glass Variables — upgraded */
   --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-highlight: rgba(255, 255, 255, 0.25);
-  --glass-blur: 24px;
-  --glass-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.28);
+  --glass-blur: 28px;
+  --glass-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+  
+  /* Google Material You Color Tokens */
+  --google-blue: #4285F4;
+  --google-red: #EA4335;
+  --google-yellow: #FBBC04;
+  --google-green: #34A853;
+  --google-ripple: rgba(66, 133, 244, 0.28);
+  --m3-state-hover: rgba(255,255,255,0.08);
+  --m3-state-pressed: rgba(255,255,255,0.12);
   
   --text-primary: #F5F5F7;
   --text-secondary: rgba(255, 255, 255, 0.65);
@@ -33,11 +42,13 @@
   
   --font-family: "SF Pro Display", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
-  /* Apple Spring Physics */
-  --spring-snappy: cubic-bezier(0.175, 0.885, 0.32, 1.15); /* Back-out / Overshoot */
-  --spring-fluid: cubic-bezier(0.23, 1, 0.32, 1); /* Ease-out-quint / Smooth decel */
+  /* Spring Physics */
+  --spring-snappy: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  --spring-fluid: cubic-bezier(0.23, 1, 0.32, 1);
+  --spring-google: cubic-bezier(0.2, 0, 0, 1); /* Google's standard easing */
   --transition-premium: all 0.6s var(--spring-snappy);
   --transition-smooth: all 0.4s var(--spring-fluid);
+  --transition-google: all 0.35s var(--spring-google);
 }
 
 * {
@@ -153,30 +164,99 @@ a {
 
 
 
+/* ============================
+   LIQUID GLASS HEADER — v2
+   Google-meets-Apple aesthetic
+   ============================ */
 .app-header {
-  padding: 10px 24px;
+  padding: 8px 20px;
   position: sticky;
   top: 16px;
   z-index: 9999;
-  background: rgba(20, 20, 25, 0.4);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top-color: rgba(255, 255, 255, 0.25);
+  /* True liquid glass: layered bg + prism refraction */
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,0.09) 0%,
+      rgba(255,255,255,0.03) 50%,
+      rgba(255,255,255,0.07) 100%);
+  backdrop-filter: blur(32px) saturate(220%) brightness(1.05);
+  -webkit-backdrop-filter: blur(32px) saturate(220%) brightness(1.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.3);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
   border-radius: 999px;
-  transition: var(--transition-smooth);
-  box-shadow: 0 16px 32px -12px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.15);
+  transition: box-shadow 0.5s var(--spring-fluid), background 0.5s var(--spring-fluid), border-color 0.5s var(--spring-fluid);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.3),
+    0 12px 32px -8px rgba(0,0,0,0.5),
+    inset 0 1.5px 1px rgba(255,255,255,0.2),
+    inset 0 -1px 0 rgba(0,0,0,0.1);
   max-width: 1000px;
   margin: 16px auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* Prismatic border shimmer layer */
+  position: sticky;
+}
+
+/* Animated prismatic shimmer on header */
+.app-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.06) 25%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.06) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: header-shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes header-shimmer {
+  0%   { background-position: -100% 0; opacity: 0.5; }
+  50%  { background-position: 100% 0;  opacity: 1;   }
+  100% { background-position: -100% 0; opacity: 0.5; }
+}
+
+/* Refraction edge highlight (top inner glow) */
+.app-header::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 8px; right: 8px;
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.5) 20%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0.5) 80%,
+    transparent
+  );
+  filter: blur(0.5px);
+  pointer-events: none;
 }
 
 .app-header:hover {
-  background: rgba(30, 30, 35, 0.5);
-  border-top-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.25);
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,0.13) 0%,
+      rgba(255,255,255,0.05) 50%,
+      rgba(255,255,255,0.1) 100%);
+  border-top-color: rgba(255, 255, 255, 0.42);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.3),
+    0 20px 48px -10px rgba(0,0,0,0.6),
+    inset 0 1.5px 1px rgba(255,255,255,0.3),
+    inset 0 -1px 0 rgba(0,0,0,0.1);
 }
 
 .header-inner {
@@ -184,6 +264,8 @@ a {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
@@ -193,55 +275,100 @@ a {
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-top-color: rgba(255,255,255,0.35);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   transition: var(--transition-smooth);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1), inset 0 1px 0 var(--glass-highlight);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+.logo-icon:hover {
+  transform: rotate(-8deg) scale(1.1);
+  border-color: rgba(255,255,255,0.3);
 }
 
 .logo h1 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--text-primary);
-  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+  letter-spacing: -0.4px;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.75) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+/* Google Material You Nav */
 .main-nav {
   display: flex;
-  gap: 32px;
+  gap: 4px;
 }
 
+/* Google-style ripple nav links */
 .nav-link {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
-  transition: all 0.3s ease;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  padding: 8px 16px;
+  font-size: 0.83rem;
+  letter-spacing: 0.06em;
+  padding: 8px 18px;
   border-radius: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.25s var(--spring-google);
+  /* Google M3 state layer */
+  isolation: isolate;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 40px;
+  background: rgba(255,255,255,0);
+  transition: background 0.25s var(--spring-google);
+  z-index: -1;
+}
+
+/* Google Ripple Effect */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  inset: 50% 50%;
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: none;
+  z-index: 0;
+}
+
+.nav-link:hover::before {
+  background: rgba(255,255,255,0.09);
 }
 
 .nav-link:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link:active::after {
+  transform: translate(-50%, -50%) scale(3);
+  opacity: 0;
+  transition: transform 0.5s var(--spring-fluid), opacity 0.5s var(--spring-fluid);
 }
 
 .nav-link.active {
   color: #000;
-  background: #fff;
+  background: linear-gradient(135deg, #fff 0%, #f0f0f2 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
 
@@ -369,47 +496,222 @@ a {
   text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-/* === FILTERS === */
+/* ============================================
+   LIQUID GLASS FILTER / TAB SWITCHER — v3
+   Google Material You + Apple Liquid Glass
+   ============================================ */
 .filter-container {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 6px;
   margin-bottom: 48px;
-  background: rgba(30, 30, 35, 0.4);
-  padding: 8px;
-  border-radius: 24px;
+  /* Deep liquid glass with prismatic refraction */
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.09) 0%,
+      rgba(255,255,255,0.03) 60%,
+      rgba(255,255,255,0.06) 100%);
+  padding: 6px;
+  border-radius: 999px;
   width: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top-color: rgba(255, 255, 255, 0.32);
+  border-bottom-color: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(220%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(220%) brightness(1.06);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.25),
+    0 16px 40px -8px rgba(0,0,0,0.55),
+    inset 0 1.5px 1px rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(0,0,0,0.12),
+    /* Google-style subtle colored ambient glow */
+    0 0 0 1px rgba(66,133,244,0.08),
+    0 8px 32px rgba(66,133,244,0.06);
   position: relative;
   z-index: 10;
+  isolation: isolate;
+  /* Smooth entrance */
+  animation: filter-bar-enter 0.6s var(--spring-snappy) both;
 }
 
+@keyframes filter-bar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Top prismatic highlight streak */
+.filter-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12px; right: 12px;
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.6) 25%,
+    rgba(255,255,255,0.9) 50%,
+    rgba(255,255,255,0.6) 75%,
+    transparent 100%
+  );
+  filter: blur(0.4px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Bottom iridescent tint (Google prism effect) */
+.filter-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: conic-gradient(
+    from 180deg at 50% 120%,
+    rgba(66,133,244,0.08) 0deg,
+    rgba(234,67,53,0.06) 72deg,
+    rgba(251,188,4,0.06) 144deg,
+    rgba(52,168,83,0.06) 216deg,
+    rgba(66,133,244,0.08) 288deg,
+    rgba(66,133,244,0.08) 360deg
+  );
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.7;
+  animation: prism-rotate 8s linear infinite;
+}
+
+@keyframes prism-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ---- Tab Buttons ---- */
 .filter-btn {
-  padding: 8px 20px;
-  border-radius: 12px;
-  font-size: 0.85rem;
+  padding: 9px 22px;
+  border-radius: 999px;
+  font-size: 0.84rem;
   font-weight: 700;
   background: transparent;
   color: var(--text-muted);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
   border: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* Google M3 easing */
+  transition: color 0.3s var(--spring-google), transform 0.2s var(--spring-google);
+  z-index: 1;
+}
+
+/* State layer (hover/focus) — Google Material You */
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0);
+  transition: background 0.25s var(--spring-google);
+  z-index: -1;
+}
+
+/* Google Ripple inkspot */
+.filter-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0);
+  animation: google-ripple 0.6s var(--spring-fluid);
+  pointer-events: none;
+}
+
+@keyframes google-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.filter-btn:hover::before {
+  background: rgba(255,255,255,0.08);
 }
 
 .filter-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255,255,255,0.9);
+  transform: translateY(-1px);
 }
 
+.filter-btn:active {
+  transform: scale(0.95) translateY(0);
+}
+
+/* ACTIVE — Liquid Glass Pill (sliding indicator) */
 .filter-btn.active {
-  background: #fff;
-  color: #000;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+  /* Frosted white pill — Apple meets Google */
+  background:
+    linear-gradient(160deg,
+      rgba(255,255,255,0.96) 0%,
+      rgba(240,240,248,0.92) 100%);
+  color: #0d0d12;
+  font-weight: 800;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.15),
+    0 4px 16px rgba(0,0,0,0.2),
+    0 8px 24px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -1px 0 rgba(0,0,0,0.08);
+  /* Google-style depth letter-spacing  */
+  letter-spacing: 0.02em;
+  transform: translateY(-1px);
+  transition:
+    background 0.3s var(--spring-google),
+    color 0.3s var(--spring-google),
+    box-shadow 0.3s var(--spring-google),
+    transform 0.3s var(--spring-snappy);
+}
+
+/* Active pill inner shimmer */
+.filter-btn.active::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.4) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: pill-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes pill-shimmer {
+  0%   { background-position: -100% 0; opacity: 0; }
+  40%  { opacity: 1; }
+  100% { background-position: 200% 0; opacity: 0; }
+}
+
+/* Colored dot under active pill — Google indicator */
+.filter-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--google-blue);
+  box-shadow: 0 0 6px var(--google-blue);
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 0.6; transform: translateX(-50%) scale(0.7); }
 }
 
 
