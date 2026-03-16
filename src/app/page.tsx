@@ -82,14 +82,14 @@ export default async function Home({ searchParams }: PageProps) {
       )}
 
       {/* EDITORIAL CAROUSEL */}
-      {(!filter || filter === 'all') && editorialPicks.length > 0 && (
+      {editorialPicks.length > 0 && (
         <section style={{ margin: '0 auto 60px', width: '100%', maxWidth: '1200px' }}>
           <EditorialCarousel articles={editorialPicks} />
         </section>
       )}
 
       {/* ARTICLE ARCHIVE - Bento Box Hero Section */}
-      {(!filter || filter === 'all') && standardArticles.length > 0 && (
+      {standardArticles.length > 0 && (
         <section className="articles-archive">
           <Container>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
