@@ -212,6 +212,7 @@ export default function ImageCropperModal({
                         aspect={aspectRatio}
                         objectFit="cover"
                         showGrid={true}
+                        restrictPosition={false}
                         onCropChange={setCrop}
                         onRotationChange={setRotation}
                         onCropComplete={onCropCompleteEvent}
