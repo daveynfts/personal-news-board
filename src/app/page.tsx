@@ -6,7 +6,6 @@ import EventCalendar from '@/components/EventCalendar';
 import Container from '@/components/Container';
 import FilterBar from '@/components/FilterBar';
 import Link from 'next/link';
-import SearchBar from '@/components/SearchBar';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
@@ -78,10 +77,6 @@ export default async function Home({ searchParams }: PageProps) {
         </div>
       )}
 
-      {/* Global Search */}
-      <Container style={{ display: 'flex', justifyContent: 'center', marginTop: '24px', marginBottom: '40px' }}>
-        <SearchBar placeholder="Search posts, articles, events..." />
-      </Container>
 
       {/* EDITORIAL CAROUSEL */}
       {editorialPicks.length > 0 && (
