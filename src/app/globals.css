@@ -1664,25 +1664,157 @@ a {
 }
 
 
-/* === CRYPTO TICKER === */
+/* === CRYPTO TICKER — LIQUID GLASS PREMIUM === */
+
+/* Iridescent shimmer sweep */
+@keyframes ticker-shimmer {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(220%) skewX(-18deg); opacity: 0; }
+}
+
+/* Subtle aurora drift across the bar */
+@keyframes ticker-aurora {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Number flash on price update */
+@keyframes price-flash {
+  0%   { opacity: 0.3; transform: translateY(-4px) scale(0.96); }
+  60%  { opacity: 1;   transform: translateY(0)    scale(1.04); }
+  100% { opacity: 1;   transform: translateY(0)    scale(1); }
+}
+
+/* Separator pulse */
+@keyframes sep-pulse {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.45; }
+}
+
 .crypto-ticker-container {
   width: 100%;
   overflow: hidden;
-  background-color: var(--bg-color);
-  border-bottom: 1px solid var(--border-color);
-  padding: 10px 0;
   position: relative;
   z-index: 100;
-  display: flex;
-  align-items: center;
+  padding: 0;
+
+  /* Liquid glass base */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.055) 0%,
+      rgba(255, 255, 255, 0.018) 50%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+  backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+
+  /* Hair-line top highlight */
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  /* Bottom separator */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* Ambient depth shadow */
+  box-shadow:
+    0 4px 24px -4px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
 }
 
+/* Iridescent aurora overlay — drifting gradient */
+.crypto-ticker-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    270deg,
+    rgba(120, 80, 255, 0.07),
+    rgba(0, 200, 255, 0.07),
+    rgba(0, 255, 160, 0.05),
+    rgba(255, 100, 200, 0.06),
+    rgba(120, 80, 255, 0.07)
+  );
+  background-size: 400% 100%;
+  animation: ticker-aurora 12s ease infinite;
+  pointer-events: none;
+}
+
+/* Shimmer sweep on hover */
+.crypto-ticker-container::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 30%; height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.crypto-ticker-container:hover::after {
+  animation: ticker-shimmer 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Inner wrapper for row layout */
+.crypto-ticker-inner {
+  display: flex;
+  align-items: center;
+  padding: 9px 0;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Live badge */
+.crypto-live-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 8px;
+  margin-left: 16px;
+  margin-right: 4px;
+  background: rgba(0, 255, 120, 0.08);
+  border: 1px solid rgba(0, 255, 120, 0.22);
+  border-radius: 20px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0, 255, 120, 0.9);
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.crypto-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #00ff78;
+  box-shadow: 0 0 6px 2px rgba(0, 255, 120, 0.7);
+  animation: sep-pulse 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* Scrolling track */
 .crypto-ticker-track {
   display: flex;
   width: max-content;
-  animation: crypto-ticker-scroll 60s linear infinite;
-  gap: 40px;
-  padding-left: 40px;
+  animation: crypto-ticker-scroll 55s linear infinite;
+  gap: 0;
+  align-items: center;
+  padding-left: 24px;
 }
 
 .crypto-ticker-container:hover .crypto-ticker-track {
@@ -1690,53 +1822,85 @@ a {
 }
 
 @keyframes crypto-ticker-scroll {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(calc(-50% - 20px));
-  }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(-50%)); }
 }
 
+/* Individual coin */
 .crypto-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.85rem;
+  gap: 7px;
+  font-size: 0.8rem;
   font-weight: 600;
   white-space: nowrap;
+  padding: 4px 18px 4px 0;
+  cursor: default;
+  transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Glowing glass separator between coins */
+.crypto-item + .crypto-item {
+  border-left: 1px solid rgba(255, 255, 255, 0.10);
+  padding-left: 18px;
+  margin-left: 0;
+}
+
+.crypto-item:hover {
+  transform: translateY(-1px);
 }
 
 .crypto-icon {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1px;
   object-fit: contain;
   flex-shrink: 0;
   align-self: center;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.08);
 }
 
 .crypto-name {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .crypto-price {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.92);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .crypto-change {
   display: flex;
   align-items: center;
   gap: 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
+/* ▲ positive — neon green glow */
 .crypto-change.positive {
-  color: var(--success-color);
+  color: #00e87a;
+  background: rgba(0, 232, 122, 0.08);
+  text-shadow: 0 0 8px rgba(0, 232, 122, 0.5);
 }
 
+/* ▼ negative — neon coral glow */
 .crypto-change.negative {
-  color: var(--error-color);
+  color: #ff5c5c;
+  background: rgba(255, 92, 92, 0.08);
+  text-shadow: 0 0 8px rgba(255, 92, 92, 0.4);
 }
 
 /* === SECTION TITLES === */

@@ -93,10 +93,19 @@ export default function CryptoTicker() {
 
     return (
         <div className="crypto-ticker-container">
-            <div className="crypto-ticker-track">
-                {coins.map(coin => <TickerItem key={coin.id} coin={coin} keyPrefix="a" />)}
-                {/* Duplicate for seamless infinite scroll */}
-                {coins.map(coin => <TickerItem key={`dup-${coin.id}`} coin={coin} keyPrefix="b" />)}
+            <div className="crypto-ticker-inner">
+                {/* Live indicator badge */}
+                <div className="crypto-live-badge">
+                    <span className="crypto-live-dot" />
+                    LIVE
+                </div>
+
+                {/* Scrolling price track */}
+                <div className="crypto-ticker-track">
+                    {coins.map(coin => <TickerItem key={coin.id} coin={coin} keyPrefix="a" />)}
+                    {/* Duplicate for seamless infinite scroll */}
+                    {coins.map(coin => <TickerItem key={`dup-${coin.id}`} coin={coin} keyPrefix="b" />)}
+                </div>
             </div>
         </div>
     );
