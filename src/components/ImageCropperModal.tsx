@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import Cropper from 'react-easy-crop';
 import 'react-easy-crop/react-easy-crop.css';
 
-// Helper to load an image and get its natural dimensions
 const loadImage = (url: string): Promise<HTMLImageElement> =>
     new Promise((resolve, reject) => {
         const img = new Image();
@@ -13,15 +12,22 @@ const loadImage = (url: string): Promise<HTMLImageElement> =>
 
 const getRadianAngle = (deg: number) => (deg * Math.PI) / 180;
 
-// Given the image natural size and the crop aspect ratio,
-// calculate the minimum zoom so the full image fits inside the crop frame.
+/**
+ * With objectFit="cover":
+ *   zoom=1  → image fills crop area (ready to pan)
+ *   zoom<1  → image smaller than crop area (full image visible, black bars in output)
+ *
+ * This computes the zoom where the ENTIRE image is visible inside the crop frame.
+ */
 function calcFitZoom(imgW: number, imgH: number, cropAspect: number): number {
     const imgAspect = imgW / imgH;
+    // With cover, fit = ratio of container-aspect / image-aspect (or inverse)
+    // Essentially: how much to shrink so the smaller dimension fits
     if (imgAspect > cropAspect) {
-        // Image is wider than crop frame → constrained by height
+        // Wide image: constrained by height, width extends → shrink so width fits
         return cropAspect / imgAspect;
     } else {
-        // Image is taller than crop frame → constrained by width
+        // Tall image: constrained by width, height extends → shrink so height fits
         return imgAspect / cropAspect;
     }
 }
@@ -39,8 +45,8 @@ async function getCroppedImg(
     const ctx = canvas.getContext('2d')!;
 
     const rotRad = getRadianAngle(rotation);
-    const bw = Math.abs(Math.cos(rotRad) * image.naturalWidth)  + Math.abs(Math.sin(rotRad) * image.naturalHeight);
-    const bh = Math.abs(Math.sin(rotRad) * image.naturalWidth)  + Math.abs(Math.cos(rotRad) * image.naturalHeight);
+    const bw = Math.abs(Math.cos(rotRad) * image.naturalWidth) + Math.abs(Math.sin(rotRad) * image.naturalHeight);
+    const bh = Math.abs(Math.sin(rotRad) * image.naturalWidth) + Math.abs(Math.cos(rotRad) * image.naturalHeight);
 
     canvas.width = bw;
     canvas.height = bh;
@@ -49,13 +55,12 @@ async function getCroppedImg(
     ctx.translate(-image.naturalWidth / 2, -image.naturalHeight / 2);
     ctx.drawImage(image, 0, 0);
 
-    // Output canvas at the target OG-image resolution (1200×630)
     const out = document.createElement('canvas');
     const octx = out.getContext('2d')!;
-    out.width  = outputWidth;
+    out.width = outputWidth;
     out.height = outputHeight;
 
-    // Fill black so letterbox bars look intentional
+    // Black fill for any letterbox areas (when zoom < 1)
     octx.fillStyle = '#000';
     octx.fillRect(0, 0, outputWidth, outputHeight);
 
@@ -98,22 +103,35 @@ export default function ImageCropperModal({
         x: number; y: number; width: number; height: number;
     } | null>(null);
     const [isSaving, setIsSaving] = useState(false);
-    const fitZoomRef = useRef(1);
+    const [mode, setMode] = useState<'crop' | 'fit'>('crop');
+    const fitZoomRef = useRef(0.1);
 
-    // On mount: load image, compute the "fit all" zoom, apply it immediately
     useEffect(() => {
         loadImage(imageSrc).then(img => {
             const fit = calcFitZoom(img.naturalWidth, img.naturalHeight, aspectRatio);
             fitZoomRef.current = fit;
-            setMinZoom(fit * 0.5); // allow going a bit smaller than fit if desired
-            setZoom(fit);           // start fully zoomed-out (all content visible)
+            // Allow zooming out below fit so user can always fully see the image
+            setMinZoom(Math.min(fit * 0.9, 0.1));
+            // Start at zoom=1 (cover mode) so user can immediately pan freely
+            setZoom(1);
             setCrop({ x: 0, y: 0 });
+            setMode('crop');
         });
     }, [imageSrc, aspectRatio]);
 
+    /** Toggle between "see full image" and "crop mode" */
     const handleFitAll = () => {
-        setZoom(fitZoomRef.current);
-        setCrop({ x: 0, y: 0 });
+        if (mode === 'fit') {
+            // Return to crop mode (zoom=1, fill frame)
+            setZoom(1);
+            setCrop({ x: 0, y: 0 });
+            setMode('crop');
+        } else {
+            // Zoom out to fit the whole image in frame (may add black letterbox bars)
+            setZoom(fitZoomRef.current);
+            setCrop({ x: 0, y: 0 });
+            setMode('fit');
+        }
     };
 
     const onCropCompleteEvent = useCallback(
@@ -135,6 +153,8 @@ export default function ImageCropperModal({
         }
     };
 
+    const isFitMode = mode === 'fit';
+
     return (
         <div className="modal-overlay" onClick={onCancel}>
             <div
@@ -145,32 +165,34 @@ export default function ImageCropperModal({
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '4px' }}>
                     <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: 0 }}>Crop Image</h3>
-                    {/* Fit All shortcut button */}
                     <button
                         onClick={handleFitAll}
-                        title="Show full image (fit all content in frame)"
+                        title={isFitMode ? 'Back to crop mode' : 'View full image'}
                         style={{
-                            background: 'rgba(255,255,255,0.08)',
-                            border: '1px solid rgba(255,255,255,0.15)',
+                            background: isFitMode ? 'rgba(99,179,237,0.18)' : 'rgba(255,255,255,0.08)',
+                            border: `1px solid ${isFitMode ? 'rgba(99,179,237,0.4)' : 'rgba(255,255,255,0.15)'}`,
                             borderRadius: '8px',
-                            color: '#fff',
+                            color: isFitMode ? '#63b3ed' : '#fff',
                             fontSize: '0.78rem',
                             fontWeight: 700,
                             padding: '6px 14px',
                             cursor: 'pointer',
                             letterSpacing: '0.03em',
-                            transition: 'background 0.2s',
                         }}
                     >
-                        ⤢ Fit All
+                        {isFitMode ? '✂ Crop Mode' : '⤢ Fit All'}
                     </button>
                 </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px', marginTop: '4px' }}>
-                    Scroll or drag to reposition. Use <strong style={{ color: '#fff' }}>⤢ Fit All</strong> to show full image.
-                    <span style={{ marginLeft: 8, opacity: 0.55, fontSize: '0.75rem' }}>Output: 1200 × 630 px</span>
+
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px', marginTop: '4px' }}>
+                    {isFitMode
+                        ? '⚠ Fit All mode — click ✂ Crop Mode to pan & select a region'
+                        : 'Drag to pan · Scroll to zoom · Use ⤢ Fit All to see the full image'
+                    }
+                    <span style={{ marginLeft: 8, opacity: 0.5, fontSize: '0.72rem' }}>Output: 1200 × 630 px</span>
                 </p>
 
-                {/* Crop canvas — always 16:9 landscape */}
+                {/* Crop canvas */}
                 <div style={{
                     position: 'relative',
                     width: '100%',
@@ -178,7 +200,7 @@ export default function ImageCropperModal({
                     background: '#000',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    border: '1px solid var(--border-color)',
+                    border: `1px solid ${isFitMode ? 'rgba(99,179,237,0.3)' : 'var(--border-color)'}`,
                 }}>
                     <Cropper
                         image={imageSrc}
@@ -188,36 +210,36 @@ export default function ImageCropperModal({
                         maxZoom={4}
                         rotation={rotation}
                         aspect={aspectRatio}
-                        objectFit="contain"
+                        objectFit="cover"
                         showGrid={true}
                         onCropChange={setCrop}
                         onRotationChange={setRotation}
                         onCropComplete={onCropCompleteEvent}
-                        onZoomChange={setZoom}
+                        onZoomChange={z => { setZoom(z); setMode('crop'); }}
                         style={{ containerStyle: { background: '#000' } }}
                     />
                 </div>
 
                 {/* Controls */}
-                <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '1.1rem', color: 'var(--text-muted)', width: 24, textAlign: 'center' }}>🔍</span>
+                <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '1rem', color: 'var(--text-muted)', width: 22, textAlign: 'center' }}>🔍</span>
                         <input
                             type="range"
                             min={minZoom}
                             max={4}
                             step={0.01}
                             value={zoom}
-                            onChange={e => setZoom(Number(e.target.value))}
+                            onChange={e => { setZoom(Number(e.target.value)); setMode('crop'); }}
                             style={{ flex: 1, accentColor: 'var(--accent-color)' }}
                             title="Zoom"
                         />
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', width: 38, textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', width: 36, textAlign: 'right' }}>
                             {Math.round(zoom * 100)}%
                         </span>
                     </div>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '1.1rem', color: 'var(--text-muted)', width: 24, textAlign: 'center' }}>🔄</span>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '1rem', color: 'var(--text-muted)', width: 22, textAlign: 'center' }}>🔄</span>
                         <input
                             type="range"
                             min={0}
@@ -228,13 +250,13 @@ export default function ImageCropperModal({
                             style={{ flex: 1, accentColor: 'var(--accent-color)' }}
                             title="Rotate"
                         />
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', width: 38, textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', width: 36, textAlign: 'right' }}>
                             {rotation}°
                         </span>
                     </div>
                 </div>
 
-                <div className="btn-group" style={{ marginTop: '18px' }}>
+                <div className="btn-group" style={{ marginTop: '16px' }}>
                     <button className="btn-secondary" onClick={onCancel} disabled={isSaving}>Cancel</button>
                     <button className="submit-btn" onClick={handleSave} disabled={isSaving} style={{ width: 'auto', flex: 1 }}>
                         {isSaving ? '⏳ Processing...' : '✓ Confirm & Upload'}
