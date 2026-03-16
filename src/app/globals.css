@@ -3070,6 +3070,110 @@ a {
 /* === EVENT CALENDAR HERO === */
 .event-calendar-section {
   padding: 20px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Liquid Glass Orb — follows cursor */
+.liquid-orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 260px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.liquid-orb-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      ellipse 65% 55% at 40% 38%,
+      rgba(99, 102, 241, 0.35) 0%,
+      rgba(139, 92, 246, 0.2) 30%,
+      rgba(59, 130, 246, 0.12) 55%,
+      transparent 100%
+    );
+  filter: blur(2px);
+  animation: orb-breathe 4s ease-in-out infinite;
+}
+
+.liquid-orb-ring {
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.2) 0%,
+      rgba(99, 102, 241, 0.25) 30%,
+      rgba(139, 92, 246, 0.18) 50%,
+      rgba(59, 130, 246, 0.2) 70%,
+      rgba(255,255,255,0.15) 100%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: orb-ring-rotate 8s linear infinite;
+}
+
+.liquid-orb-specular {
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 50%;
+  height: 35%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,255,255,0.35) 0%,
+    rgba(255,255,255,0.1) 45%,
+    transparent 100%
+  );
+  transform: rotate(-25deg);
+  filter: blur(1px);
+  animation: orb-specular-drift 6s ease-in-out infinite;
+}
+
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+
+@keyframes orb-ring-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orb-specular-drift {
+  0%, 100% { transform: rotate(-25deg) translateX(0); opacity: 0.9; }
+  50% { transform: rotate(-20deg) translateX(8px); opacity: 1; }
+}
+
+/* Cards should have smooth transition for 3D tilt */
+.featured-event-card,
+.timeline-event-card {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s, border-color 0.3s;
+  will-change: transform;
+}
+
+/* Ensure content stays above the orb */
+.event-calendar-section .section-header-premium,
+.event-calendar-section .event-calendar-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .trans-up {

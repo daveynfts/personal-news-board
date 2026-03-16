@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { CalendarEvent } from '@/lib/db';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 
@@ -13,6 +13,12 @@ interface EventCalendarProps {
 export default function EventCalendar({ events }: EventCalendarProps) {
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
     const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
+    const sectionRef = useRef<HTMLElement>(null);
+    const orbRef = useRef<HTMLDivElement>(null);
+    const mousePos = useRef({ x: 0, y: 0 });
+    const orbPos = useRef({ x: 0, y: 0 });
+    const rafRef = useRef<number>(null);
+    const isHovering = useRef(false);
 
     // Filter events
     const today = new Date();
@@ -23,7 +29,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     const featuredEventsList = upcomingEvents.length > 0 ? upcomingEvents : pastEvents;
     
-    // Ensure index is within bounds in case data changes
     const displayFeaturedIndex = currentFeaturedIndex >= featuredEventsList.length ? 0 : currentFeaturedIndex;
     const featuredEvent = featuredEventsList[displayFeaturedIndex] || null;
     const displayEvents = activeTab === 'upcoming' ? upcomingEvents : pastEvents;
@@ -36,6 +41,68 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         }, 7000);
         return () => clearInterval(interval);
     }, [featuredEventsList.length]);
+
+    // ── Liquid Glass Orb Animation ──────────────────────────────────────────
+    const animateOrb = useCallback(() => {
+        const lerp = 0.12;
+        orbPos.current.x += (mousePos.current.x - orbPos.current.x) * lerp;
+        orbPos.current.y += (mousePos.current.y - orbPos.current.y) * lerp;
+
+        if (orbRef.current) {
+            orbRef.current.style.transform = `translate(${orbPos.current.x}px, ${orbPos.current.y}px) translate(-50%, -50%)`;
+        }
+
+        rafRef.current = requestAnimationFrame(animateOrb);
+    }, []);
+
+    useEffect(() => {
+        rafRef.current = requestAnimationFrame(animateOrb);
+        return () => {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        };
+    }, [animateOrb]);
+
+    const handleMouseMove = useCallback((e: React.MouseEvent) => {
+        if (!sectionRef.current) return;
+        const rect = sectionRef.current.getBoundingClientRect();
+        mousePos.current.x = e.clientX - rect.left;
+        mousePos.current.y = e.clientY - rect.top;
+
+        // 3D tilt effect on cards
+        const cards = sectionRef.current.querySelectorAll<HTMLElement>('.featured-event-card, .timeline-event-card');
+        cards.forEach(card => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            const deltaX = (e.clientX - cardCenterX) / cardRect.width;
+            const deltaY = (e.clientY - cardCenterY) / cardRect.height;
+            const dist = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
+            if (dist < 1.5) {
+                const intensity = Math.max(0, 1 - dist / 1.5);
+                const rotateX = deltaY * intensity * -4;
+                const rotateY = deltaX * intensity * 4;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${1 + intensity * 0.015})`;
+            } else {
+                card.style.transform = '';
+            }
+        });
+    }, []);
+
+    const handleMouseEnter = () => {
+        isHovering.current = true;
+        if (orbRef.current) orbRef.current.style.opacity = '1';
+    };
+
+    const handleMouseLeave = () => {
+        isHovering.current = false;
+        if (orbRef.current) orbRef.current.style.opacity = '0';
+        // Reset all card transforms
+        if (sectionRef.current) {
+            const cards = sectionRef.current.querySelectorAll<HTMLElement>('.featured-event-card, .timeline-event-card');
+            cards.forEach(card => { card.style.transform = ''; });
+        }
+    };
 
     if (events.length === 0) {
         return (
@@ -74,7 +141,20 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     };
 
     return (
-        <section className="event-calendar-section">
+        <section
+            className="event-calendar-section"
+            ref={sectionRef}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            {/* Liquid Glass Orb */}
+            <div ref={orbRef} className="liquid-orb" aria-hidden="true">
+                <div className="liquid-orb-inner" />
+                <div className="liquid-orb-ring" />
+                <div className="liquid-orb-specular" />
+            </div>
+
             <div className="section-header-premium trans-up" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
                 <div>
                     <h2 className="section-title" style={{ marginBottom: 0 }}>Events &amp; Timeline</h2>
@@ -89,7 +169,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
             </div>
 
             <div className="event-calendar-grid">
-                {/* Left: Featured - No more internal title, it's now in the header or shared area if needed */}
+                {/* Left: Featured */}
                 {featuredEvent && (
                     <div key={featuredEvent.id} className="featured-event-card trans-up">
                         <div className="event-image">
@@ -155,8 +235,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                             <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
                         </div>
                     </div>
-
-
 
                     <div className="timeline-wrapper">
                         {displayEvents.length === 0 ? (
