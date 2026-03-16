@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
+import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 
@@ -88,6 +89,9 @@ export default async function ArticlesPage() {
                             <p className="archive-hero-subtitle">
                                 In-depth articles, editorial picks, and long-form reads on crypto and web3.
                             </p>
+                        </div>
+                        <div style={{ marginTop: '20px' }}>
+                            <SearchBar scope="articles" placeholder="Search articles..." compact />
                         </div>
                         <div className="archive-hero-stats">
                             <div className="archive-stat">

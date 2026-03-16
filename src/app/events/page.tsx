@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
+import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 
@@ -102,6 +103,9 @@ export default async function EventsPage() {
                             <p className="archive-hero-subtitle">
                                 All conferences, meetups, and web3 events — upcoming and past.
                             </p>
+                        </div>
+                        <div style={{ marginTop: '20px' }}>
+                            <SearchBar scope="events" placeholder="Search events..." compact />
                         </div>
                         <div className="archive-hero-stats">
                             <div className="archive-stat">

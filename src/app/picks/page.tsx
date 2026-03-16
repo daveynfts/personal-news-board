@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
+import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 
@@ -81,6 +82,9 @@ export default async function PicksPage({ searchParams }: PageProps) {
                             <p className="archive-hero-subtitle">
                                 Every curated news, blog post, and X thread — the complete collection.
                             </p>
+                        </div>
+                        <div style={{ marginTop: '20px' }}>
+                            <SearchBar scope="posts" placeholder="Search picks..." compact />
                         </div>
                         <div className="archive-hero-stats">
                             <div className="archive-stat">
