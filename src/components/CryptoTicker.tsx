@@ -11,18 +11,8 @@ interface CoinData {
     changePercent24Hr: string;
 }
 
-const FALLBACK: CoinData[] = [
-    { id: 'btc',  symbol: 'BTC',  name: 'Bitcoin',   priceUsd: '83500.00', changePercent24Hr: '0.00' },
-    { id: 'eth',  symbol: 'ETH',  name: 'Ethereum',  priceUsd: '1850.00',  changePercent24Hr: '0.00' },
-    { id: 'sol',  symbol: 'SOL',  name: 'Solana',    priceUsd: '120.00',   changePercent24Hr: '0.00' },
-    { id: 'bnb',  symbol: 'BNB',  name: 'BNB',       priceUsd: '580.00',   changePercent24Hr: '0.00' },
-    { id: 'xrp',  symbol: 'XRP',  name: 'XRP',       priceUsd: '2.10',     changePercent24Hr: '0.00' },
-    { id: 'doge', symbol: 'DOGE', name: 'Dogecoin',  priceUsd: '0.18',     changePercent24Hr: '0.00' },
-    { id: 'ada',  symbol: 'ADA',  name: 'Cardano',   priceUsd: '0.65',     changePercent24Hr: '0.00' },
-    { id: 'avax', symbol: 'AVAX', name: 'Avalanche', priceUsd: '22.00',    changePercent24Hr: '0.00' },
-    { id: 'link', symbol: 'LINK', name: 'Chainlink', priceUsd: '13.50',    changePercent24Hr: '0.00' },
-    { id: 'dot',  symbol: 'DOT',  name: 'Polkadot',  priceUsd: '4.50',     changePercent24Hr: '0.00' },
-];
+// No static fallback — we never want to show 0.00% fake changes.
+// The ticker stays hidden until real data arrives from Binance.
 
 // CoinGecko icon IDs for matching symbols
 const ICON_MAP: Record<string, string> = {
@@ -64,20 +54,29 @@ function TickerItem({ coin, keyPrefix }: { coin: CoinData; keyPrefix: string }) 
 
 export default function CryptoTicker() {
     const [coins, setCoins] = useState<CoinData[]>([]);
-    const [loaded, setLoaded] = useState(false);
 
     async function fetchPrices() {
         try {
-            const res = await fetch('/api/crypto', { cache: 'no-store' });
-            if (!res.ok) throw new Error('API error');
+            // Force fresh data — bypass any browser cache
+            const res = await fetch('/api/crypto', {
+                cache: 'no-store',
+                headers: { 'Cache-Control': 'no-cache' },
+            });
+            if (!res.ok) throw new Error(`API error ${res.status}`);
             const data: CoinData[] = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
+            // Guard: only update if we get real % data (not zeros)
+            const hasRealChanges = Array.isArray(data) &&
+                data.length > 0 &&
+                data.some(c => parseFloat(c.changePercent24Hr) !== 0);
+            if (hasRealChanges) {
+                setCoins(data);
+            } else if (Array.isArray(data) && data.length > 0) {
+                // Accept data even if all happen to be 0% (very unlikely)
                 setCoins(data);
             }
-        } catch {
-            if (!loaded) setCoins(FALLBACK);
-        } finally {
-            setLoaded(true);
+        } catch (err) {
+            console.warn('[CryptoTicker] fetch failed, keeping current data:', err);
+            // Don't reset to empty — keep whatever we had before
         }
     }
 
@@ -89,6 +88,7 @@ export default function CryptoTicker() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Hide until real data loads — never show 0% placeholders
     if (coins.length === 0) return null;
 
     return (

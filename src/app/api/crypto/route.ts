@@ -16,7 +16,8 @@ const COINS = [
     { symbol: 'TONUSDT',  display: 'TON',       ticker: 'TON'  },
 ];
 
-export const revalidate = 60; // cache 60 seconds
+// Always fetch fresh — client handles its own 60s refresh interval
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
@@ -24,7 +25,8 @@ export async function GET() {
         const url = `https://api3.binance.com/api/v3/ticker/24hr?symbols=${encodeURIComponent(symbolsParam)}`;
 
         const res = await fetch(url, {
-            next: { revalidate: 60 },
+            // No Next.js cache — client's interval does the throttling
+            cache: 'no-store',
             signal: AbortSignal.timeout(5000),
         });
 
@@ -49,7 +51,8 @@ export async function GET() {
         });
 
         return NextResponse.json(coins, {
-            headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' },
+            // Short CDN cache — fresh enough, not hammering Binance
+            headers: { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=10' },
         });
     } catch (err) {
         console.error('[/api/crypto] fetch failed:', err);
