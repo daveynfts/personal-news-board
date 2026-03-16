@@ -25,6 +25,7 @@ export async function POST(request: Request) {
 
         const id = await createEvent({ title, description, date, location, link, imageUrl, timelineImageUrl });
         revalidatePath('/');
+        revalidatePath('/events');
         return NextResponse.json({ id, success: true }, { status: 201 });
     } catch (error) {
         console.error('Failed to create event:', error);
@@ -44,6 +45,7 @@ export async function PUT(request: Request) {
         const success = await updateEvent(Number(id), { title, description, date, location, link, imageUrl, timelineImageUrl });
         if (success) {
             revalidatePath('/');
+            revalidatePath('/events');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Event not found' }, { status: 404 });
@@ -66,6 +68,7 @@ export async function DELETE(request: Request) {
         const success = await deleteEvent(Number(id));
         if (success) {
             revalidatePath('/');
+            revalidatePath('/events');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Event not found' }, { status: 404 });

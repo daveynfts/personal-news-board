@@ -24,6 +24,7 @@ export async function POST(request: Request) {
 
         const newId = await createPost({ type, title, url, imageUrl });
         revalidatePath('/');
+        revalidatePath('/picks');
         return NextResponse.json({ id: newId, success: true }, { status: 201 });
     } catch {
         return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
@@ -42,6 +43,7 @@ export async function DELETE(request: Request) {
         const success = await deletePost(parseInt(id, 10));
         if (success) {
             revalidatePath('/');
+            revalidatePath('/picks');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -67,6 +69,7 @@ export async function PUT(request: Request) {
 
         if (result.rowsAffected > 0) {
             revalidatePath('/');
+            revalidatePath('/picks');
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 });

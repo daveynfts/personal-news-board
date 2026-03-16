@@ -36,6 +36,7 @@ export async function PUT(
         if (!success) return NextResponse.json({ error: 'Article not found or no changes made' }, { status: 404 });
 
         revalidatePath('/');
+        revalidatePath('/articles');
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to update article:', error);
@@ -55,6 +56,7 @@ export async function DELETE(
         if (!success) return NextResponse.json({ error: 'Article not found' }, { status: 404 });
 
         revalidatePath('/');
+        revalidatePath('/articles');
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to delete article:', error);

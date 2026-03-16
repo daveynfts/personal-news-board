@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         });
 
         revalidatePath('/');
+        revalidatePath('/articles');
         return NextResponse.json({ id: newId }, { status: 201 });
     } catch (error) {
         console.error('Failed to create article:', error);

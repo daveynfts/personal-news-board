@@ -20,6 +20,7 @@ export async function PATCH(request: Request) {
 
         revalidatePath('/');
         revalidatePath('/more');
+        revalidatePath('/events');
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to toggle event more:', error);

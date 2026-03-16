@@ -57,10 +57,6 @@ export default async function Home({ searchParams }: PageProps) {
 
   const visibleEvents = allEvents.filter(e => !e.isMore);
 
-  const hasMoreContent =
-    allPosts.some(p => p.isMore) ||
-    allArticles.some(a => a.isMore) ||
-    allEvents.some(e => e.isMore);
 
 
   return (
