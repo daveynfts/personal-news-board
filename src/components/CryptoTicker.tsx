@@ -88,8 +88,30 @@ export default function CryptoTicker() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Hide until real data loads — never show 0% placeholders
-    if (coins.length === 0) return null;
+    // Show skeleton while loading to prevent layout shift
+    // (never show fake 0% data, but DO reserve the space)
+    if (coins.length === 0) {
+        return (
+            <div className="crypto-ticker-container">
+                <div className="crypto-ticker-inner">
+                    <div className="crypto-live-badge" style={{ opacity: 0.4 }}>
+                        <span className="crypto-live-dot" style={{ animationPlayState: 'paused' }} />
+                        LIVE
+                    </div>
+                    <div style={{ display: 'flex', gap: '24px', paddingLeft: '24px', overflow: 'hidden', flex: 1 }}>
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <div key={i} className="crypto-item" style={{ opacity: 0.15 }}>
+                                <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />
+                                <div style={{ width: 52, height: 10, borderRadius: 4, background: 'rgba(255,255,255,0.3)' }} />
+                                <div style={{ width: 64, height: 10, borderRadius: 4, background: 'rgba(255,255,255,0.3)' }} />
+                                <div style={{ width: 42, height: 10, borderRadius: 4, background: 'rgba(255,255,255,0.2)' }} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="crypto-ticker-container">
