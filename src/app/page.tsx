@@ -49,18 +49,25 @@ export default async function Home({ searchParams }: PageProps) {
   const allEvents = await getAllEvents();
 
   const filteredPosts = filter && filter !== 'all'
-    ? allPosts.filter(p => p.type.toLowerCase() === filter.toLowerCase())
-    : allPosts;
+    ? allPosts.filter(p => p.type.toLowerCase() === filter.toLowerCase() && !p.isMore)
+    : allPosts.filter(p => !p.isMore);
 
-  const editorialPicks = allArticles.filter(a => a.isEditorialPick);
-  const standardArticles = allArticles.filter(a => !a.isEditorialPick);
+  const editorialPicks = allArticles.filter(a => a.isEditorialPick && !a.isMore);
+  const standardArticles = allArticles.filter(a => !a.isEditorialPick && !a.isMore);
+
+  const visibleEvents = allEvents.filter(e => !e.isMore);
+
+  const hasMoreContent =
+    allPosts.some(p => p.isMore) ||
+    allArticles.some(a => a.isMore) ||
+    allEvents.some(e => e.isMore);
 
 
   return (
     <div className="home-container">
-      {allEvents.length > 0 ? (
+      {visibleEvents.length > 0 ? (
         <Container style={{ marginTop: '16px' }}>
-          <EventCalendar events={allEvents} />
+          <EventCalendar events={visibleEvents} />
         </Container>
       ) : (
         <div className="hero-wrapper" style={{ margin: '40px auto 60px', padding: '0 20px' }}>
@@ -85,7 +92,14 @@ export default async function Home({ searchParams }: PageProps) {
       {(!filter || filter === 'all') && standardArticles.length > 0 && (
         <section className="articles-archive">
           <Container>
-            <h2 className="section-title">Latest Features</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+              <h2 className="section-title" style={{ marginBottom: 0 }}>Latest Features</h2>
+              {hasMoreContent && (
+                <Link href="/more" style={{ fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.85 }}>
+                  View All →
+                </Link>
+              )}
+            </div>
             <div className="bento-grid">
               {standardArticles.map((article, index) => (
                 <Link 
@@ -121,7 +135,14 @@ export default async function Home({ searchParams }: PageProps) {
 
       {/* CURATION FEED (POSTS) */}
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
-        <h2 className="section-title" style={{ marginBottom: '32px' }}>DaveyNFTs&apos; Picks</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+          <h2 className="section-title" style={{ marginBottom: 0 }}>DaveyNFTs&apos; Picks</h2>
+          {hasMoreContent && (
+            <Link href="/more" style={{ fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.85 }}>
+              View All →
+            </Link>
+          )}
+        </div>
         
         <Suspense fallback={
           <div className="filter-container" style={{ margin: '0 auto 48px' }}>

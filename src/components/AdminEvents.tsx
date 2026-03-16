@@ -185,6 +185,24 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
         }
     };
 
+    const handleToggleMore = async (event: CalendarEvent) => {
+        try {
+            const res = await fetch('/api/events/toggle-more', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: event.id, isMore: !event.isMore }),
+            });
+            if (res.ok) {
+                addToast(event.isMore ? 'Removed from More page.' : 'Added to More page.');
+                fetchEvents();
+            } else {
+                addToast('Failed to update.', 'error');
+            }
+        } catch {
+            addToast('An error occurred.', 'error');
+        }
+    };
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -425,6 +443,20 @@ export default function AdminEvents({ addToast }: AdminEventsProps) {
                                                     <span className={`status-badge ${activeTab === 'upcoming' ? 'going' : 'past'}`}>
                                                         {activeTab === 'upcoming' ? 'Active' : 'Archived'}
                                                     </span>
+                                                    <button
+                                                        onClick={() => handleToggleMore(event)}
+                                                        className="edit-btn"
+                                                        style={{
+                                                            background: event.isMore ? 'rgba(99,102,241,0.2)' : undefined,
+                                                            borderColor: event.isMore ? 'rgba(99,102,241,0.6)' : undefined,
+                                                            color: event.isMore ? '#a5b4fc' : undefined,
+                                                            fontSize: '0.7rem',
+                                                            whiteSpace: 'nowrap'
+                                                        }}
+                                                        title={event.isMore ? 'Remove from More page' : 'Add to More page'}
+                                                    >
+                                                        {event.isMore ? '⊖ More' : '⊕ More'}
+                                                    </button>
                                                     <button onClick={() => startEditing(event)} className="edit-btn">Edit</button>
                                                     <button onClick={() => setShowConfirm({ id: event.id!, title: event.title })} className="delete-btn">Delete</button>
                                                 </div>

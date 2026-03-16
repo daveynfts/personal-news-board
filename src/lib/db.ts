@@ -19,6 +19,7 @@ async function initDb() {
         title TEXT NOT NULL,
         url TEXT NOT NULL,
         imageUrl TEXT,
+        isMore BOOLEAN DEFAULT 0,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -31,6 +32,7 @@ async function initDb() {
         coverImage TEXT,
         xSourceUrl TEXT,
         isEditorialPick BOOLEAN DEFAULT 0,
+        isMore BOOLEAN DEFAULT 0,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -45,14 +47,20 @@ async function initDb() {
         link TEXT,
         imageUrl TEXT,
         timelineImageUrl TEXT,
+        isMore BOOLEAN DEFAULT 0,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    try {
-        await db.execute('ALTER TABLE events ADD COLUMN timelineImageUrl TEXT');
-    } catch {
-        // Ignore if column already exists
+    // Migrations for existing databases
+    const migrations = [
+        'ALTER TABLE events ADD COLUMN timelineImageUrl TEXT',
+        'ALTER TABLE posts ADD COLUMN isMore BOOLEAN DEFAULT 0',
+        'ALTER TABLE articles ADD COLUMN isMore BOOLEAN DEFAULT 0',
+        'ALTER TABLE events ADD COLUMN isMore BOOLEAN DEFAULT 0',
+    ];
+    for (const sql of migrations) {
+        try { await db.execute(sql); } catch { /* Ignore if column already exists */ }
     }
 }
 
@@ -65,6 +73,7 @@ export interface Post {
     title: string;
     url: string;
     imageUrl?: string;
+    isMore?: boolean;
     createdAt?: string;
 }
 
@@ -76,14 +85,36 @@ export async function getAllPosts(): Promise<Post[]> {
         title: String(row.title),
         url: String(row.url),
         imageUrl: String(row.imageUrl || ''),
+        isMore: Number(row.isMore) === 1,
         createdAt: String(row.createdAt || ''),
     }));
 }
 
+export async function getMorePosts(): Promise<Post[]> {
+    const result = await db.execute('SELECT * FROM posts WHERE isMore = 1 ORDER BY createdAt DESC');
+    return result.rows.map(row => ({
+        id: Number(row.id),
+        type: String(row.type),
+        title: String(row.title),
+        url: String(row.url),
+        imageUrl: String(row.imageUrl || ''),
+        isMore: true,
+        createdAt: String(row.createdAt || ''),
+    }));
+}
+
+export async function togglePostMore(id: number, isMore: boolean): Promise<boolean> {
+    const result = await db.execute({
+        sql: 'UPDATE posts SET isMore = ? WHERE id = ?',
+        args: [isMore ? 1 : 0, id]
+    });
+    return result.rowsAffected > 0;
+}
+
 export async function createPost(post: Omit<Post, 'id' | 'createdAt'>): Promise<number> {
     const result = await db.execute({
-        sql: 'INSERT INTO posts (type, title, url, imageUrl) VALUES (?, ?, ?, ?)',
-        args: [post.type, post.title, post.url, post.imageUrl || '']
+        sql: 'INSERT INTO posts (type, title, url, imageUrl, isMore) VALUES (?, ?, ?, ?, ?)',
+        args: [post.type, post.title, post.url, post.imageUrl || '', post.isMore ? 1 : 0]
     });
     return Number(result.lastInsertRowid || 0);
 }
@@ -105,6 +136,7 @@ export interface Article {
     coverImage?: string;
     xSourceUrl?: string;
     isEditorialPick: boolean;
+    isMore?: boolean;
     createdAt?: string;
 }
 
@@ -117,8 +149,31 @@ export async function getAllArticles(): Promise<Article[]> {
         coverImage: String(row.coverImage || ''),
         xSourceUrl: String(row.xSourceUrl || ''),
         isEditorialPick: Number(row.isEditorialPick) === 1,
+        isMore: Number(row.isMore) === 1,
         createdAt: String(row.createdAt || ''),
     }));
+}
+
+export async function getMoreArticles(): Promise<Article[]> {
+    const result = await db.execute('SELECT * FROM articles WHERE isMore = 1 ORDER BY createdAt DESC');
+    return result.rows.map(row => ({
+        id: Number(row.id),
+        title: String(row.title),
+        content: String(row.content),
+        coverImage: String(row.coverImage || ''),
+        xSourceUrl: String(row.xSourceUrl || ''),
+        isEditorialPick: Number(row.isEditorialPick) === 1,
+        isMore: true,
+        createdAt: String(row.createdAt || ''),
+    }));
+}
+
+export async function toggleArticleMore(id: number, isMore: boolean): Promise<boolean> {
+    const result = await db.execute({
+        sql: 'UPDATE articles SET isMore = ? WHERE id = ?',
+        args: [isMore ? 1 : 0, id]
+    });
+    return result.rowsAffected > 0;
 }
 
 export async function getArticleById(id: number): Promise<Article | null> {
@@ -137,14 +192,15 @@ export async function getArticleById(id: number): Promise<Article | null> {
         coverImage: String(row.coverImage || ''),
         xSourceUrl: String(row.xSourceUrl || ''),
         isEditorialPick: Number(row.isEditorialPick) === 1,
+        isMore: Number(row.isMore) === 1,
         createdAt: String(row.createdAt || ''),
     };
 }
 
 export async function createArticle(article: Omit<Article, 'id' | 'createdAt'>): Promise<number> {
     const result = await db.execute({
-        sql: 'INSERT INTO articles (title, content, coverImage, xSourceUrl, isEditorialPick) VALUES (?, ?, ?, ?, ?)',
-        args: [article.title, article.content, article.coverImage || '', article.xSourceUrl || '', article.isEditorialPick ? 1 : 0]
+        sql: 'INSERT INTO articles (title, content, coverImage, xSourceUrl, isEditorialPick, isMore) VALUES (?, ?, ?, ?, ?, ?)',
+        args: [article.title, article.content, article.coverImage || '', article.xSourceUrl || '', article.isEditorialPick ? 1 : 0, article.isMore ? 1 : 0]
     });
     return Number(result.lastInsertRowid || 0);
 }
@@ -158,6 +214,7 @@ export async function updateArticle(id: number, article: Partial<Article>): Prom
     if (article.coverImage !== undefined) { setClauses.push('coverImage = ?'); args.push(article.coverImage); }
     if (article.xSourceUrl !== undefined) { setClauses.push('xSourceUrl = ?'); args.push(article.xSourceUrl); }
     if (article.isEditorialPick !== undefined) { setClauses.push('isEditorialPick = ?'); args.push(article.isEditorialPick ? 1 : 0); }
+    if (article.isMore !== undefined) { setClauses.push('isMore = ?'); args.push(article.isMore ? 1 : 0); }
 
     if (setClauses.length === 0) return false;
 
@@ -187,6 +244,7 @@ export interface CalendarEvent {
     link?: string;
     imageUrl?: string;
     timelineImageUrl?: string;
+    isMore?: boolean;
     createdAt?: string;
 }
 
@@ -201,8 +259,33 @@ export async function getAllEvents(): Promise<CalendarEvent[]> {
         link: String(row.link || ''),
         imageUrl: String(row.imageUrl || ''),
         timelineImageUrl: String(row.timelineImageUrl || ''),
+        isMore: Number(row.isMore) === 1,
         createdAt: String(row.createdAt || ''),
     }));
+}
+
+export async function getMoreEvents(): Promise<CalendarEvent[]> {
+    const result = await db.execute('SELECT * FROM events WHERE isMore = 1 ORDER BY createdAt DESC');
+    return result.rows.map(row => ({
+        id: Number(row.id),
+        title: String(row.title),
+        description: String(row.description || ''),
+        date: String(row.date),
+        location: String(row.location || ''),
+        link: String(row.link || ''),
+        imageUrl: String(row.imageUrl || ''),
+        timelineImageUrl: String(row.timelineImageUrl || ''),
+        isMore: true,
+        createdAt: String(row.createdAt || ''),
+    }));
+}
+
+export async function toggleEventMore(id: number, isMore: boolean): Promise<boolean> {
+    const result = await db.execute({
+        sql: 'UPDATE events SET isMore = ? WHERE id = ?',
+        args: [isMore ? 1 : 0, id]
+    });
+    return result.rowsAffected > 0;
 }
 
 export async function createEvent(event: Omit<CalendarEvent, 'id' | 'createdAt'>): Promise<number> {
@@ -224,6 +307,7 @@ export async function updateEvent(id: number, event: Partial<CalendarEvent>): Pr
     if (event.link !== undefined) { setClauses.push('link = ?'); args.push(event.link); }
     if (event.imageUrl !== undefined) { setClauses.push('imageUrl = ?'); args.push(event.imageUrl); }
     if (event.timelineImageUrl !== undefined) { setClauses.push('timelineImageUrl = ?'); args.push(event.timelineImageUrl); }
+    if (event.isMore !== undefined) { setClauses.push('isMore = ?'); args.push(event.isMore ? 1 : 0); }
 
     if (setClauses.length === 0) return false;
 

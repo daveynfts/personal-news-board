@@ -11,6 +11,7 @@ interface Post {
     title: string;
     url: string;
     imageUrl?: string;
+    isMore?: boolean;
     createdAt?: string;
 }
 
@@ -163,6 +164,24 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
         }
     };
 
+
+    const handleToggleMore = async (post: Post) => {
+        try {
+            const res = await fetch('/api/posts/toggle-more', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: post.id, isMore: !post.isMore }),
+            });
+            if (res.ok) {
+                addToast(post.isMore ? 'Removed from More page.' : 'Added to More page.');
+                fetchPosts();
+            } else {
+                addToast('Failed to update.', 'error');
+            }
+        } catch {
+            addToast('An error occurred.', 'error');
+        }
+    };
 
     return (
         <div className="admin-page-layout trans-enter">
@@ -327,6 +346,20 @@ export default function AdminPosts({ addToast }: AdminPostsProps) {
                                     </div>
                                 </div>
                                 <div className="post-item-actions">
+                                    <button
+                                        onClick={() => handleToggleMore(post)}
+                                        className="edit-btn"
+                                        style={{
+                                            background: post.isMore ? 'rgba(99,102,241,0.2)' : undefined,
+                                            borderColor: post.isMore ? 'rgba(99,102,241,0.6)' : undefined,
+                                            color: post.isMore ? '#a5b4fc' : undefined,
+                                            fontSize: '0.7rem',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                        title={post.isMore ? 'Remove from More page' : 'Add to More page'}
+                                    >
+                                        {post.isMore ? '⊖ More' : '⊕ More'}
+                                    </button>
                                     <button onClick={() => startEditing(post)} className="edit-btn">Edit</button>
                                     <button onClick={() => setShowConfirm({ id: post.id, title: post.title })} className="delete-btn">Remove</button>
                                 </div>

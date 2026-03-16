@@ -13,6 +13,7 @@ interface Article {
     coverImage?: string;
     xSourceUrl?: string;
     isEditorialPick: boolean;
+    isMore?: boolean;
     createdAt?: string;
 }
 
@@ -166,6 +167,24 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
         } finally {
             setLoading(false);
             setShowConfirm(null);
+        }
+    };
+
+    const handleToggleMore = async (article: Article) => {
+        try {
+            const res = await fetch('/api/articles/toggle-more', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: article.id, isMore: !article.isMore }),
+            });
+            if (res.ok) {
+                addToast(article.isMore ? 'Removed from More page.' : 'Added to More page.');
+                fetchArticles();
+            } else {
+                addToast('Failed to update.', 'error');
+            }
+        } catch {
+            addToast('An error occurred.', 'error');
         }
     };
 
@@ -370,6 +389,20 @@ export default function AdminArticles({ addToast }: AdminArticlesProps) {
                                     </div>
                                 </div>
                                 <div className="post-item-actions">
+                                    <button
+                                        onClick={() => handleToggleMore(article)}
+                                        className="edit-btn"
+                                        style={{
+                                            background: article.isMore ? 'rgba(99,102,241,0.2)' : undefined,
+                                            borderColor: article.isMore ? 'rgba(99,102,241,0.6)' : undefined,
+                                            color: article.isMore ? '#a5b4fc' : undefined,
+                                            fontSize: '0.7rem',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                        title={article.isMore ? 'Remove from More page' : 'Add to More page'}
+                                    >
+                                        {article.isMore ? '⊖ More' : '⊕ More'}
+                                    </button>
                                     <button onClick={() => startEditing(article)} className="edit-btn">Edit</button>
                                     <button onClick={() => setShowConfirm({ id: article.id, title: article.title })} className="delete-btn">Delete</button>
                                 </div>
