@@ -48,6 +48,7 @@ next-env.d.ts
 
 # database
 *.sqlite
+db_dump.json
 
 # local uploads
 /public/uploads/
