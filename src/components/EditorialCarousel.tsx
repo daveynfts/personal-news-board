@@ -36,7 +36,10 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
     return (
         <div className="editorial-carousel-container">
             <Container>
-                <h2 className="section-title" style={{ marginBottom: '24px' }}>Editorial Picks</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>Editorial Picks</h2>
+                    <Link href="/articles" className="archive-view-all-btn">View All Articles →</Link>
+                </div>
 
                 <div className="editorial-carousel-premium">
                     {/* Background Image - crossfade style */}

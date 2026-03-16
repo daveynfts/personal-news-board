@@ -94,11 +94,9 @@ export default async function Home({ searchParams }: PageProps) {
           <Container>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
               <h2 className="section-title" style={{ marginBottom: 0 }}>Latest Features</h2>
-              {hasMoreContent && (
-                <Link href="/more" style={{ fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.85 }}>
-                  View All →
-                </Link>
-              )}
+              <Link href="/articles" className="archive-view-all-btn">
+                View All Articles →
+              </Link>
             </div>
             <div className="bento-grid">
               {standardArticles.map((article, index) => (
@@ -137,11 +135,9 @@ export default async function Home({ searchParams }: PageProps) {
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
           <h2 className="section-title" style={{ marginBottom: 0 }}>DaveyNFTs&apos; Picks</h2>
-          {hasMoreContent && (
-            <Link href="/more" style={{ fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.85 }}>
-              View All →
-            </Link>
-          )}
+          <Link href="/picks" className="archive-view-all-btn">
+            View All Picks →
+          </Link>
         </div>
         
         <Suspense fallback={

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { CalendarEvent } from '@/lib/db';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -74,9 +75,17 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     return (
         <section className="event-calendar-section">
-            <div className="section-header-premium trans-up">
-                <h2 className="section-title">Events & Timeline</h2>
-                <div className="section-divider"></div>
+            <div className="section-header-premium trans-up" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+                <div>
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>Events &amp; Timeline</h2>
+                    <div className="section-divider" style={{ marginTop: '12px' }}></div>
+                </div>
+                <Link
+                    href="/events"
+                    className="archive-view-all-btn"
+                >
+                    View All Events →
+                </Link>
             </div>
 
             <div className="event-calendar-grid">
