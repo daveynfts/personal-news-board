@@ -131,6 +131,10 @@ export default function Header() {
             <h1>DaveyNFTs</h1>
           </div>
           <nav className="main-nav">
+            <Link href="/special-offer" className="nav-link nav-link-special">
+              <span className="nav-special-icon">✨</span>
+              SPECIAL OFFER
+            </Link>
             <Link href="/" className="nav-link">HOME</Link>
             <Link href="/admin" className="nav-link">ADMIN</Link>
             <button
