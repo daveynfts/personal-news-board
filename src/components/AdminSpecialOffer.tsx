@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { convertToWebP } from '@/lib/convertToWebP';
-import ImageCropperModal from './ImageCropperModal';
 import Image from 'next/image';
 
 interface Exchange {
@@ -92,22 +91,14 @@ const defaultEvent: Omit<CryptoEvent, 'id'> = {
 
 function ImageUploadField({ label, value, onChange, addToast }: { label: string; value: string; onChange: (url: string) => void; addToast: Props['addToast'] }) {
     const [uploading, setUploading] = useState(false);
-    const [cropFile, setCropFile] = useState<{ src: string; file: File } | null>(null);
 
-    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const objUrl = URL.createObjectURL(file);
-        setCropFile({ src: objUrl, file });
         e.target.value = '';
-    };
-
-    const handleCropComplete = async (croppedFile: File) => {
-        if (cropFile) URL.revokeObjectURL(cropFile.src);
-        setCropFile(null);
         setUploading(true);
         try {
-            const webpFile = await convertToWebP(croppedFile);
+            const webpFile = await convertToWebP(file);
             const res = await fetch(`/api/upload?filename=${encodeURIComponent(webpFile.name)}`, { method: 'POST', body: webpFile });
             if (res.ok) {
                 const blob = await res.json();
@@ -123,7 +114,7 @@ function ImageUploadField({ label, value, onChange, addToast }: { label: string;
 
     return (
         <div className="form-group">
-            <label>{label}</label>
+            <label>{label} <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400 }}>(1:1 ratio recommended)</span></label>
             <div style={{ display: 'flex', gap: '8px', marginBottom: isValid ? '10px' : 0 }}>
                 <input className="form-input" type="text" value={value} onChange={e => onChange(e.target.value)} placeholder="Image URL or upload..." style={{ flex: 1 }} />
                 <input type="file" onChange={handleFile} accept="image/*" style={{ display: 'none' }} id={inputId} disabled={uploading} />
@@ -139,15 +130,6 @@ function ImageUploadField({ label, value, onChange, addToast }: { label: string;
                     <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{value}</span>
                     <button type="button" onClick={() => onChange('')} className="delete-btn" style={{ fontSize: '0.65rem', padding: '3px 8px' }}>✕</button>
                 </div>
-            )}
-            {cropFile && (
-                <ImageCropperModal
-                    imageSrc={cropFile.src}
-                    fileName={cropFile.file.name}
-                    aspectRatio={1}
-                    onCropComplete={handleCropComplete}
-                    onCancel={() => { URL.revokeObjectURL(cropFile.src); setCropFile(null); }}
-                />
             )}
         </div>
     );
