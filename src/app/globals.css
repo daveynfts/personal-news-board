@@ -7682,26 +7682,70 @@ select.form-input {
    ══════════════════════════════════════════════ */
 
 .article-tweet-embed {
-  margin: 32px auto;
+  margin: 36px auto;
   max-width: 550px;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid rgba(255,255,255,0.1);
   transition: all 0.3s ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
 }
 
 .article-tweet-embed:hover {
-  border-color: rgba(29,155,240,0.25);
-  box-shadow: 0 8px 32px rgba(29,155,240,0.08);
+  border-color: rgba(29,155,240,0.3);
+  box-shadow: 0 8px 40px rgba(29,155,240,0.1), 0 4px 24px rgba(0,0,0,0.3);
+  transform: translateY(-1px);
 }
 
+/* Remove default margins and borders from react-tweet */
 .article-tweet-embed > div {
   margin: 0 !important;
 }
 
-.article-tweet-embed > div > div {
-  border: none !important;
+.article-tweet-embed [data-theme="dark"] {
+  --tweet-bg-color: transparent !important;
+  --tweet-border: transparent !important;
+  --tweet-font-color: #e7e9ea !important;
+  --tweet-font-color-secondary: #71767b !important;
+  --tweet-color-blue-secondary: #1d9bf0 !important;
+  --tweet-actions-font-weight: 600 !important;
+}
+
+/* Force dark background for the tweet container */
+.article-tweet-embed div[class*="react-tweet"] {
   background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+}
+
+/* Tweet card inner wrapper */
+.article-tweet-embed article {
+  background: transparent !important;
+  border: none !important;
+  padding: 16px 20px !important;
+  margin: 0 !important;
+}
+
+/* Override any white backgrounds in nested elements */
+.article-tweet-embed div[style*="background-color"] {
+  background-color: transparent !important;
+}
+
+/* Ensure images inside the tweet have rounded corners */
+.article-tweet-embed img[alt="Image"] {
+  border-radius: 12px !important;
+}
+
+/* Reply button / bottom bar styling */
+.article-tweet-embed a[href*="twitter.com"],
+.article-tweet-embed a[href*="x.com"] {
+  color: #1d9bf0 !important;
+}
+
+/* "Read X replies" button */
+.article-tweet-embed div[role="link"] {
+  border-color: rgba(255,255,255,0.12) !important;
+  color: #e7e9ea !important;
 }
 
