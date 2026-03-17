@@ -78,14 +78,14 @@ const defaultExchange: Omit<Exchange, 'id'> = {
     name: '', badge: '', badgeColor: '#f0b90b', bonus: '',
     gradient: gradientPresets[0].value,
     glowColor: glowPresets[0].value, logo: '',
-    features: '[]', link: '#', sortOrder: 0, isVisible: true,
+    features: '[]', link: '', sortOrder: 0, isVisible: true,
 };
 
 const defaultEvent: Omit<CryptoEvent, 'id'> = {
     platform: 'Binance', platformIcon: '', platformColor: '#f0b90b',
     eventType: 'Launchpool', tokenSymbol: '', tokenName: '', description: '',
     status: 'upcoming', endDate: '', totalRewards: '', stakingAssets: '[]',
-    apr: '', tags: '[]', ctaLink: '#', sortOrder: 0, isVisible: true,
+    apr: '', tags: '[]', ctaLink: '', sortOrder: 0, isVisible: true,
 };
 
 // ── Reusable sub-components ──
@@ -133,8 +133,8 @@ function ImageUploadField({ label, value, onChange, addToast }: { label: string;
             </div>
             {isValid && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#000' }}>
-                        <Image src={value} alt={label} fill style={{ objectFit: 'contain' }} unoptimized />
+                    <div style={{ width: '56px', height: '56px', borderRadius: '12px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
+                        <Image src={value} alt={label} fill style={{ objectFit: 'cover' }} unoptimized />
                     </div>
                     <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{value}</span>
                     <button type="button" onClick={() => onChange('')} className="delete-btn" style={{ fontSize: '0.65rem', padding: '3px 8px' }}>✕</button>
@@ -209,8 +209,8 @@ function ExchangePreview({ form, features }: { form: Omit<Exchange, 'id'>; featu
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px', position: 'relative', zIndex: 1 }}>
                     {isValidUrl(form.logo) ? (
-                        <div style={{ width: '36px', height: '36px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                            <Image src={form.logo} alt={form.name} fill style={{ objectFit: 'contain' }} unoptimized />
+                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
+                            <Image src={form.logo} alt={form.name} fill style={{ objectFit: 'cover' }} unoptimized />
                         </div>
                     ) : (
                         <span style={{ fontSize: '1.8rem' }}>{form.logo || '🟡'}</span>
@@ -256,8 +256,8 @@ function CryptoEventPreview({ form }: { form: Omit<CryptoEvent, 'id'> }) {
             <div style={{ padding: '16px 20px', borderRadius: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                     {isValidUrl(form.platformIcon) ? (
-                        <div style={{ width: '28px', height: '28px', borderRadius: '8px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                            <Image src={form.platformIcon} alt={form.platform} fill style={{ objectFit: 'contain' }} unoptimized />
+                        <div style={{ width: '40px', height: '40px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
+                            <Image src={form.platformIcon} alt={form.platform} fill style={{ objectFit: 'cover' }} unoptimized />
                         </div>
                     ) : (
                         <span style={{ fontSize: '1.2rem' }}>{form.platformIcon || '🟡'}</span>
@@ -450,8 +450,8 @@ export default function AdminSpecialOffer({ addToast }: Props) {
                                 <div key={ex.id} className="post-item-admin" style={{ opacity: ex.isVisible ? 1 : 0.5 }}>
                                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
                                         {isValidUrl(ex.logo) ? (
-                                            <div style={{ width: '32px', height: '32px', borderRadius: '8px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                                                <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'contain' }} unoptimized />
+                                            <div style={{ width: '44px', height: '44px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
+                                                <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'cover' }} unoptimized />
                                             </div>
                                         ) : (
                                             <span style={{ fontSize: '1.5rem' }}>{ex.logo || '🟡'}</span>
@@ -599,8 +599,8 @@ export default function AdminSpecialOffer({ addToast }: Props) {
                                 <div key={ev.id} className="post-item-admin" style={{ opacity: ev.isVisible ? 1 : 0.5 }}>
                                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
                                         {isValidUrl(ev.platformIcon) ? (
-                                            <div style={{ width: '28px', height: '28px', borderRadius: '6px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                                                <Image src={ev.platformIcon} alt={ev.platform} fill style={{ objectFit: 'contain' }} unoptimized />
+                                            <div style={{ width: '36px', height: '36px', borderRadius: '8px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
+                                                <Image src={ev.platformIcon} alt={ev.platform} fill style={{ objectFit: 'cover' }} unoptimized />
                                             </div>
                                         ) : (
                                             <span style={{ fontSize: '1.5rem' }}>{ev.platformIcon || '🟡'}</span>

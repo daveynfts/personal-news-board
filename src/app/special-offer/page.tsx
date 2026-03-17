@@ -315,9 +315,9 @@ export default function SpecialOfferPage() {
 
                 {/* Logo & Name */}
                 <div className="so-exchange-header">
-                  {ex.logo && ex.logo.startsWith('http') ? (
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                      <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'contain' }} unoptimized />
+                  {ex.logo && ex.logo.startsWith('http') && ex.logo.length > 10 ? (
+                    <div style={{ width: '52px', height: '52px', borderRadius: '14px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
+                      <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'cover' }} unoptimized />
                     </div>
                   ) : (
                     <span className="so-exchange-logo">{ex.logo || '🟡'}</span>
@@ -343,7 +343,12 @@ export default function SpecialOfferPage() {
 
                 {/* CTA Button */}
                 <a
-                  href={ex.link}
+                  href={(() => {
+                    let url = ex.link || '#';
+                    // Strip accidental leading # from URLs
+                    while (url.startsWith('#http')) url = url.slice(1);
+                    return url;
+                  })()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="so-exchange-cta"
