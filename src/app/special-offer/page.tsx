@@ -317,7 +317,7 @@ export default function SpecialOfferPage() {
                 <div className="so-exchange-header">
                   {ex.logo && ex.logo.startsWith('http') && ex.logo.length > 10 ? (
                     <div style={{ width: '52px', height: '52px', borderRadius: '14px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#111' }}>
-                      <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'cover' }} unoptimized />
+                      <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'contain' }} unoptimized />
                     </div>
                   ) : (
                     <span className="so-exchange-logo">{ex.logo || '🟡'}</span>
