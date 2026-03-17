@@ -1,13 +1,78 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Container from '@/components/Container';
+
+interface ExchangeData {
+  name: string;
+  badge: string;
+  badgeColor: string;
+  bonus: string;
+  gradient: string;
+  glowColor: string;
+  logo: string;
+  features: string[];
+  link: string;
+}
+
+interface RadarPreview {
+  status: string;
+  statusLabel: string;
+  name: string;
+  token: string;
+  apr: string;
+}
+
+const defaultExchanges: ExchangeData[] = [
+  { name: 'Binance', badge: 'Best for P2P', badgeColor: '#f0b90b', bonus: 'Up to $600 Bonus', gradient: 'linear-gradient(135deg, #f0b90b 0%, #d4a20a 50%, #b8890a 100%)', glowColor: 'rgba(240, 185, 11, 0.3)', logo: '🟡', features: ['Lowest spot fees', '350+ cryptos', '#1 by volume'], link: '#' },
+  { name: 'Bybit', badge: 'Lowest Futures Fees', badgeColor: '#f7a600', bonus: 'Up to $500 Bonus', gradient: 'linear-gradient(135deg, #f7a600 0%, #ff6b00 50%, #e85d00 100%)', glowColor: 'rgba(247, 166, 0, 0.3)', logo: '🟠', features: ['Copy trading', 'Leveraged tokens', 'Fast execution'], link: '#' },
+  { name: 'OKX', badge: 'Best for DeFi', badgeColor: '#00d4aa', bonus: 'Up to $500 Bonus', gradient: 'linear-gradient(135deg, #00d4aa 0%, #00b894 50%, #009d80 100%)', glowColor: 'rgba(0, 212, 170, 0.3)', logo: '🟢', features: ['Web3 wallet', 'DEX aggregator', 'Earn up to 20% APY'], link: '#' },
+];
+
+const defaultRadarPreviews: RadarPreview[] = [
+  { status: 'live', statusLabel: '🔴 LIVE', name: 'Binance Launchpool', token: '$KERNEL', apr: 'Est. APR: ~45%' },
+  { status: 'upcoming', statusLabel: '⏳ UPCOMING', name: 'Binance Megadrop', token: '$SOLV', apr: 'Snapshot in 3 days' },
+  { status: 'hot', statusLabel: '🔥 HOT', name: 'Bybit Launchpool', token: '$INIT', apr: 'Est. APR: ~32%' },
+];
 
 export default function SpecialOfferPage() {
   const [volume, setVolume] = useState(50000);
   const [animatedSavings, setAnimatedSavings] = useState(0);
   const sliderRef = useRef<HTMLInputElement>(null);
+  const [exchanges, setExchanges] = useState<ExchangeData[]>(defaultExchanges);
+  const [radarPreviews, setRadarPreviews] = useState<RadarPreview[]>(defaultRadarPreviews);
+
+  // Fetch exchanges from API
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await fetch('/api/exchanges');
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        setExchanges(data.map((ex: { name: string; badge: string; badgeColor: string; bonus: string; gradient: string; glowColor: string; logo: string; features: string; link: string }) => ({
+          ...ex,
+          features: (() => { try { return JSON.parse(ex.features); } catch { return []; } })(),
+        })));
+      }
+    } catch { /* use defaults */ }
+
+    try {
+      const res = await fetch('/api/crypto-events');
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        const statusMap: Record<string, string> = { live: '🔴 LIVE', upcoming: '⏳ UPCOMING', ended: '✅ ENDED' };
+        setRadarPreviews(data.slice(0, 3).map((ev: { status: string; platform: string; eventType: string; tokenSymbol: string; apr: string }) => ({
+          status: ev.status === 'live' ? 'live' : ev.status === 'upcoming' ? 'upcoming' : 'hot',
+          statusLabel: statusMap[ev.status] || '🔥 HOT',
+          name: `${ev.platform} ${ev.eventType}`,
+          token: `$${ev.tokenSymbol}`,
+          apr: ev.apr ? `Est. APR: ${ev.apr}` : '',
+        })));
+      }
+    } catch { /* use defaults */ }
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const standardFee = volume * 0.001;
   const savings = standardFee * 0.2;
@@ -50,42 +115,6 @@ export default function SpecialOfferPage() {
       duration: 2 + Math.random() * 3,
     })),
   []);
-
-  const exchanges = [
-    {
-      name: 'Binance',
-      badge: 'Best for P2P',
-      badgeColor: '#f0b90b',
-      bonus: 'Up to $600 Bonus',
-      gradient: 'linear-gradient(135deg, #f0b90b 0%, #d4a20a 50%, #b8890a 100%)',
-      glowColor: 'rgba(240, 185, 11, 0.3)',
-      logo: '🟡',
-      features: ['Lowest spot fees', '350+ cryptos', '#1 by volume'],
-      link: '#',
-    },
-    {
-      name: 'Bybit',
-      badge: 'Lowest Futures Fees',
-      badgeColor: '#f7a600',
-      bonus: 'Up to $500 Bonus',
-      gradient: 'linear-gradient(135deg, #f7a600 0%, #ff6b00 50%, #e85d00 100%)',
-      glowColor: 'rgba(247, 166, 0, 0.3)',
-      logo: '🟠',
-      features: ['Copy trading', 'Leveraged tokens', 'Fast execution'],
-      link: '#',
-    },
-    {
-      name: 'OKX',
-      badge: 'Best for DeFi',
-      badgeColor: '#00d4aa',
-      bonus: 'Up to $500 Bonus',
-      gradient: 'linear-gradient(135deg, #00d4aa 0%, #00b894 50%, #009d80 100%)',
-      glowColor: 'rgba(0, 212, 170, 0.3)',
-      logo: '🟢',
-      features: ['Web3 wallet', 'DEX aggregator', 'Earn up to 20% APY'],
-      link: '#',
-    },
-  ];
 
   return (
     <div className="so-page">
@@ -251,24 +280,32 @@ export default function SpecialOfferPage() {
         </Container>
       </section>
 
-      {/* Exchange Comparison Matrix */}
+      {/* Exchange Comparison Matrix — Premium */}
       <section id="exchanges" className="so-exchanges-section">
         <Container>
+          {/* Floating orbs behind the exchange grid */}
+          <div className="so-ex-orbs" aria-hidden="true">
+            <div className="so-ex-orb so-ex-orb-1" />
+            <div className="so-ex-orb so-ex-orb-2" />
+            <div className="so-ex-orb so-ex-orb-3" />
+          </div>
+
           <div className="so-section-label">
             <span className="so-section-icon">🏆</span>
             <span>Exchange Comparison</span>
           </div>
           <h2 className="so-exchanges-title">
-            Top Exchanges, <span className="so-gradient-text">Exclusive Rates</span>
+            Top Exchanges, <span className="so-gradient-text-animated">Exclusive Rates</span>
           </h2>
           <p className="so-exchanges-subtitle">
             Sign up through our verified partner links and enjoy lifetime fee discounts
           </p>
 
           <div className="so-exchange-grid">
-            {exchanges.map((ex) => (
-              <div key={ex.name} className="so-exchange-card" style={{ '--glow-color': ex.glowColor } as React.CSSProperties}>
+            {exchanges.map((ex, idx) => (
+              <div key={ex.name} className="so-exchange-card" style={{ '--glow-color': ex.glowColor, '--card-delay': `${idx * 0.1}s` } as React.CSSProperties}>
                 <div className="so-exchange-card-glow" style={{ background: `radial-gradient(ellipse at 50% 0%, ${ex.glowColor}, transparent 70%)` }} />
+                <div className="so-ex-card-shimmer" />
 
                 {/* Badge */}
                 <div className="so-exchange-badge" style={{ background: ex.badgeColor, color: '#000' }}>
@@ -327,15 +364,26 @@ export default function SpecialOfferPage() {
         </Container>
       </section>
 
-      {/* FOMO Tracker — Airdrop Radar Teaser */}
+      {/* FOMO Tracker — Airdrop Radar Teaser — Premium */}
       <section className="so-radar-section">
         <Container>
           <div className="so-radar-card">
             <div className="so-radar-glow" />
+            <div className="so-radar-scanline" />
             <div className="so-radar-header">
-              <div className="so-radar-icon-wrap">
+              {/* 3D Radar Object */}
+              <div className="so-radar-3d-wrap">
+                <div className="so-radar-3d">
+                  <div className="so-radar-3d-core" />
+                  <div className="so-radar-3d-ring so-radar-3d-ring-1" />
+                  <div className="so-radar-3d-ring so-radar-3d-ring-2" />
+                  <div className="so-radar-3d-ring so-radar-3d-ring-3" />
+                  <div className="so-radar-3d-beam" />
+                  <div className="so-radar-3d-dot so-radar-3d-dot-1" />
+                  <div className="so-radar-3d-dot so-radar-3d-dot-2" />
+                  <div className="so-radar-3d-dot so-radar-3d-dot-3" />
+                </div>
                 <span className="so-radar-ping" />
-                <span className="so-radar-icon">📡</span>
               </div>
               <div>
                 <h2 className="so-radar-title">Airdrop & Launchpool Radar</h2>
@@ -347,24 +395,14 @@ export default function SpecialOfferPage() {
 
             {/* Quick preview cards */}
             <div className="so-radar-preview-grid">
-              <div className="so-radar-preview-card">
-                <div className="so-radar-preview-status live">🔴 LIVE</div>
-                <div className="so-radar-preview-name">Binance Launchpool</div>
-                <div className="so-radar-preview-token">$KERNEL</div>
-                <div className="so-radar-preview-apy">Est. APR: ~45%</div>
-              </div>
-              <div className="so-radar-preview-card">
-                <div className="so-radar-preview-status upcoming">⏳ UPCOMING</div>
-                <div className="so-radar-preview-name">Binance Megadrop</div>
-                <div className="so-radar-preview-token">$SOLV</div>
-                <div className="so-radar-preview-apy">Snapshot in 3 days</div>
-              </div>
-              <div className="so-radar-preview-card">
-                <div className="so-radar-preview-status hot">🔥 HOT</div>
-                <div className="so-radar-preview-name">Bybit Launchpool</div>
-                <div className="so-radar-preview-token">$INIT</div>
-                <div className="so-radar-preview-apy">Est. APR: ~32%</div>
-              </div>
+              {radarPreviews.map((rp, i) => (
+                <div key={i} className="so-radar-preview-card">
+                  <div className={`so-radar-preview-status ${rp.status}`}>{rp.statusLabel}</div>
+                  <div className="so-radar-preview-name">{rp.name}</div>
+                  <div className="so-radar-preview-token">{rp.token}</div>
+                  <div className="so-radar-preview-apy">{rp.apr}</div>
+                </div>
+              ))}
             </div>
 
             <Link href="/crypto-events" className="so-radar-cta">

@@ -6348,12 +6348,95 @@ select.form-input {
 }
 
 
-/* ── EXCHANGE COMPARISON ── */
+/* ── EXCHANGE COMPARISON — Premium ── */
 .so-exchanges-section {
   position: relative;
   z-index: 1;
   padding: 60px 0 40px;
   text-align: center;
+  overflow: hidden;
+}
+
+/* Animated gradient text for "Exclusive Rates" */
+.so-gradient-text-animated {
+  background: linear-gradient(
+    135deg,
+    #a855f7 0%, #6366f1 25%, #ec4899 50%, #a855f7 75%, #6366f1 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: so-gradient-flow 4s ease-in-out infinite;
+}
+
+@keyframes so-gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating orbs behind exchange grid */
+.so-ex-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.so-ex-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.2;
+  mix-blend-mode: screen;
+  animation: so-float 20s infinite alternate ease-in-out;
+}
+
+.so-ex-orb-1 {
+  width: 300px; height: 300px;
+  background: #f0b90b;
+  top: 10%; left: -5%;
+}
+
+.so-ex-orb-2 {
+  width: 250px; height: 250px;
+  background: #f7a600;
+  bottom: 5%; right: 10%;
+  animation-delay: -6s;
+}
+
+.so-ex-orb-3 {
+  width: 200px; height: 200px;
+  background: #00d4aa;
+  top: 40%; right: -8%;
+  animation-delay: -12s;
+}
+
+/* Card shimmer sweep overlay */
+.so-ex-card-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255,255,255,0.03) 45%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.03) 55%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  animation: so-ex-shimmer-sweep 5s var(--card-delay, 0s) ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+@keyframes so-ex-shimmer-sweep {
+  0% { background-position: 250% 0; }
+  100% { background-position: -50% 0; }
 }
 
 .so-exchanges-title {
@@ -6628,31 +6711,173 @@ select.form-input {
 
 .so-radar-header {
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
   margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
 }
 
-.so-radar-icon-wrap {
+/* Scanline sweep across the entire card */
+.so-radar-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(16,185,129,0.03) 48%,
+    rgba(16,185,129,0.08) 50%,
+    rgba(16,185,129,0.03) 52%,
+    transparent 100%
+  );
+  background-size: 100% 400%;
+  animation: so-scanline-sweep 4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes so-scanline-sweep {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+
+/* 3D Radar Object Container */
+.so-radar-3d-wrap {
   position: relative;
+  width: 80px;
+  height: 80px;
   flex-shrink: 0;
 }
 
-.so-radar-icon {
-  font-size: 2.8rem;
-  display: block;
+.so-radar-3d {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  perspective: 200px;
+  transform-style: preserve-3d;
+  animation: so-radar-3d-float 6s ease-in-out infinite;
 }
 
-.so-radar-ping {
+@keyframes so-radar-3d-float {
+  0%, 100% { transform: translateY(0) rotateY(0deg); }
+  25% { transform: translateY(-4px) rotateY(8deg); }
+  50% { transform: translateY(-2px) rotateY(0deg); }
+  75% { transform: translateY(-6px) rotateY(-8deg); }
+}
+
+/* Glowing core */
+.so-radar-3d-core {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 14px;
-  height: 14px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #6ee7b7, #10b981);
+  box-shadow:
+    0 0 12px rgba(16,185,129,0.8),
+    0 0 24px rgba(16,185,129,0.4),
+    0 0 48px rgba(16,185,129,0.2);
+  z-index: 3;
+  animation: so-core-pulse 2s ease-in-out infinite;
+}
+
+@keyframes so-core-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(16,185,129,0.8), 0 0 24px rgba(16,185,129,0.4), 0 0 48px rgba(16,185,129,0.2); transform: translate(-50%, -50%) scale(1); }
+  50% { box-shadow: 0 0 18px rgba(16,185,129,1), 0 0 36px rgba(16,185,129,0.6), 0 0 60px rgba(16,185,129,0.3); transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* Orbit rings */
+.so-radar-3d-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(16,185,129,0.25);
+  box-shadow: 0 0 6px rgba(16,185,129,0.15);
+  animation: so-ring-orbit linear infinite;
+}
+
+.so-radar-3d-ring-1 {
+  width: 42px; height: 42px;
+  margin: -21px 0 0 -21px;
+  transform: rotateX(70deg) rotateZ(0deg);
+  animation-duration: 4s;
+  border-color: rgba(16,185,129,0.35);
+}
+
+.so-radar-3d-ring-2 {
+  width: 58px; height: 58px;
+  margin: -29px 0 0 -29px;
+  transform: rotateX(70deg) rotateZ(60deg);
+  animation-duration: 6s;
+  animation-direction: reverse;
+  border-color: rgba(99,102,241,0.25);
+  box-shadow: 0 0 6px rgba(99,102,241,0.15);
+}
+
+.so-radar-3d-ring-3 {
+  width: 72px; height: 72px;
+  margin: -36px 0 0 -36px;
+  transform: rotateX(70deg) rotateZ(120deg);
+  animation-duration: 8s;
+  border-color: rgba(168,85,247,0.2);
+  box-shadow: 0 0 6px rgba(168,85,247,0.1);
+}
+
+@keyframes so-ring-orbit {
+  from { transform: rotateX(70deg) rotateZ(0deg); }
+  to { transform: rotateX(70deg) rotateZ(360deg); }
+}
+
+/* Radar sweep beam */
+.so-radar-3d-beam {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 36px; height: 2px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(16,185,129,0.8), transparent);
+  border-radius: 0 999px 999px 0;
+  z-index: 2;
+  animation: so-beam-sweep 3s linear infinite;
+  box-shadow: 0 0 8px rgba(16,185,129,0.5);
+}
+
+@keyframes so-beam-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Signal dots on the rings */
+.so-radar-3d-dot {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: #6ee7b7;
+  box-shadow: 0 0 6px rgba(110,231,183,0.8);
+  z-index: 4;
+  animation: so-dot-blink 2s ease-in-out infinite;
+}
+
+.so-radar-3d-dot-1 { top: 8px; left: 50%; animation-delay: 0s; }
+.so-radar-3d-dot-2 { bottom: 12px; left: 18px; animation-delay: 0.7s; }
+.so-radar-3d-dot-3 { bottom: 15px; right: 14px; animation-delay: 1.3s; }
+
+@keyframes so-dot-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.6); }
+}
+
+/* Updated ping position for 3D object */
+.so-radar-3d-wrap .so-radar-ping {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #10b981;
   animation: so-radar-ping-anim 2s ease-in-out infinite;
   box-shadow: 0 0 12px rgba(16,185,129,0.7);
+  z-index: 5;
 }
 
 @keyframes so-radar-ping-anim {

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import AdminPosts from '@/components/AdminPosts';
 import AdminArticles from '@/components/AdminArticles';
 import AdminEvents from '@/components/AdminEvents';
+import AdminSpecialOffer from '@/components/AdminSpecialOffer';
 
 const TOKEN_KEY = 'admin_session_token';
 const STORAGE_TYPE_KEY = 'admin_session_storage'; // 'local' or 'session'
@@ -37,7 +38,7 @@ export default function AdminPage() {
     const [rememberMe, setRememberMe] = useState(false);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isChecking, setIsChecking] = useState(true); // Loading state for auto-login
-    const [activeTab, setActiveTab] = useState<'posts' | 'articles' | 'events'>('posts');
+    const [activeTab, setActiveTab] = useState<'posts' | 'articles' | 'events' | 'offers'>('posts');
     const [toasts, setToasts] = useState<{ id: string; message: string; type: 'success' | 'error' }[]>([]);
 
     const addToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -263,6 +264,12 @@ export default function AdminPage() {
                                 >
                                     📅 Events
                                 </button>
+                                <button
+                                    className={`admin-tab ${activeTab === 'offers' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('offers')}
+                                >
+                                    🎁 Special Offer
+                                </button>
                             </div>
                             <button
                                 onClick={handleLogout}
@@ -292,6 +299,7 @@ export default function AdminPage() {
                 {activeTab === 'posts' && <AdminPosts addToast={addToast} />}
                 {activeTab === 'articles' && <AdminArticles addToast={addToast} />}
                 {activeTab === 'events' && <AdminEvents addToast={addToast} />}
+                {activeTab === 'offers' && <AdminSpecialOffer addToast={addToast} />}
             </div>
         </div>
     );
