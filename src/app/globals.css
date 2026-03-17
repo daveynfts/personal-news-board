@@ -7626,7 +7626,7 @@ select.form-input {
 .tweet-wall-card {
   position: relative;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
   transition: all 0.3s ease;
@@ -7685,7 +7685,7 @@ select.form-input {
   margin: 36px auto;
   max-width: 550px;
   border-radius: 18px;
-  overflow: hidden;
+  overflow: visible;
   background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
   border: 1px solid rgba(255,255,255,0.1);
   transition: all 0.3s ease;
