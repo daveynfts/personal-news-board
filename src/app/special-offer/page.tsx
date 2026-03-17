@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Container from '@/components/Container';
 
 interface ExchangeData {
@@ -314,7 +315,13 @@ export default function SpecialOfferPage() {
 
                 {/* Logo & Name */}
                 <div className="so-exchange-header">
-                  <span className="so-exchange-logo">{ex.logo}</span>
+                  {ex.logo && ex.logo.startsWith('http') ? (
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                      <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'contain' }} unoptimized />
+                    </div>
+                  ) : (
+                    <span className="so-exchange-logo">{ex.logo || '🟡'}</span>
+                  )}
                   <h3 className="so-exchange-name">{ex.name}</h3>
                 </div>
 
