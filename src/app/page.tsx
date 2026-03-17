@@ -5,6 +5,7 @@ import EditorialCarousel from '@/components/EditorialCarousel';
 import EventCalendar from '@/components/EventCalendar';
 import Container from '@/components/Container';
 import FilterBar from '@/components/FilterBar';
+import TweetWall from '@/components/TweetWall';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
@@ -127,6 +128,11 @@ export default async function Home({ searchParams }: PageProps) {
           </Container>
         </section>
       )}
+
+      {/* FEATURED TWEETS */}
+      <Container>
+        <TweetWall />
+      </Container>
 
       {/* CURATION FEED (POSTS) */}
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>

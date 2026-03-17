@@ -7535,4 +7535,173 @@ select.form-input {
   .ce-countdown-num { font-size: 1.1rem; min-width: 34px; }
   .ce-filter-btn { font-size: 0.7rem; padding: 8px 14px; }
 }
+
+/* ══════════════════════════════════════════════
+   TWEET WALL — Premium Embedded Tweets Section
+   ══════════════════════════════════════════════ */
+
+.tweet-wall-section {
+  padding: 60px 0 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.tweet-wall-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.tweet-wall-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.tweet-wall-x {
+  font-size: 1.6rem;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.tweet-wall-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+.tweet-wall-filters {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  padding: 0 16px;
+}
+
+.tweet-filter-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tweet-filter-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.tweet-filter-btn.active {
+  background: rgba(29,155,240,0.15);
+  border-color: rgba(29,155,240,0.3);
+  color: #1d9bf0;
+}
+
+.tweet-wall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+  padding: 0 16px;
+}
+
+.tweet-wall-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.3s ease;
+}
+
+.tweet-wall-card:hover {
+  border-color: rgba(29,155,240,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+.tweet-wall-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(29,155,240,0.85);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+}
+
+/* Override react-tweet dark theme styles */
+.tweet-wall-grid [data-theme="dark"] .react-tweet-theme {
+  --tweet-bg-color: transparent !important;
+  --tweet-border: rgba(255,255,255,0.06) !important;
+}
+
+.tweet-wall-card > div {
+  margin: 0 !important;
+}
+
+.tweet-wall-card > div > div {
+  border: none !important;
+  background: transparent !important;
+}
+
+@media (max-width: 768px) {
+  .tweet-wall-grid {
+    grid-template-columns: 1fr;
+    padding: 0 12px;
+  }
+  .tweet-wall-title { font-size: 1.6rem; }
+}
+
+/* ══════════════════════════════════════════════
+   ARTICLE TWEET EMBED — Inline tweet in articles
+   ══════════════════════════════════════════════ */
+
+.article-tweet-embed {
+  margin: 32px auto;
+  max-width: 550px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.3s ease;
+}
+
+.article-tweet-embed:hover {
+  border-color: rgba(29,155,240,0.25);
+  box-shadow: 0 8px 32px rgba(29,155,240,0.08);
+}
+
+.article-tweet-embed > div {
+  margin: 0 !important;
+}
+
+.article-tweet-embed > div > div {
+  border: none !important;
+  background: transparent !important;
+}
 

@@ -1,6 +1,6 @@
 import { getArticleById } from '@/lib/db';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
+import ArticleContent from '@/components/ArticleContent';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { buildMetadata, buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/seo';
@@ -163,7 +163,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Article Body */}
                 <article className="article-body">
-                    <ReactMarkdown>{article.content}</ReactMarkdown>
+                    <ArticleContent content={article.content} />
                 </article>
 
                 {/* Footer attribution */}

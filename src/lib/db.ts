@@ -93,6 +93,18 @@ async function initDb() {
       )
     `);
 
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS embedded_tweets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tweetId TEXT NOT NULL,
+        label TEXT,
+        category TEXT DEFAULT 'general',
+        sortOrder INTEGER DEFAULT 0,
+        isVisible BOOLEAN DEFAULT 1,
+        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Migrations for existing databases
     const migrations = [
         'ALTER TABLE events ADD COLUMN timelineImageUrl TEXT',
@@ -562,5 +574,62 @@ export async function updateCryptoEvent(id: number, ev: Partial<CryptoEvent>): P
 
 export async function deleteCryptoEvent(id: number): Promise<boolean> {
     const result = await db.execute({ sql: 'DELETE FROM crypto_events WHERE id = ?', args: [id] });
+    return result.rowsAffected > 0;
+}
+
+// ── Embedded Tweets ──
+export interface EmbeddedTweet {
+    id?: number;
+    tweetId: string;
+    label?: string;
+    category?: string;
+    sortOrder?: number;
+    isVisible?: boolean;
+    createdAt?: string;
+}
+
+export async function getEmbeddedTweets(allIncludingHidden = false): Promise<EmbeddedTweet[]> {
+    // DB initializes at module load
+    const sql = allIncludingHidden
+        ? 'SELECT * FROM embedded_tweets ORDER BY sortOrder ASC, createdAt DESC'
+        : 'SELECT * FROM embedded_tweets WHERE isVisible = 1 ORDER BY sortOrder ASC, createdAt DESC';
+    const result = await db.execute(sql);
+    return result.rows.map(r => ({
+        id: r.id as number,
+        tweetId: r.tweetId as string,
+        label: r.label as string || '',
+        category: r.category as string || 'general',
+        sortOrder: r.sortOrder as number || 0,
+        isVisible: Boolean(r.isVisible),
+        createdAt: r.createdAt as string,
+    }));
+}
+
+export async function createEmbeddedTweet(tweet: Omit<EmbeddedTweet, 'id' | 'createdAt'>): Promise<number> {
+    // DB initializes at module load
+    const result = await db.execute({
+        sql: 'INSERT INTO embedded_tweets (tweetId, label, category, sortOrder, isVisible) VALUES (?, ?, ?, ?, ?)',
+        args: [tweet.tweetId, tweet.label || '', tweet.category || 'general', tweet.sortOrder || 0, tweet.isVisible !== false ? 1 : 0],
+    });
+    return Number(result.lastInsertRowid);
+}
+
+export async function updateEmbeddedTweet(id: number, tweet: Partial<EmbeddedTweet>): Promise<boolean> {
+    // DB initializes at module load
+    const setClauses: string[] = [];
+    const args: InValue[] = [];
+    if (tweet.tweetId !== undefined) { setClauses.push('tweetId = ?'); args.push(tweet.tweetId); }
+    if (tweet.label !== undefined) { setClauses.push('label = ?'); args.push(tweet.label); }
+    if (tweet.category !== undefined) { setClauses.push('category = ?'); args.push(tweet.category); }
+    if (tweet.sortOrder !== undefined) { setClauses.push('sortOrder = ?'); args.push(tweet.sortOrder); }
+    if (tweet.isVisible !== undefined) { setClauses.push('isVisible = ?'); args.push(tweet.isVisible ? 1 : 0); }
+    if (setClauses.length === 0) return false;
+    args.push(id);
+    const result = await db.execute({ sql: `UPDATE embedded_tweets SET ${setClauses.join(', ')} WHERE id = ?`, args });
+    return result.rowsAffected > 0;
+}
+
+export async function deleteEmbeddedTweet(id: number): Promise<boolean> {
+    const result = await db.execute({ sql: 'DELETE FROM embedded_tweets WHERE id = ?', args: [id] });
     return result.rowsAffected > 0;
 }

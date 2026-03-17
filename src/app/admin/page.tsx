@@ -5,6 +5,7 @@ import AdminPosts from '@/components/AdminPosts';
 import AdminArticles from '@/components/AdminArticles';
 import AdminEvents from '@/components/AdminEvents';
 import AdminSpecialOffer from '@/components/AdminSpecialOffer';
+import AdminEmbeddedTweets from '@/components/AdminEmbeddedTweets';
 
 const TOKEN_KEY = 'admin_session_token';
 const STORAGE_TYPE_KEY = 'admin_session_storage'; // 'local' or 'session'
@@ -38,7 +39,7 @@ export default function AdminPage() {
     const [rememberMe, setRememberMe] = useState(false);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isChecking, setIsChecking] = useState(true); // Loading state for auto-login
-    const [activeTab, setActiveTab] = useState<'posts' | 'articles' | 'events' | 'offers'>('posts');
+    const [activeTab, setActiveTab] = useState<'posts' | 'articles' | 'events' | 'offers' | 'tweets'>('posts');
     const [toasts, setToasts] = useState<{ id: string; message: string; type: 'success' | 'error' }[]>([]);
 
     const addToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -270,6 +271,12 @@ export default function AdminPage() {
                                 >
                                     🎁 Special Offer
                                 </button>
+                                <button
+                                    className={`admin-tab ${activeTab === 'tweets' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('tweets')}
+                                >
+                                    𝕏 Tweets
+                                </button>
                             </div>
                             <button
                                 onClick={handleLogout}
@@ -300,6 +307,7 @@ export default function AdminPage() {
                 {activeTab === 'articles' && <AdminArticles addToast={addToast} />}
                 {activeTab === 'events' && <AdminEvents addToast={addToast} />}
                 {activeTab === 'offers' && <AdminSpecialOffer addToast={addToast} />}
+                {activeTab === 'tweets' && <AdminEmbeddedTweets addToast={addToast} />}
             </div>
         </div>
     );
