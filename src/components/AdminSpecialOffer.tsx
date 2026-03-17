@@ -67,6 +67,13 @@ const glowPresets = [
     { label: 'White', value: 'rgba(255, 255, 255, 0.15)', dot: '#ffffff' },
 ];
 
+// ── URL validation helper ──
+function isValidUrl(str: string): boolean {
+    if (!str || str.length < 10) return false;
+    try { const u = new URL(str); return u.protocol === 'http:' || u.protocol === 'https:'; }
+    catch { return false; }
+}
+
 const defaultExchange: Omit<Exchange, 'id'> = {
     name: '', badge: '', badgeColor: '#f0b90b', bonus: '',
     gradient: gradientPresets[0].value,
@@ -112,18 +119,19 @@ function ImageUploadField({ label, value, onChange, addToast }: { label: string;
     };
 
     const inputId = `img-upload-${label.replace(/\s/g, '-').toLowerCase()}`;
+    const isValid = isValidUrl(value);
 
     return (
         <div className="form-group">
             <label>{label}</label>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: value ? '10px' : 0 }}>
-                <input className="form-input" type="url" value={value} onChange={e => onChange(e.target.value)} placeholder="Image URL or upload..." style={{ flex: 1 }} />
+            <div style={{ display: 'flex', gap: '8px', marginBottom: isValid ? '10px' : 0 }}>
+                <input className="form-input" type="text" value={value} onChange={e => onChange(e.target.value)} placeholder="Image URL or upload..." style={{ flex: 1 }} />
                 <input type="file" onChange={handleFile} accept="image/*" style={{ display: 'none' }} id={inputId} disabled={uploading} />
                 <label htmlFor={inputId} className="edit-btn" style={{ whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '6px 14px' }}>
                     {uploading ? '⏳' : '↑ Upload'}
                 </label>
             </div>
-            {value && value.startsWith('http') && (
+            {isValid && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0, background: '#000' }}>
                         <Image src={value} alt={label} fill style={{ objectFit: 'contain' }} unoptimized />
@@ -200,7 +208,7 @@ function ExchangePreview({ form, features }: { form: Omit<Exchange, 'id'>; featu
                     <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '3px 10px', borderRadius: '999px', background: form.badgeColor, color: '#000', fontSize: '0.6rem', fontWeight: 900, textTransform: 'uppercase' }}>{form.badge}</div>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px', position: 'relative', zIndex: 1 }}>
-                    {form.logo && form.logo.startsWith('http') ? (
+                    {isValidUrl(form.logo) ? (
                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
                             <Image src={form.logo} alt={form.name} fill style={{ objectFit: 'contain' }} unoptimized />
                         </div>
@@ -247,7 +255,7 @@ function CryptoEventPreview({ form }: { form: Omit<CryptoEvent, 'id'> }) {
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--accent-color)', marginBottom: '12px' }}>📱 Live Preview</div>
             <div style={{ padding: '16px 20px', borderRadius: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                    {form.platformIcon && form.platformIcon.startsWith('http') ? (
+                    {isValidUrl(form.platformIcon) ? (
                         <div style={{ width: '28px', height: '28px', borderRadius: '8px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
                             <Image src={form.platformIcon} alt={form.platform} fill style={{ objectFit: 'contain' }} unoptimized />
                         </div>
@@ -403,7 +411,7 @@ export default function AdminSpecialOffer({ addToast }: Props) {
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                     <div className="form-group">
                                         <label>Affiliate Link</label>
-                                        <input className="form-input" type="url" value={exForm.link} onChange={e => setExForm(p => ({ ...p, link: e.target.value }))} placeholder="https://..." />
+                                        <input className="form-input" type="text" value={exForm.link} onChange={e => setExForm(p => ({ ...p, link: e.target.value }))} placeholder="https://..." />
                                     </div>
                                     <div className="form-group">
                                         <label>Sort Order</label>
@@ -441,7 +449,7 @@ export default function AdminSpecialOffer({ addToast }: Props) {
                             ) : exchanges.map(ex => (
                                 <div key={ex.id} className="post-item-admin" style={{ opacity: ex.isVisible ? 1 : 0.5 }}>
                                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
-                                        {ex.logo && ex.logo.startsWith('http') ? (
+                                        {isValidUrl(ex.logo) ? (
                                             <div style={{ width: '32px', height: '32px', borderRadius: '8px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
                                                 <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'contain' }} unoptimized />
                                             </div>
@@ -552,7 +560,7 @@ export default function AdminSpecialOffer({ addToast }: Props) {
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                     <div className="form-group">
                                         <label>CTA Link</label>
-                                        <input className="form-input" type="url" value={ceForm.ctaLink} onChange={e => setCeForm(p => ({ ...p, ctaLink: e.target.value }))} placeholder="https://..." />
+                                        <input className="form-input" type="text" value={ceForm.ctaLink} onChange={e => setCeForm(p => ({ ...p, ctaLink: e.target.value }))} placeholder="https://..." />
                                     </div>
                                     <div className="form-group">
                                         <label>Sort Order</label>
@@ -590,7 +598,7 @@ export default function AdminSpecialOffer({ addToast }: Props) {
                             ) : cryptoEvents.map(ev => (
                                 <div key={ev.id} className="post-item-admin" style={{ opacity: ev.isVisible ? 1 : 0.5 }}>
                                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
-                                        {ev.platformIcon && ev.platformIcon.startsWith('http') ? (
+                                        {isValidUrl(ev.platformIcon) ? (
                                             <div style={{ width: '28px', height: '28px', borderRadius: '6px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
                                                 <Image src={ev.platformIcon} alt={ev.platform} fill style={{ objectFit: 'contain' }} unoptimized />
                                             </div>
