@@ -57,6 +57,11 @@
   padding: 0;
 }
 
+/* Force font inheritance on form elements (browsers use system UI font by default) */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
@@ -400,11 +405,11 @@ a {
   transform: scale(0.95);
 }
 
-/* ─── Floating Language Toggle (Top-Right) ─── */
+/* ─── Floating Language Toggle (Top-Left, beside logo) ─── */
 .lang-toggle-floating {
   position: fixed;
   top: 28px;
-  right: 24px;
+  left: 24px;
   z-index: 10000;
   display: flex;
   align-items: center;
@@ -517,7 +522,7 @@ a {
 @media (max-width: 480px) {
   .lang-toggle-floating {
     top: 20px;
-    right: 12px;
+    left: 12px;
   }
   .lang-toggle-flag-track {
     width: 72px;
