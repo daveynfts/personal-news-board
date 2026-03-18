@@ -7778,7 +7778,7 @@ select.form-input {
 
 .tweet-wall-label {
   position: absolute;
-  top: 12px;
+  top: -10px;
   left: 12px;
   z-index: 2;
   padding: 3px 10px;
@@ -7790,6 +7790,10 @@ select.form-input {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   backdrop-filter: blur(8px);
+  max-width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* Override react-tweet dark theme styles */
