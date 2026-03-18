@@ -28,8 +28,9 @@ export default function Header() {
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const router = useRouter();
   const { t } = useTranslation();
-  const [avatarUrl, setAvatarUrl] = useState('/logo.png');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [bubbleText, setBubbleText] = useState('');
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [floatingBubbles, setFloatingBubbles] = useState<Array<{
     id: number; text: string; x: number; y: number; size: number;
     hue: number; delay: number;
@@ -50,14 +51,13 @@ export default function Header() {
     const bubble = {
       id,
       text: phrase.trim(),
-      x: 10 + Math.random() * 80, // 10%-90% viewport width
-      y: 20 + Math.random() * 60, // 20%-80% viewport height
-      size: 1.0 + Math.random() * 0.3, // scale 1.0-1.3
+      x: 10 + Math.random() * 80,
+      y: 20 + Math.random() * 60,
+      size: 1.0 + Math.random() * 0.3,
       hue: Math.floor(Math.random() * 360),
       delay: Math.random() * 0.3,
     };
     setFloatingBubbles(prev => [...prev, bubble]);
-    // Auto-remove after animation
     setTimeout(() => {
       setFloatingBubbles(prev => prev.filter(b => b.id !== id));
     }, 3500);
@@ -65,11 +65,9 @@ export default function Header() {
 
   const startBubbles = useCallback(() => {
     if (bubblePhrases.length === 0) return;
-    // Spawn initial burst
     for (let i = 0; i < Math.min(3, bubblePhrases.length); i++) {
       setTimeout(() => spawnBubble(), i * 200);
     }
-    // Continue spawning
     hoverTimerRef.current = setInterval(spawnBubble, 1800);
   }, [spawnBubble, bubblePhrases]);
 
@@ -80,20 +78,24 @@ export default function Header() {
     }
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => { if (hoverTimerRef.current) clearInterval(hoverTimerRef.current); };
   }, []);
 
-  // Fetch site settings
+  // Fetch site settings — avatar won't render until this completes
   useEffect(() => {
     fetch('/api/site-settings')
       .then(res => res.json())
       .then(data => {
-        if (data.avatarUrl) setAvatarUrl(data.avatarUrl);
+        setAvatarUrl(data.avatarUrl || '/logo.png');
         if (data.bubbleText) setBubbleText(data.bubbleText);
       })
-      .catch(() => {});
+      .catch(() => {
+        setAvatarUrl('/logo.png');
+      })
+      .finally(() => {
+        setSettingsLoaded(true);
+      });
   }, []);
 
   // Focus input when search opens
@@ -202,7 +204,11 @@ export default function Header() {
               >
                 <div className="logo-icon">
                   <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
-                    <Image src={avatarUrl} alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} unoptimized />
+                    {settingsLoaded && avatarUrl ? (
+                      <Image src={avatarUrl} alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} unoptimized />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: 'inherit' }} />
+                    )}
                   </a>
                 </div>
               </div>
