@@ -24,15 +24,14 @@ export default async function EventsPage() {
     noStore();
     const allEvents = await getAllEvents();
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
 
     const upcomingEvents = allEvents
-        .filter(e => !e.isMore && new Date(e.date) >= today)
+        .filter(e => !e.isMore && new Date(e.date) >= now)
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     const pastEvents = allEvents
-        .filter(e => !e.isMore && new Date(e.date) < today)
+        .filter(e => !e.isMore && new Date(e.date) < now)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const moreEvents = allEvents.filter(e => e.isMore)
