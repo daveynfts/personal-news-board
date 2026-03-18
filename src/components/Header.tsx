@@ -28,6 +28,20 @@ export default function Header() {
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const router = useRouter();
   const { t } = useTranslation();
+  const [avatarUrl, setAvatarUrl] = useState('/logo.png');
+  const [bubbleText, setBubbleText] = useState('');
+  const [showBubble, setShowBubble] = useState(false);
+
+  // Fetch site settings
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.avatarUrl) setAvatarUrl(data.avatarUrl);
+        if (data.bubbleText) setBubbleText(data.bubbleText);
+      })
+      .catch(() => {});
+  }, []);
 
   // Focus input when search opens
   useEffect(() => {
@@ -128,10 +142,29 @@ export default function Header() {
         <header className="app-header">
           <Container className="header-inner">
             <div className="logo">
-              <div className="logo-icon">
-                <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
-                  <Image src="/logo.png" alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} />
-                </a>
+              <div
+                className="logo-icon-wrapper"
+                onMouseEnter={() => setShowBubble(true)}
+                onMouseLeave={() => setShowBubble(false)}
+              >
+                <div className="logo-icon">
+                  <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
+                    <Image src={avatarUrl} alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} unoptimized />
+                  </a>
+                </div>
+                {/* Thought Bubble */}
+                {bubbleText && (
+                  <div className={`thought-bubble-container ${showBubble ? 'visible' : ''}`}>
+                    <div className="thought-dots">
+                      <span className="thought-dot dot-1" />
+                      <span className="thought-dot dot-2" />
+                      <span className="thought-dot dot-3" />
+                    </div>
+                    <div className="thought-bubble">
+                      <p>{bubbleText}</p>
+                    </div>
+                  </div>
+                )}
               </div>
               <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <h1>DaveyNFTs</h1>

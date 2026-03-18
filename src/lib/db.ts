@@ -105,6 +105,13 @@ async function initDb() {
       )
     `);
 
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS site_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL DEFAULT ''
+      )
+    `);
+
     // Migrations for existing databases
     const migrations = [
         'ALTER TABLE events ADD COLUMN timelineImageUrl TEXT',
@@ -632,4 +639,27 @@ export async function updateEmbeddedTweet(id: number, tweet: Partial<EmbeddedTwe
 export async function deleteEmbeddedTweet(id: number): Promise<boolean> {
     const result = await db.execute({ sql: 'DELETE FROM embedded_tweets WHERE id = ?', args: [id] });
     return result.rowsAffected > 0;
+}
+
+// ── Site Settings ──
+export async function getSiteSetting(key: string): Promise<string> {
+    const result = await db.execute({ sql: 'SELECT value FROM site_settings WHERE key = ?', args: [key] });
+    if (result.rows.length === 0) return '';
+    return String(result.rows[0].value || '');
+}
+
+export async function setSiteSetting(key: string, value: string): Promise<void> {
+    await db.execute({
+        sql: 'INSERT INTO site_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
+        args: [key, value]
+    });
+}
+
+export async function getAllSiteSettings(): Promise<Record<string, string>> {
+    const result = await db.execute('SELECT key, value FROM site_settings');
+    const settings: Record<string, string> = {};
+    for (const row of result.rows) {
+        settings[String(row.key)] = String(row.value || '');
+    }
+    return settings;
 }
