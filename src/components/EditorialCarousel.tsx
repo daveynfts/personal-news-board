@@ -55,7 +55,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                                 inset: 0,
                                 backgroundImage: `url(${article.coverImage ? `${article.coverImage}?t=${article.createdAt ? new Date(article.createdAt).getTime() : 0}` : '/placeholder.jpg'})`,
                                 backgroundSize: 'cover',
-                                backgroundPosition: 'center top',
+                                backgroundPosition: 'center center',
                                 opacity: idx === currentIndex ? 1 : 0,
                                 transition: 'opacity 1s cubic-bezier(0.4, 0, 0.2, 1)',
                                 zIndex: 1
