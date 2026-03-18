@@ -4139,9 +4139,9 @@ a {
 }
 
 .timeline-event-thumb {
-  width: 90px;
-  height: 90px;
-  border-radius: 10px;
+  width: 110px;
+  height: 110px;
+  border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
   background: var(--surface-secondary);
@@ -4149,6 +4149,7 @@ a {
   align-self: center;
   position: relative;
   z-index: 2;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .timeline-event-thumb img {
