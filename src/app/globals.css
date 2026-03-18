@@ -7755,11 +7755,26 @@ select.form-input {
   color: #1d9bf0;
 }
 
-.tweet-wall-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+.tweet-wall-carousel-wrapper {
+  position: relative;
   padding: 0 16px;
+}
+
+.tweet-wall-grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 4px 8px;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tweet-wall-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .tweet-wall-card {
@@ -7769,12 +7784,57 @@ select.form-input {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
   transition: all 0.3s ease;
+  flex: 0 0 380px;
+  min-width: 380px;
+  scroll-snap-align: start;
 }
 
 .tweet-wall-card:hover {
   border-color: rgba(29,155,240,0.2);
   transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+/* Carousel navigation buttons */
+.tweet-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.tweet-carousel-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tweet-carousel-btn:hover {
+  background: rgba(29,155,240,0.3);
+  border-color: rgba(29,155,240,0.5);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.tweet-carousel-btn-left {
+  left: -6px;
+}
+
+.tweet-carousel-btn-right {
+  right: -6px;
 }
 
 .tweet-wall-label {
@@ -7813,11 +7873,17 @@ select.form-input {
 }
 
 @media (max-width: 768px) {
-  .tweet-wall-grid {
-    grid-template-columns: 1fr;
-    padding: 0 12px;
+  .tweet-wall-card {
+    flex: 0 0 320px;
+    min-width: 320px;
   }
   .tweet-wall-title { font-size: 1.6rem; }
+  .tweet-carousel-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .tweet-carousel-btn-left { left: 0; }
+  .tweet-carousel-btn-right { right: 0; }
 }
 
 /* ══════════════════════════════════════════════
