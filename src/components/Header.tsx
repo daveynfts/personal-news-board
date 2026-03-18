@@ -40,9 +40,7 @@ export default function Header() {
   // Split bubble text into phrases for individual bubbles
   const bubblePhrases = useMemo(() => {
     if (!bubbleText) return [];
-    // Split by sentences, commas, or emoji boundaries
-    const parts = bubbleText.split(/(?<=[!?.🌊☕✨🚀💎👋🫶☀️])\s*|[,;]\s*/).filter(s => s.trim());
-    return parts.length > 0 ? parts : [bubbleText];
+    return [bubbleText];
   }, [bubbleText]);
 
   const spawnBubble = useCallback(() => {
@@ -54,7 +52,7 @@ export default function Header() {
       text: phrase.trim(),
       x: 10 + Math.random() * 80, // 10%-90% viewport width
       y: 20 + Math.random() * 60, // 20%-80% viewport height
-      size: 0.8 + Math.random() * 0.6, // scale 0.8-1.4
+      size: 1.0 + Math.random() * 0.3, // scale 1.0-1.3
       hue: Math.floor(Math.random() * 360),
       delay: Math.random() * 0.3,
     };
@@ -72,7 +70,7 @@ export default function Header() {
       setTimeout(() => spawnBubble(), i * 200);
     }
     // Continue spawning
-    hoverTimerRef.current = setInterval(spawnBubble, 1200);
+    hoverTimerRef.current = setInterval(spawnBubble, 1800);
   }, [spawnBubble, bubblePhrases]);
 
   const stopBubbles = useCallback(() => {
