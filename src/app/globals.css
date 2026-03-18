@@ -7865,4 +7865,32 @@ select.form-input {
   border-color: rgba(255,255,255,0.12) !important;
   color: #e7e9ea !important;
 }
+
+/* ── Prevent image cropping inside article tweet embeds ── */
+/* react-tweet media container — remove fixed aspect-ratio / max-height */
+.article-tweet-embed [data-testid="tweetPhoto"],
+.article-tweet-embed div[style*="aspect-ratio"] {
+  aspect-ratio: unset !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* react-tweet images — show full image, no cover crop */
+.article-tweet-embed img[alt="Image"],
+.article-tweet-embed img[alt="Embedded video"],
+.article-tweet-embed [data-testid="tweetPhoto"] img,
+.article-tweet-embed article img {
+  object-fit: contain !important;
+  max-height: none !important;
+  height: auto !important;
+  width: 100% !important;
+  border-radius: 12px !important;
+}
+
+/* react-tweet media wrapper — let it grow to image size */
+.article-tweet-embed div[class*="mediaWrapper"],
+.article-tweet-embed div > a > div {
+  max-height: none !important;
+  overflow: visible !important;
+}
 
