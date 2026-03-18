@@ -7820,17 +7820,66 @@ select.form-input {
 .tweet-wall-card {
   position: relative;
   border-radius: 16px;
-  overflow: visible;
+  overflow: hidden;
   background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top-color: rgba(255,255,255,0.15);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              background 0.4s ease,
+              border-color 0.4s ease;
+  box-shadow: 0 8px 24px -6px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
   flex: 0 0 380px;
   min-width: 380px;
 }
 
+/* Liquid Light Sweep — slides across on hover */
+.tweet-wall-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Iridescent border glow */
+.tweet-wall-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(29,155,240,0.4) 0%, transparent 40%, transparent 60%, rgba(29,155,240,0.15) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
 .tweet-wall-card:hover {
-  border-color: rgba(29,155,240,0.2);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  transform: translateY(-4px) scale(1.015);
+  background: linear-gradient(135deg, rgba(29,155,240,0.06) 0%, rgba(255,255,255,0.04) 100%);
+  border-color: rgba(29,155,240,0.3);
+  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6),
+              0 0 40px -8px rgba(29,155,240,0.15),
+              inset 0 1px 1px rgba(255,255,255,0.3);
+}
+
+.tweet-wall-card:hover::before {
+  left: 200%;
+}
+
+.tweet-wall-card:hover::after {
+  opacity: 1;
 }
 
 /* Carousel navigation buttons */
@@ -7877,7 +7926,7 @@ select.form-input {
 
 .tweet-wall-label {
   position: absolute;
-  top: -10px;
+  top: 8px;
   left: 12px;
   z-index: 2;
   padding: 3px 10px;
