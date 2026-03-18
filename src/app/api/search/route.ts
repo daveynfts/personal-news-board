@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export interface SearchResult {
     id: number;
     title: string;
-    type: 'post' | 'article' | 'event';
+    type: 'post' | 'article' | 'event' | 'offer';
     subType?: string; // 'News' | 'Blog' | 'X' for posts, 'Editorial' | 'Feature' for articles
     url?: string;
     imageUrl?: string;
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const query = searchParams.get('q')?.trim();
-        const scope = searchParams.get('scope') || 'all'; // 'all' | 'posts' | 'articles' | 'events'
+        const scope = searchParams.get('scope') || 'all'; // 'all' | 'posts' | 'articles' | 'events' | 'offers'
         const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 50);
 
         if (!query || query.length < 2) {
@@ -114,6 +114,30 @@ export async function GET(request: Request) {
                     imageUrl: String(row.imageUrl || ''),
                     date: String(row.date || ''),
                     snippet: String(row.location || ''),
+                });
+            }
+        }
+
+        // Search Exchanges (Special Offers)
+        if (scope === 'all' || scope === 'offers') {
+            const exchanges = await db.execute({
+                sql: `SELECT id, name, badge, bonus, features, link, createdAt 
+                      FROM exchanges 
+                      WHERE isVisible = 1 AND (name LIKE ? ESCAPE '\\' OR bonus LIKE ? ESCAPE '\\' OR features LIKE ? ESCAPE '\\')
+                      ORDER BY sortOrder ASC 
+                      LIMIT ?`,
+                args: [safeTerm, safeTerm, safeTerm, limit],
+            });
+
+            for (const row of exchanges.rows) {
+                results.push({
+                    id: Number(row.id),
+                    title: String(row.name),
+                    type: 'offer',
+                    subType: String(row.badge || 'Offer'),
+                    url: String(row.link || '/special-offer'),
+                    date: String(row.createdAt || ''),
+                    snippet: String(row.bonus || ''),
                 });
             }
         }

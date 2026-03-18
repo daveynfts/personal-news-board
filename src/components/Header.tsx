@@ -11,7 +11,7 @@ import { useTranslation } from '@/lib/LanguageContext';
 interface SearchResult {
     id: number;
     title: string;
-    type: 'post' | 'article' | 'event';
+    type: 'post' | 'article' | 'event' | 'offer';
     subType?: string;
     url?: string;
     date?: string;
@@ -156,7 +156,13 @@ export default function Header() {
 
   const navigateToResult = (result: SearchResult) => {
     setSearchOpen(false);
-    if (result.type === 'post' && result.url) {
+    if (result.type === 'offer' && result.url) {
+      if (result.url.startsWith('http')) {
+        window.open(result.url, '_blank');
+      } else {
+        router.push(result.url);
+      }
+    } else if (result.type === 'post' && result.url) {
       window.open(result.url, '_blank');
     } else if (result.type === 'article') {
       router.push(`/article/${result.id}`);
@@ -188,6 +194,7 @@ export default function Header() {
     post: { icon: '📌', color: 'var(--accent-color)' },
     article: { icon: '✍️', color: 'var(--blog-color)' },
     event: { icon: '📅', color: '#10b981' },
+    offer: { icon: '🎁', color: '#f0b90b' },
   };
 
   const highlightMatch = (text: string, q: string) => {
