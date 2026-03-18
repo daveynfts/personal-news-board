@@ -7867,30 +7867,30 @@ select.form-input {
 }
 
 /* ── Prevent image cropping inside article tweet embeds ── */
-/* react-tweet media container — remove fixed aspect-ratio / max-height */
-.article-tweet-embed [data-testid="tweetPhoto"],
-.article-tweet-embed div[style*="aspect-ratio"] {
+
+/* Force all containers inside tweet to allow full image display */
+.article-tweet-embed article div {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+/* Target the media container that has inline aspect-ratio + overflow:hidden */
+.article-tweet-embed article div[style*="aspect-ratio"],
+.article-tweet-embed article div[style*="overflow: hidden"] {
   aspect-ratio: unset !important;
-  max-height: none !important;
   overflow: visible !important;
-}
-
-/* react-tweet images — show full image, no cover crop */
-.article-tweet-embed img[alt="Image"],
-.article-tweet-embed img[alt="Embedded video"],
-.article-tweet-embed [data-testid="tweetPhoto"] img,
-.article-tweet-embed article img {
-  object-fit: contain !important;
-  max-height: none !important;
   height: auto !important;
-  width: 100% !important;
-  border-radius: 12px !important;
 }
 
-/* react-tweet media wrapper — let it grow to image size */
-.article-tweet-embed div[class*="mediaWrapper"],
-.article-tweet-embed div > a > div {
+/* react-tweet images use position:absolute + inset:0 + object-fit:cover.
+   Override to static positioning so the image defines its own size. */
+.article-tweet-embed article img {
+  position: relative !important;
+  inset: unset !important;
+  object-fit: contain !important;
+  width: 100% !important;
+  height: auto !important;
   max-height: none !important;
-  overflow: visible !important;
+  border-radius: 12px !important;
 }
 
