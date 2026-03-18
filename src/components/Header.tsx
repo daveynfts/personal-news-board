@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -30,7 +30,62 @@ export default function Header() {
   const { t } = useTranslation();
   const [avatarUrl, setAvatarUrl] = useState('/logo.png');
   const [bubbleText, setBubbleText] = useState('');
-  const [showBubble, setShowBubble] = useState(false);
+  const [floatingBubbles, setFloatingBubbles] = useState<Array<{
+    id: number; text: string; x: number; y: number; size: number;
+    hue: number; delay: number;
+  }>>([]);
+  const bubbleIdRef = useRef(0);
+  const hoverTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Split bubble text into phrases for individual bubbles
+  const bubblePhrases = useMemo(() => {
+    if (!bubbleText) return [];
+    // Split by sentences, commas, or emoji boundaries
+    const parts = bubbleText.split(/(?<=[!?.🌊☕✨🚀💎👋🫶☀️])\s*|[,;]\s*/).filter(s => s.trim());
+    return parts.length > 0 ? parts : [bubbleText];
+  }, [bubbleText]);
+
+  const spawnBubble = useCallback(() => {
+    if (bubblePhrases.length === 0) return;
+    const phrase = bubblePhrases[Math.floor(Math.random() * bubblePhrases.length)];
+    const id = ++bubbleIdRef.current;
+    const bubble = {
+      id,
+      text: phrase.trim(),
+      x: 10 + Math.random() * 80, // 10%-90% viewport width
+      y: 20 + Math.random() * 60, // 20%-80% viewport height
+      size: 0.8 + Math.random() * 0.6, // scale 0.8-1.4
+      hue: Math.floor(Math.random() * 360),
+      delay: Math.random() * 0.3,
+    };
+    setFloatingBubbles(prev => [...prev, bubble]);
+    // Auto-remove after animation
+    setTimeout(() => {
+      setFloatingBubbles(prev => prev.filter(b => b.id !== id));
+    }, 3500);
+  }, [bubblePhrases]);
+
+  const startBubbles = useCallback(() => {
+    if (bubblePhrases.length === 0) return;
+    // Spawn initial burst
+    for (let i = 0; i < Math.min(3, bubblePhrases.length); i++) {
+      setTimeout(() => spawnBubble(), i * 200);
+    }
+    // Continue spawning
+    hoverTimerRef.current = setInterval(spawnBubble, 1200);
+  }, [spawnBubble, bubblePhrases]);
+
+  const stopBubbles = useCallback(() => {
+    if (hoverTimerRef.current) {
+      clearInterval(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => { if (hoverTimerRef.current) clearInterval(hoverTimerRef.current); };
+  }, []);
 
   // Fetch site settings
   useEffect(() => {
@@ -144,27 +199,14 @@ export default function Header() {
             <div className="logo">
               <div
                 className="logo-icon-wrapper"
-                onMouseEnter={() => setShowBubble(true)}
-                onMouseLeave={() => setShowBubble(false)}
+                onMouseEnter={startBubbles}
+                onMouseLeave={stopBubbles}
               >
                 <div className="logo-icon">
                   <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
                     <Image src={avatarUrl} alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} unoptimized />
                   </a>
                 </div>
-                {/* Thought Bubble */}
-                {bubbleText && (
-                  <div className={`thought-bubble-container ${showBubble ? 'visible' : ''}`}>
-                    <div className="thought-dots">
-                      <span className="thought-dot dot-1" />
-                      <span className="thought-dot dot-2" />
-                      <span className="thought-dot dot-3" />
-                    </div>
-                    <div className="thought-bubble">
-                      <p>{bubbleText}</p>
-                    </div>
-                  </div>
-                )}
               </div>
               <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <h1>DaveyNFTs</h1>
@@ -277,6 +319,27 @@ export default function Header() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Floating Bubbles Portal */}
+      {floatingBubbles.length > 0 && (
+        <div className="floating-bubbles-portal">
+          {floatingBubbles.map(bubble => (
+            <div
+              key={bubble.id}
+              className="floating-bubble"
+              style={{
+                left: `${bubble.x}%`,
+                top: `${bubble.y}%`,
+                transform: `scale(${bubble.size})`,
+                animationDelay: `${bubble.delay}s`,
+                '--bubble-hue': bubble.hue,
+              } as React.CSSProperties}
+            >
+              <span>{bubble.text}</span>
+            </div>
+          ))}
         </div>
       )}
     </>
