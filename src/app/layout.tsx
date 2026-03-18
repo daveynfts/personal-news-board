@@ -4,7 +4,6 @@ import './globals.css';
 import Header from '@/components/Header';
 import CryptoTicker from '@/components/CryptoTicker';
 import TokenRain from '@/components/TokenRain';
-import LanguageToggle from '@/components/LanguageToggle';
 import { buildMetadata, buildWebSiteJsonLd } from '@/lib/seo';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
@@ -44,9 +43,9 @@ export default function RootLayout({
             {children}
           </main>
           <TokenRain />
-          <LanguageToggle />
         </LanguageProvider>
       </body>
     </html>
   );
 }
+

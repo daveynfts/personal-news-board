@@ -173,11 +173,27 @@ a {
    LIQUID GLASS HEADER — v2
    Google-meets-Apple aesthetic
    ============================ */
-.app-header {
-  padding: 8px 20px;
+
+/* Sticky row: toggle + header pill side by side */
+.header-row {
   position: sticky;
   top: 16px;
   z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+  padding: 0 24px;
+  pointer-events: none; /* Let clicks pass through the transparent gap */
+}
+
+.header-row > * {
+  pointer-events: auto; /* Re-enable clicks on children */
+}
+
+.app-header {
+  padding: 8px 20px;
   /* True liquid glass: layered bg + prism refraction */
   background:
     linear-gradient(135deg,
@@ -197,12 +213,13 @@ a {
     inset 0 1.5px 1px rgba(255,255,255,0.2),
     inset 0 -1px 0 rgba(0,0,0,0.1);
   max-width: 1000px;
-  margin: 16px auto;
+  margin: 16px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Prismatic border shimmer layer */
-  position: sticky;
+  flex: 1;
+  min-width: 0;
+  position: relative;
 }
 
 /* Animated prismatic shimmer on header */
@@ -405,12 +422,8 @@ a {
   transform: scale(0.95);
 }
 
-/* ─── Floating Language Toggle (Top-Left, beside logo) ─── */
+/* ─── Language Toggle (inline, beside header pill) ─── */
 .lang-toggle-floating {
-  position: fixed;
-  top: 28px;
-  left: 24px;
-  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -418,6 +431,7 @@ a {
   border: none;
   cursor: pointer;
   padding: 0;
+  flex-shrink: 0;
   /* Entrance animation */
   animation: lang-float-in 0.6s var(--spring-snappy) 0.5s both;
 }
@@ -425,11 +439,11 @@ a {
 @keyframes lang-float-in {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.85);
+    transform: scale(0.85);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
   }
 }
 
@@ -437,8 +451,8 @@ a {
   position: relative;
   display: flex;
   align-items: center;
-  width: 82px;
-  height: 40px;
+  width: 76px;
+  height: 38px;
   border-radius: 999px;
   background:
     linear-gradient(135deg,
@@ -489,8 +503,8 @@ a {
   z-index: 2;
   flex: 1;
   text-align: center;
-  font-size: 1.15rem;
-  line-height: 40px;
+  font-size: 1.1rem;
+  line-height: 38px;
   user-select: none;
   pointer-events: none;
   filter: grayscale(0.5) brightness(0.8);
@@ -518,19 +532,15 @@ a {
   z-index: 1;
 }
 
-/* Mobile */
+/* Mobile: smaller toggle */
 @media (max-width: 480px) {
-  .lang-toggle-floating {
-    top: 20px;
-    left: 12px;
-  }
   .lang-toggle-flag-track {
-    width: 72px;
-    height: 36px;
+    width: 64px;
+    height: 32px;
   }
   .lang-toggle-flag {
-    font-size: 1rem;
-    line-height: 36px;
+    font-size: 0.95rem;
+    line-height: 32px;
   }
 }
 

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Container from './Container';
-
+import LanguageToggle from './LanguageToggle';
 import { useTranslation } from '@/lib/LanguageContext';
 
 interface SearchResult {
@@ -123,37 +123,40 @@ export default function Header() {
 
   return (
     <>
-      <header className="app-header">
-        <Container className="header-inner">
-          <div className="logo">
-            <div className="logo-icon">
-              <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
-                <Image src="/logo.png" alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} />
-              </a>
+      <div className="header-row">
+        <LanguageToggle />
+        <header className="app-header">
+          <Container className="header-inner">
+            <div className="logo">
+              <div className="logo-icon">
+                <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
+                  <Image src="/logo.png" alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} />
+                </a>
+              </div>
+              <h1>DaveyNFTs</h1>
             </div>
-            <h1>DaveyNFTs</h1>
-          </div>
-          <nav className="main-nav">
-            <Link href="/special-offer" className="nav-link nav-link-special">
-              <span className="nav-special-icon">✨</span>
-              {t('nav.specialOffer')}
-            </Link>
-            <Link href="/" className="nav-link">{t('nav.home')}</Link>
-            <Link href="/admin" className="nav-link">{t('nav.admin')}</Link>
-            <button
-              className="header-search-btn"
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search"
-              title="Search (⌘K)"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-            </button>
-          </nav>
-        </Container>
-      </header>
+            <nav className="main-nav">
+              <Link href="/special-offer" className="nav-link nav-link-special">
+                <span className="nav-special-icon">✨</span>
+                {t('nav.specialOffer')}
+              </Link>
+              <Link href="/" className="nav-link">{t('nav.home')}</Link>
+              <Link href="/admin" className="nav-link">{t('nav.admin')}</Link>
+              <button
+                className="header-search-btn"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Search"
+                title="Search (⌘K)"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+              </button>
+            </nav>
+          </Container>
+        </header>
+      </div>
 
       {/* Search Overlay */}
       {searchOpen && (
