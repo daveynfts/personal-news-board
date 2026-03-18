@@ -133,15 +133,15 @@ export default function Header() {
                   <Image src="/logo.png" alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} />
                 </a>
               </div>
-              <h1>DaveyNFTs</h1>
+              <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h1>DaveyNFTs</h1>
+              </Link>
             </div>
             <nav className="main-nav">
               <Link href="/special-offer" className="nav-link nav-link-special">
                 <span className="nav-special-icon">✨</span>
                 {t('nav.specialOffer')}
               </Link>
-              <Link href="/" className="nav-link">{t('nav.home')}</Link>
-              <Link href="/admin" className="nav-link">{t('nav.admin')}</Link>
               <button
                 className="header-search-btn"
                 onClick={() => setSearchOpen(true)}
