@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import { Tweet } from 'react-tweet';
 import { useTranslation } from '@/lib/LanguageContext';
 
@@ -75,11 +76,16 @@ export default function TweetWall() {
     return (
         <section className="tweet-wall-section">
             <div className="tweet-wall-header">
-                <h2 className="tweet-wall-title">
-                    <span className="tweet-wall-x">𝕏</span>
-                    {t('section.featuredPosts')}
-                </h2>
-                <p className="tweet-wall-desc">{t('tweet.curatedInsights')}</p>
+                <div>
+                    <h2 className="tweet-wall-title">
+                        <span className="tweet-wall-x">𝕏</span>
+                        {t('section.featuredPosts')}
+                    </h2>
+                    <p className="tweet-wall-desc">{t('tweet.curatedInsights')}</p>
+                </div>
+                <Link href="/tweets" className="archive-view-all-btn">
+                    {t('btn.viewAllTweets')}
+                </Link>
             </div>
 
             {categories.length > 2 && (
