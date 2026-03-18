@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
+import { HeroText, SectionHeader, EmptyState } from '@/components/TranslatableText';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,8 +73,7 @@ export default async function Home({ searchParams }: PageProps) {
           <div className="liquid-blob blob-2"></div>
           <div className="liquid-blob blob-3"></div>
           <section className="hero hero-glass-container">
-            <h2>Your Curated Universe.</h2>
-            <p>A personal collection of top news, insightful blogs, and interesting X threads, built for elite curation.</p>
+            <HeroText />
           </section>
         </div>
       )}
@@ -90,12 +90,11 @@ export default async function Home({ searchParams }: PageProps) {
       {standardArticles.length > 0 && (
         <section className="articles-archive">
           <Container>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-              <h2 className="section-title" style={{ marginBottom: 0 }}>Latest Features</h2>
-              <Link href="/articles" className="archive-view-all-btn">
-                View All Articles →
-              </Link>
-            </div>
+            <SectionHeader
+              titleKey="section.latestFeatures"
+              viewAllKey="btn.viewAllArticles"
+              viewAllHref="/articles"
+            />
             <div className="bento-grid">
               {standardArticles.map((article, index) => (
                 <Link 
@@ -136,12 +135,11 @@ export default async function Home({ searchParams }: PageProps) {
 
       {/* CURATION FEED (POSTS) */}
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-          <h2 className="section-title" style={{ marginBottom: 0 }}>DaveyNFTs&apos; Picks</h2>
-          <Link href="/picks" className="archive-view-all-btn">
-            View All Picks →
-          </Link>
-        </div>
+        <SectionHeader
+          titleKey="section.daveyPicks"
+          viewAllKey="btn.viewAllPicks"
+          viewAllHref="/picks"
+        />
         
         <Suspense fallback={
           <div className="filter-container" style={{ margin: '0 auto 48px' }}>
@@ -155,12 +153,7 @@ export default async function Home({ searchParams }: PageProps) {
 
         <section className="feed">
           {filteredPosts.length === 0 ? (
-            <div className="empty-state">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px', opacity: 0.5 }}>
-                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="9" x2="9" y1="21" y2="9" />
-              </svg>
-              <p>No posts found for this category. <br />Add some magic in the admin panel!</p>
-            </div>
+            <EmptyState />
           ) : (
             <div className="rainbow-glow-container">
               <div className="marquee-wrapper">

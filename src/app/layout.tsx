@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import CryptoTicker from '@/components/CryptoTicker';
 import TokenRain from '@/components/TokenRain';
 import { buildMetadata, buildWebSiteJsonLd } from '@/lib/seo';
+import { LanguageProvider } from '@/lib/LanguageContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,12 +35,14 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <CryptoTicker />
-        <Header />
-        <main style={{ minHeight: '80vh' }}>
-          {children}
-        </main>
-        <TokenRain />
+        <LanguageProvider>
+          <CryptoTicker />
+          <Header />
+          <main style={{ minHeight: '80vh' }}>
+            {children}
+          </main>
+          <TokenRain />
+        </LanguageProvider>
       </body>
     </html>
   );

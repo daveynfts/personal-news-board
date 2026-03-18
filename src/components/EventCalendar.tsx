@@ -5,6 +5,7 @@ import { CalendarEvent } from '@/lib/db';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface EventCalendarProps {
     events: CalendarEvent[];
@@ -19,6 +20,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     const orbPos = useRef({ x: 0, y: 0 });
     const rafRef = useRef<number>(null);
     const isHovering = useRef(false);
+    const { t, locale } = useTranslation();
 
     // Filter events
     const today = new Date();
@@ -108,8 +110,8 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         return (
             <div className="event-hero-empty">
                 <div className="event-hero-content">
-                    <h1>Your Curated Universe.</h1>
-                    <p>A personal collection of top news, insightful blogs, and interesting X threads. No upcoming events scheduled.</p>
+                    <h1>{t('hero.title')}</h1>
+                    <p>{t('hero.noEvents')}</p>
                 </div>
             </div>
         );
@@ -118,11 +120,13 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     const handleNextFeatured = () => setCurrentFeaturedIndex(prev => (prev + 1) % featuredEventsList.length);
     const handlePrevFeatured = () => setCurrentFeaturedIndex(prev => (prev - 1 + featuredEventsList.length) % featuredEventsList.length);
     
+    const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
+
     // Group events for timeline
     const groupedEvents = displayEvents.reduce((acc, event) => {
         const d = new Date(event.date);
-        const dateKey = `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}`;
-        const dayKey = d.toLocaleString('en-US', { weekday: 'long' });
+        const dateKey = `${d.toLocaleString(dateLocale, { month: 'short' })} ${d.getDate()}`;
+        const dayKey = d.toLocaleString(dateLocale, { weekday: 'long' });
         if (!acc[dateKey]) {
             acc[dateKey] = { dayKey, events: [] };
         }
@@ -133,9 +137,9 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     const formatDate = (dateStr: string) => {
         const d = new Date(dateStr);
         return {
-            month: d.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
+            month: d.toLocaleString(dateLocale, { month: 'short' }).toUpperCase(),
             day: d.getDate(),
-            weekday: d.toLocaleString('en-US', { weekday: 'short' }),
+            weekday: d.toLocaleString(dateLocale, { weekday: 'short' }),
             time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
     };
@@ -157,14 +161,14 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
             <div className="section-header-premium trans-up" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
                 <div>
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>Events &amp; Timeline</h2>
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>{t('section.eventsTimeline')}</h2>
                     <div className="section-divider" style={{ marginTop: '12px' }}></div>
                 </div>
                 <Link
                     href="/events"
                     className="archive-view-all-btn"
                 >
-                    View All Events →
+                    {t('btn.viewAllEvents')}
                 </Link>
             </div>
 
@@ -188,7 +192,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                         <div className="event-info">
                             <div className="event-info-header">
                                 <div className="event-type-badge">
-                                    <span>⭐</span> FEATURED EVENT
+                                    <span>⭐</span> {t('events.featuredEvent')}
                                 </div>
                                 {featuredEventsList.length > 1 && (
                                     <div className="featured-controls">
@@ -206,12 +210,12 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                             </h3>
                             <div className="event-desc-markdown">
                                 <ReactMarkdown>
-                                    {featuredEvent.description || 'No description provided.'}
+                                    {featuredEvent.description || t('events.noDescription')}
                                 </ReactMarkdown>
                             </div>
                             <div className="event-meta-premium">
                                 <div className="meta-item-badge">
-                                    📍 <span>{featuredEvent.location || 'Online'}</span>
+                                    📍 <span>{featuredEvent.location || t('events.online')}</span>
                                 </div>
                                 <div className="meta-item-badge">
                                     ⏰ <span>{formatDate(featuredEvent.date).time}</span>
@@ -219,7 +223,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                             </div>
                             {featuredEvent.link && (
                                 <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="event-main-btn">
-                                    Register Now
+                                    {t('btn.registerNow')}
                                 </a>
                             )}
                         </div>
@@ -229,10 +233,10 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                 {/* Right: Timeline Side */}
                 <div className="upcoming-events-list trans-up">
                     <div className="manage-header">
-                        <h2 className="timeline-section-title">Timeline</h2>
+                        <h2 className="timeline-section-title">{t('section.timeline')}</h2>
                         <div className="timeline-tabs">
-                            <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>Upcoming</button>
-                            <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>Past</button>
+                            <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>{t('events.upcoming')}</button>
+                            <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>{t('events.past')}</button>
                         </div>
                     </div>
 
@@ -240,7 +244,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                         {displayEvents.length === 0 ? (
                             <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
                                 <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>📅</div>
-                                <p style={{ color: 'var(--text-secondary)' }}>No {activeTab} events found.</p>
+                                <p style={{ color: 'var(--text-secondary)' }}>{activeTab === 'upcoming' ? t('events.noUpcoming') : t('events.noPast')}</p>
                             </div>
                         ) : (
                             Object.entries(groupedEvents).map(([dateKey, { dayKey, events }]) => (
@@ -259,18 +263,18 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                     </div>
                                                     <div className="timeline-event-title">{event.title}</div>
                                                     <div className="timeline-event-host">
-                                                        🤝 <span>By DaveyNFTs</span>
+                                                        🤝 <span>{t('events.byDavey')}</span>
                                                     </div>
                                                     <div className="timeline-event-location">
-                                                        📍 {event.location || 'Online / Link provided'}
+                                                        📍 {event.location || t('events.onlineLink')}
                                                     </div>
                                                     <div className="timeline-event-actions">
                                                         <div className={`status-badge ${activeTab === 'upcoming' ? 'going' : 'past'}`}>
-                                                            {activeTab === 'upcoming' ? 'Going' : 'Ended'}
+                                                            {activeTab === 'upcoming' ? t('events.going') : t('events.ended')}
                                                         </div>
                                                         {event.link && (
                                                             <a href={event.link} target="_blank" rel="noopener noreferrer" className="rsvp-btn">
-                                                                RSVP ↗
+                                                                {t('btn.rsvp')}
                                                             </a>
                                                         )}
                                                     </div>

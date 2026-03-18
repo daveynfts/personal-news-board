@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Tweet } from 'react-tweet';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface EmbeddedTweetData {
     id: number;
@@ -13,6 +14,7 @@ interface EmbeddedTweetData {
 export default function TweetWall() {
     const [tweets, setTweets] = useState<EmbeddedTweetData[]>([]);
     const [filter, setFilter] = useState('all');
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetch('/api/embedded-tweets')
@@ -22,17 +24,17 @@ export default function TweetWall() {
     }, []);
 
     const categories = ['all', ...Array.from(new Set(tweets.map(t => t.category)))];
-    const filtered = filter === 'all' ? tweets : tweets.filter(t => t.category === filter);
+    const filtered = filter === 'all' ? tweets : tweets.filter(tw => tw.category === filter);
 
     if (tweets.length === 0) return null;
 
     const categoryLabels: Record<string, string> = {
-        all: '🌐 All',
-        general: '📌 General',
-        breaking: '🔥 Breaking',
-        analysis: '📊 Analysis',
-        alpha: '💎 Alpha',
-        thread: '🧵 Thread',
+        all: t('tweet.all'),
+        general: t('tweet.general'),
+        breaking: t('tweet.breaking'),
+        analysis: t('tweet.analysis'),
+        alpha: t('tweet.alpha'),
+        thread: t('tweet.thread'),
     };
 
     return (
@@ -40,9 +42,9 @@ export default function TweetWall() {
             <div className="tweet-wall-header">
                 <h2 className="tweet-wall-title">
                     <span className="tweet-wall-x">𝕏</span>
-                    Featured Posts
+                    {t('section.featuredPosts')}
                 </h2>
-                <p className="tweet-wall-desc">Curated insights from the crypto community</p>
+                <p className="tweet-wall-desc">{t('tweet.curatedInsights')}</p>
             </div>
 
             {categories.length > 2 && (
@@ -60,10 +62,10 @@ export default function TweetWall() {
             )}
 
             <div className="tweet-wall-grid" data-theme="dark">
-                {filtered.map(t => (
-                    <div key={t.id} className="tweet-wall-card">
-                        {t.label && <div className="tweet-wall-label">{t.label}</div>}
-                        <Tweet id={t.tweetId} />
+                {filtered.map(tw => (
+                    <div key={tw.id} className="tweet-wall-card">
+                        {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
+                        <Tweet id={tw.tweetId} />
                     </div>
                 ))}
             </div>

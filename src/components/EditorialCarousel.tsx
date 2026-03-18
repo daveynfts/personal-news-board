@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Article } from '@/lib/db';
 import Container from './Container';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface EditorialCarouselProps {
     articles: Article[];
@@ -11,6 +12,7 @@ interface EditorialCarouselProps {
 
 export default function EditorialCarousel({ articles }: EditorialCarouselProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const { t, locale } = useTranslation();
 
     // Auto-slide every 6 seconds
     useEffect(() => {
@@ -32,13 +34,14 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
     };
 
     const currentArticle = articles[currentIndex];
+    const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
     return (
         <div className="editorial-carousel-container">
             <Container>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>Editorial Picks</h2>
-                    <Link href="/articles" className="archive-view-all-btn">View All Articles →</Link>
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>{t('section.editorialPicks')}</h2>
+                    <Link href="/articles" className="archive-view-all-btn">{t('btn.viewAllArticles')}</Link>
                 </div>
 
                 <div className="editorial-carousel-premium">
@@ -67,7 +70,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                     <div className="carousel-slide-content">
                         <div className="carousel-content-inner">
                             <span className="carousel-tag">
-                                ★ Featured Article
+                                {t('carousel.featuredArticle')}
                             </span>
 
                             <Link href={`/article/${currentArticle.id}`} style={{ textDecoration: 'none' }}>
@@ -79,19 +82,19 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                             <div className="carousel-footer">
                                 <div className="carousel-meta">
                                     <span className="carousel-date">
-                                        {new Date(currentArticle.createdAt || '').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                        {new Date(currentArticle.createdAt || '').toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
                                     </span>
                                     {currentArticle.xSourceUrl && (
                                         <a href={currentArticle.xSourceUrl} target="_blank" rel="noopener noreferrer" className="carousel-x-link">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
                                             </svg>
-                                            Source
+                                            {t('carousel.source')}
                                         </a>
                                     )}
                                 </div>
                                 <Link href={`/article/${currentArticle.id}`} className="carousel-read-btn">
-                                    Read Article <span style={{ fontSize: '1.1rem' }}>→</span>
+                                    {t('btn.readArticle')} <span style={{ fontSize: '1.1rem' }}>→</span>
                                 </Link>
                             </div>
                         </div>

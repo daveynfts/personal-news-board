@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Container from './Container';
+import LanguageToggle from './LanguageToggle';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface SearchResult {
     id: number;
@@ -25,6 +27,7 @@ export default function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const router = useRouter();
+  const { t } = useTranslation();
 
   // Focus input when search opens
   useEffect(() => {
@@ -133,10 +136,11 @@ export default function Header() {
           <nav className="main-nav">
             <Link href="/special-offer" className="nav-link nav-link-special">
               <span className="nav-special-icon">✨</span>
-              SPECIAL OFFER
+              {t('nav.specialOffer')}
             </Link>
-            <Link href="/" className="nav-link">HOME</Link>
-            <Link href="/admin" className="nav-link">ADMIN</Link>
+            <Link href="/" className="nav-link">{t('nav.home')}</Link>
+            <Link href="/admin" className="nav-link">{t('nav.admin')}</Link>
+            <LanguageToggle />
             <button
               className="header-search-btn"
               onClick={() => setSearchOpen(true)}
@@ -167,7 +171,7 @@ export default function Header() {
                 ref={inputRef}
                 type="text"
                 className="search-overlay-input"
-                placeholder="Search posts, articles, events..."
+                placeholder={t('search.placeholder')}
                 value={query}
                 onChange={e => handleInput(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -219,9 +223,9 @@ export default function Header() {
                   );
                 })}
                 <div className="search-overlay-footer">
-                  <span>{results.length} result{results.length !== 1 ? 's' : ''}</span>
+                  <span>{results.length} {results.length !== 1 ? t('search.resultsPlural') : t('search.results')}</span>
                   <span className="search-nav-hint">
-                    <kbd>↑</kbd><kbd>↓</kbd> navigate · <kbd>↵</kbd> open
+                    <kbd>↑</kbd><kbd>↓</kbd> {t('search.navigate')} · <kbd>↵</kbd> {t('search.open')}
                   </span>
                 </div>
               </div>
@@ -232,8 +236,8 @@ export default function Header() {
               <div className="search-overlay-results">
                 <div className="search-no-results">
                   <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
-                  <p>No results for &quot;{query}&quot;</p>
-                  <span>Try different keywords</span>
+                  <p>{t('search.noResults')} &quot;{query}&quot;</p>
+                  <span>{t('search.tryDifferent')}</span>
                 </div>
               </div>
             )}

@@ -2,13 +2,19 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRef } from 'react';
+import { useTranslation } from '@/lib/LanguageContext';
 
-const categories = ['All', 'News', 'Blog', 'X'];
+const categoryKeys = [
+  { value: 'All', i18nKey: 'filter.all' },
+  { value: 'News', i18nKey: 'filter.news' },
+  { value: 'Blog', i18nKey: 'filter.blog' },
+  { value: 'X', i18nKey: 'filter.x' },
+];
 
 export default function FilterBar() {
   const searchParams = useSearchParams();
   const filter = searchParams.get('filter');
+  const { t } = useTranslation();
 
   // Google Material You ripple handler
   const createRipple = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -35,17 +41,17 @@ export default function FilterBar() {
 
   return (
     <div className="filter-container" style={{ margin: '0 auto 48px' }}>
-      {categories.map((cat) => {
-        const isActive = (!filter && cat === 'All') || filter === cat.toLowerCase();
+      {categoryKeys.map((cat) => {
+        const isActive = (!filter && cat.value === 'All') || filter === cat.value.toLowerCase();
         return (
           <Link
-            key={cat}
-            href={cat === 'All' ? '/' : `/?filter=${cat.toLowerCase()}`}
+            key={cat.value}
+            href={cat.value === 'All' ? '/' : `/?filter=${cat.value.toLowerCase()}`}
             className={`filter-btn ${isActive ? 'active' : ''}`}
             onClick={createRipple}
             aria-current={isActive ? 'page' : undefined}
           >
-            {cat}
+            {t(cat.i18nKey)}
           </Link>
         );
       })}

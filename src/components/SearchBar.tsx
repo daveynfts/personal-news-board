@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface SearchResult {
     id: number;
@@ -28,7 +28,7 @@ interface SearchBarProps {
 
 export default function SearchBar({
     scope = 'all',
-    placeholder = 'Search everything...',
+    placeholder,
     compact = false,
     onLocalFilter,
 }: SearchBarProps) {
@@ -41,6 +41,17 @@ export default function SearchBar({
     const dropdownRef = useRef<HTMLDivElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
     const router = useRouter();
+    const { t, locale } = useTranslation();
+
+    // Resolve placeholder
+    const resolvedPlaceholder = placeholder || (() => {
+        switch (scope) {
+            case 'articles': return t('search.articles');
+            case 'events': return t('search.events');
+            case 'posts': return t('search.picks');
+            default: return t('search.everything');
+        }
+    })();
 
     // Debounced API search
     const performSearch = useCallback(async (searchQuery: string) => {
@@ -160,9 +171,9 @@ export default function SearchBar({
     }, {} as Record<string, SearchResult[]>);
 
     const typeConfig: Record<string, { label: string; icon: string; color: string }> = {
-        post: { label: 'Posts', icon: '📌', color: 'var(--accent-color)' },
-        article: { label: 'Articles', icon: '✍️', color: 'var(--blog-color)' },
-        event: { label: 'Events', icon: '📅', color: '#10b981' },
+        post: { label: t('searchbar.posts'), icon: '📌', color: 'var(--accent-color)' },
+        article: { label: t('searchbar.articles'), icon: '✍️', color: 'var(--blog-color)' },
+        event: { label: t('searchbar.events'), icon: '📅', color: '#10b981' },
     };
 
     const highlightMatch = (text: string, q: string) => {
@@ -177,6 +188,7 @@ export default function SearchBar({
     };
 
     let flatIndex = -1;
+    const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
     return (
         <div className={`search-bar-wrapper ${compact ? 'search-compact' : ''}`}>
@@ -199,7 +211,7 @@ export default function SearchBar({
                     ref={inputRef}
                     type="text"
                     className="search-input"
-                    placeholder={placeholder}
+                    placeholder={resolvedPlaceholder}
                     value={query}
                     onChange={e => handleInputChange(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -222,7 +234,7 @@ export default function SearchBar({
                             if (onLocalFilter) onLocalFilter('');
                             inputRef.current?.focus();
                         }}
-                        aria-label="Clear search"
+                        aria-label={t('search.clearLabel')}
                     >
                         ✕
                     </button>
@@ -280,7 +292,7 @@ export default function SearchBar({
                                                 )}
                                                 {result.date && (
                                                     <span className="search-result-date">
-                                                        {new Date(result.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                                        {new Date(result.date).toLocaleDateString(dateLocale, { month: 'short', day: 'numeric' })}
                                                     </span>
                                                 )}
                                                 <span className="search-result-arrow">→</span>
@@ -292,9 +304,9 @@ export default function SearchBar({
                         );
                     })}
                     <div className="search-dropdown-footer">
-                        <span>{results.length} result{results.length !== 1 ? 's' : ''} found</span>
+                        <span>{results.length} {results.length !== 1 ? t('search.resultsPlural') : t('search.results')} {t('search.found')}</span>
                         <span className="search-nav-hint">
-                            <kbd>↑</kbd><kbd>↓</kbd> navigate · <kbd>↵</kbd> open · <kbd>esc</kbd> close
+                            <kbd>↑</kbd><kbd>↓</kbd> {t('search.navigate')} · <kbd>↵</kbd> {t('search.open')} · <kbd>esc</kbd> {t('search.close')}
                         </span>
                     </div>
                 </div>
@@ -305,8 +317,8 @@ export default function SearchBar({
                 <div ref={dropdownRef} className="search-dropdown">
                     <div className="search-no-results">
                         <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
-                        <p>No results for &quot;{query}&quot;</p>
-                        <span>Try different keywords or check your spelling</span>
+                        <p>{t('searchbar.noResultsFor')} &quot;{query}&quot;</p>
+                        <span>{t('searchbar.tryDifferent')}</span>
                     </div>
                 </div>
             )}
