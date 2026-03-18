@@ -7757,18 +7757,36 @@ select.form-input {
 
 .tweet-wall-carousel-wrapper {
   position: relative;
-  padding: 0 16px;
+  overflow: hidden;
+}
+
+/* Gradient edge masks for smooth fade effect */
+.tweet-wall-carousel-wrapper::before,
+.tweet-wall-carousel-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.tweet-wall-carousel-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-primary, #0a0a0a) 0%, transparent 100%);
+}
+
+.tweet-wall-carousel-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-primary, #0a0a0a) 0%, transparent 100%);
 }
 
 .tweet-wall-grid {
-  display: flex;
-  gap: 20px;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: 16px 4px 8px;
-  /* Hide scrollbar */
+  padding: 16px 0 8px;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -7777,21 +7795,41 @@ select.form-input {
   display: none;
 }
 
+/* Auto-scrolling marquee track */
+.tweet-marquee-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  padding: 0 16px;
+  animation: scroll-tweet-marquee 60s linear infinite;
+}
+
+.tweet-marquee-track.paused {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-tweet-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .tweet-wall-card {
   position: relative;
   border-radius: 16px;
   overflow: visible;
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   flex: 0 0 380px;
   min-width: 380px;
-  scroll-snap-align: start;
 }
 
 .tweet-wall-card:hover {
   border-color: rgba(29,155,240,0.2);
-  transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(0,0,0,0.3);
 }
 
@@ -7818,7 +7856,7 @@ select.form-input {
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-.tweet-carousel-btn.visible {
+.tweet-wall-carousel-wrapper:hover .tweet-carousel-btn {
   opacity: 1;
   pointer-events: auto;
 }
@@ -7830,11 +7868,11 @@ select.form-input {
 }
 
 .tweet-carousel-btn-left {
-  left: -6px;
+  left: 16px;
 }
 
 .tweet-carousel-btn-right {
-  right: -6px;
+  right: 16px;
 }
 
 .tweet-wall-label {
@@ -7858,7 +7896,7 @@ select.form-input {
 }
 
 /* Override react-tweet dark theme styles */
-.tweet-wall-grid [data-theme="dark"] .react-tweet-theme {
+.tweet-wall-carousel-wrapper [data-theme="dark"] .react-tweet-theme {
   --tweet-bg-color: transparent !important;
   --tweet-border: rgba(255,255,255,0.06) !important;
 }
@@ -7882,8 +7920,15 @@ select.form-input {
     width: 36px;
     height: 36px;
   }
-  .tweet-carousel-btn-left { left: 0; }
-  .tweet-carousel-btn-right { right: 0; }
+  .tweet-carousel-btn-left { left: 8px; }
+  .tweet-carousel-btn-right { right: 8px; }
+  .tweet-wall-carousel-wrapper::before,
+  .tweet-wall-carousel-wrapper::after {
+    width: 30px;
+  }
+  .tweet-marquee-track {
+    animation-duration: 40s;
+  }
 }
 
 /* ══════════════════════════════════════════════

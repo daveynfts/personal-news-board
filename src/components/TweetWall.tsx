@@ -16,6 +16,7 @@ export default function TweetWall() {
     const [filter, setFilter] = useState('all');
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
 
@@ -40,7 +41,6 @@ export default function TweetWall() {
     useEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
-        // Initial check after tweets render
         const timer = setTimeout(checkScroll, 500);
         el.addEventListener('scroll', checkScroll, { passive: true });
         window.addEventListener('resize', checkScroll);
@@ -54,7 +54,7 @@ export default function TweetWall() {
     const scroll = (direction: 'left' | 'right') => {
         const el = scrollRef.current;
         if (!el) return;
-        const cardWidth = 380; // approximate card width + gap
+        const cardWidth = 380;
         el.scrollBy({
             left: direction === 'left' ? -cardWidth : cardWidth,
             behavior: 'smooth'
@@ -96,7 +96,11 @@ export default function TweetWall() {
                 </div>
             )}
 
-            <div className="tweet-wall-carousel-wrapper">
+            <div
+                className="tweet-wall-carousel-wrapper"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+            >
                 {/* Left nav button */}
                 <button
                     className={`tweet-carousel-btn tweet-carousel-btn-left ${canScrollLeft ? 'visible' : ''}`}
@@ -108,14 +112,27 @@ export default function TweetWall() {
                     </svg>
                 </button>
 
-                {/* Scrollable tweet row */}
-                <div className="tweet-wall-grid" data-theme="dark" ref={scrollRef}>
-                    {filtered.map(tw => (
-                        <div key={tw.id} className="tweet-wall-card">
-                            {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
-                            <Tweet id={tw.tweetId} />
-                        </div>
-                    ))}
+                {/* Scrollable tweet row with auto-scroll marquee */}
+                <div
+                    className="tweet-wall-grid"
+                    data-theme="dark"
+                    ref={scrollRef}
+                >
+                    <div className={`tweet-marquee-track ${isPaused ? 'paused' : ''}`}>
+                        {filtered.map(tw => (
+                            <div key={tw.id} className="tweet-wall-card">
+                                {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
+                                <Tweet id={tw.tweetId} />
+                            </div>
+                        ))}
+                        {/* Duplicate for seamless loop */}
+                        {filtered.map(tw => (
+                            <div key={`dup-${tw.id}`} className="tweet-wall-card">
+                                {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
+                                <Tweet id={tw.tweetId} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Right nav button */}
