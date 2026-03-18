@@ -98,6 +98,17 @@ export default function Header() {
       });
   }, []);
 
+  // Auto-spawn 5 welcome bubbles on first visit (once per session)
+  useEffect(() => {
+    if (!settingsLoaded || !bubbleText) return;
+    const shown = sessionStorage.getItem('welcome_bubbles_shown');
+    if (shown) return;
+    sessionStorage.setItem('welcome_bubbles_shown', '1');
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => spawnBubble(), 800 + i * 400);
+    }
+  }, [settingsLoaded, bubbleText, spawnBubble]);
+
   // Focus input when search opens
   useEffect(() => {
     if (searchOpen) {

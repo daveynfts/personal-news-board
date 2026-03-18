@@ -49,6 +49,7 @@ export default function FilterBar() {
             href={cat.value === 'All' ? '/' : `/?filter=${cat.value.toLowerCase()}`}
             className={`filter-btn ${isActive ? 'active' : ''}`}
             onClick={createRipple}
+            scroll={false}
             aria-current={isActive ? 'page' : undefined}
           >
             {t(cat.i18nKey)}
