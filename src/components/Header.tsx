@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Container from './Container';
-import LanguageToggle from './LanguageToggle';
+
 import { useTranslation } from '@/lib/LanguageContext';
 
 interface SearchResult {
@@ -140,7 +140,6 @@ export default function Header() {
             </Link>
             <Link href="/" className="nav-link">{t('nav.home')}</Link>
             <Link href="/admin" className="nav-link">{t('nav.admin')}</Link>
-            <LanguageToggle />
             <button
               className="header-search-btn"
               onClick={() => setSearchOpen(true)}

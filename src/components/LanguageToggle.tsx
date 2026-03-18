@@ -3,24 +3,24 @@
 import { useTranslation } from '@/lib/LanguageContext';
 
 export default function LanguageToggle() {
-  const { locale, setLocale, t } = useTranslation();
+  const { locale, setLocale } = useTranslation();
 
   return (
     <button
-      className="lang-toggle"
+      className="lang-toggle-floating"
       onClick={() => setLocale(locale === 'en' ? 'vi' : 'en')}
       aria-label={`Switch to ${locale === 'en' ? 'Vietnamese' : 'English'}`}
-      title={`Switch to ${locale === 'en' ? 'Tiếng Việt' : 'English'}`}
+      title={locale === 'en' ? 'Chuyển sang Tiếng Việt' : 'Switch to English'}
     >
-      <span className="lang-toggle-track">
-        <span className={`lang-toggle-option ${locale === 'en' ? 'active' : ''}`}>
-          {t('lang.en')}
+      <span className="lang-toggle-flag-track">
+        <span className={`lang-toggle-flag ${locale === 'en' ? 'active' : ''}`}>
+          🇺🇸
         </span>
-        <span className={`lang-toggle-option ${locale === 'vi' ? 'active' : ''}`}>
-          {t('lang.vi')}
+        <span className={`lang-toggle-flag ${locale === 'vi' ? 'active' : ''}`}>
+          🇻🇳
         </span>
         <span
-          className="lang-toggle-thumb"
+          className="lang-toggle-flag-thumb"
           style={{ transform: locale === 'vi' ? 'translateX(100%)' : 'translateX(0)' }}
         />
       </span>
