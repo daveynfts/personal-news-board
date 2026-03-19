@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface ExchangeData {
   name: string;
@@ -38,6 +39,7 @@ const defaultRadarPreviews: RadarPreview[] = [
 ];
 
 export default function SpecialOfferPage() {
+  const { t } = useTranslation();
   const [volume, setVolume] = useState(50000);
   const [animatedSavings, setAnimatedSavings] = useState(0);
   const sliderRef = useRef<HTMLInputElement>(null);
@@ -135,14 +137,13 @@ export default function SpecialOfferPage() {
           <div className="so-hero-content">
             <div className="so-hero-badge">
               <span className="so-badge-pulse" />
-              <span>🔥 EXCLUSIVE PARTNER DEALS</span>
+              <span>🔥 {t('so.exclusivePartnerDeals')}</span>
             </div>
             <h1 className="so-hero-title">
-              Save <span className="so-gradient-text">20%</span> on Every Trade
+              {t('so.hero.save')} <span className="so-gradient-text">20%</span>{t('so.hero.onEveryTrade')}
             </h1>
             <p className="so-hero-subtitle">
-              Unlock lifetime VIP fee discounts on the world&apos;s top crypto exchanges.
-              Verified partner links — your savings start instantly.
+              {t('so.hero.subtitle')}
             </p>
           </div>
         </Container>
@@ -153,7 +154,7 @@ export default function SpecialOfferPage() {
         <Container>
           <div className="so-section-label">
             <span className="so-section-icon">🧮</span>
-            <span>Fee Savings Calculator</span>
+            <span>{t('so.calc.title')}</span>
           </div>
           <div
             className={`so-calculator-card ${intensity > 0.5 ? 'so-calc-intense' : ''} ${intensity > 0.85 ? 'so-calc-max' : ''}`}
@@ -196,13 +197,13 @@ export default function SpecialOfferPage() {
             <div className="so-calc-ring" />
 
             <div className="so-calc-header">
-              <h2>How Much Can You Save?</h2>
-              <p>Drag the slider to see your potential monthly savings</p>
+              <h2>{t('so.calc.howMuch')}</h2>
+              <p>{t('so.calc.dragSlider')}</p>
             </div>
 
             <div className="so-slider-section">
               <div className="so-slider-label-row">
-                <span className="so-slider-label">Monthly Trading Volume</span>
+                <span className="so-slider-label">{t('so.calc.monthlyVolume')}</span>
                 <span className="so-slider-value" style={{
                   textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(168,85,247,${0.3 + intensity * 0.4})` : 'none',
                 }}>{formatCurrency(volume)}</span>
@@ -233,12 +234,12 @@ export default function SpecialOfferPage() {
 
             <div className="so-calc-results">
               <div className="so-calc-result-item">
-                <span className="so-calc-result-label">Standard Fee (0.1%)</span>
+                <span className="so-calc-result-label">{t('so.calc.standardFee')}</span>
                 <span className="so-calc-result-value">{formatCurrencyDecimal(standardFee)}</span>
               </div>
               <div className="so-calc-divider" />
               <div className="so-calc-result-item so-calc-result-savings">
-                <span className="so-calc-result-label">🎉 VIP Partner Discount (20%)</span>
+                <span className="so-calc-result-label">🎉 {t('so.calc.vipDiscount')}</span>
                 <span className="so-calc-result-value so-savings-value">
                   − {formatCurrencyDecimal(standardFee * 0.2)}
                 </span>
@@ -260,15 +261,15 @@ export default function SpecialOfferPage() {
                   transition: 'transform 0.4s',
                 }}>💰</span>
                 <div>
-                  <div className="so-savings-label">You save every month</div>
+                  <div className="so-savings-label">{t('so.calc.youSave')}</div>
                   <div className="so-savings-amount" style={{
                     textShadow: `0 0 ${8 + intensity * 24}px rgba(52,211,153,${0.2 + intensity * 0.5})`,
                   }}>
                     {formatCurrencyDecimal(animatedSavings)}
-                    <span className="so-savings-period">/month</span>
+                    <span className="so-savings-period">{t('so.calc.perMonth')}</span>
                   </div>
                   <div className="so-savings-yearly">
-                    That&apos;s <strong>{formatCurrency(savings * 12)}</strong> per year!
+                    {t('so.calc.thats')}<strong>{formatCurrency(savings * 12)}</strong>{t('so.calc.perYear')}
                   </div>
                 </div>
               </div>
@@ -276,7 +277,7 @@ export default function SpecialOfferPage() {
 
             <a href="#exchanges" className="so-cta-primary">
               <span className="so-cta-sparkle">✨</span>
-              Claim 20% Lifetime Discount
+              {t('so.calc.claimDiscount')}
               <span className="so-cta-arrow">→</span>
             </a>
           </div>
@@ -295,13 +296,13 @@ export default function SpecialOfferPage() {
 
           <div className="so-section-label">
             <span className="so-section-icon">🏆</span>
-            <span>Exchange Comparison</span>
+            <span>{t('so.exchange.title')}</span>
           </div>
           <h2 className="so-exchanges-title">
-            Top Exchanges, <span className="so-gradient-text-animated">Exclusive Rates</span>
+            {t('so.exchange.topExchanges')}<span className="so-gradient-text-animated">{t('so.exchange.exclusiveRates')}</span>
           </h2>
           <p className="so-exchanges-subtitle">
-            Sign up through our verified partner links and enjoy lifetime fee discounts
+            {t('so.exchange.subtitle')}
           </p>
 
           <div className="so-exchange-grid">
@@ -355,7 +356,7 @@ export default function SpecialOfferPage() {
                   rel="noopener noreferrer"
                   className="so-exchange-cta"
                 >
-                  Sign Up & Claim Bonus
+                  {t('so.exchange.signUp')}
                   <span className="so-cta-arrow">→</span>
                 </a>
               </div>
@@ -365,13 +366,13 @@ export default function SpecialOfferPage() {
           {/* Trust badges */}
           <div className="so-trust-section">
             <div className="so-trust-badge">
-              <span>🔒</span> Verified Partner Links
+              <span>🔒</span> {t('so.trust.verified')}
             </div>
             <div className="so-trust-badge">
-              <span>⚡</span> Instant Activation
+              <span>⚡</span> {t('so.trust.instant')}
             </div>
             <div className="so-trust-badge">
-              <span>♾️</span> Lifetime Discount
+              <span>♾️</span> {t('so.trust.lifetime')}
             </div>
           </div>
         </Container>
@@ -399,9 +400,9 @@ export default function SpecialOfferPage() {
                 <span className="so-radar-ping" />
               </div>
               <div>
-                <h2 className="so-radar-title">Airdrop & Launchpool Radar</h2>
+                <h2 className="so-radar-title">{t('so.radar.title')}</h2>
                 <p className="so-radar-desc">
-                  Track the hottest Launchpool, Airdrop &amp; IDO events in real-time &mdash; never miss free tokens again.
+                  {t('so.radar.desc')}
                 </p>
               </div>
             </div>
@@ -410,7 +411,9 @@ export default function SpecialOfferPage() {
             <div className="so-radar-preview-grid">
               {radarPreviews.map((rp, i) => (
                 <div key={i} className="so-radar-preview-card">
-                  <div className={`so-radar-preview-status ${rp.status}`}>{rp.statusLabel}</div>
+                  <div className={`so-radar-preview-status ${rp.status}`}>
+                    {rp.status === 'live' ? `🔴 ${t('so.badge.live')}` : rp.status === 'upcoming' ? `⏳ ${t('so.badge.upcoming')}` : `🔥 ${t('so.badge.hot')}`}
+                  </div>
                   <div className="so-radar-preview-name">{rp.name}</div>
                   <div className="so-radar-preview-token">{rp.token}</div>
                   <div className="so-radar-preview-apy">{rp.apr}</div>
@@ -420,7 +423,7 @@ export default function SpecialOfferPage() {
 
             <Link href="/crypto-events" className="so-radar-cta">
               <span>🚀</span>
-              View Full Tracker — Countdowns & Event Calendar
+              {t('so.radar.viewTracker')}
               <span className="so-cta-arrow">→</span>
             </Link>
           </div>
@@ -431,8 +434,7 @@ export default function SpecialOfferPage() {
       <section className="so-disclaimer-section">
         <Container>
           <p className="so-disclaimer">
-            <strong>Disclaimer:</strong> This page contains affiliate links. We may earn a commission at no extra cost to you.
-            Always do your own research before using any exchange. Crypto trading carries risk.
+            <strong>Disclaimer:</strong> {t('so.disclaimer')}
           </p>
         </Container>
       </section>
