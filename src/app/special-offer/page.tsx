@@ -129,8 +129,10 @@ export default function SpecialOfferPage() {
       {/* Hero Section */}
       <section className="so-hero">
         <Container>
-          <div className="so-hero-content">
+          <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%', marginBottom: '24px' }}>
             <Link href="/" className="more-back-btn">← Back to Home</Link>
+          </div>
+          <div className="so-hero-content">
             <div className="so-hero-badge">
               <span className="so-badge-pulse" />
               <span>🔥 EXCLUSIVE PARTNER DEALS</span>
