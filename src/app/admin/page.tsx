@@ -7,6 +7,8 @@ import AdminEvents from '@/components/AdminEvents';
 import AdminSpecialOffer from '@/components/AdminSpecialOffer';
 import AdminEmbeddedTweets from '@/components/AdminEmbeddedTweets';
 import AdminSiteSettings from '@/components/AdminSiteSettings';
+import DashboardAnalytics from '@/components/DashboardAnalytics';
+import './analytics.css';
 
 const TOKEN_KEY = 'admin_session_token';
 const STORAGE_TYPE_KEY = 'admin_session_storage'; // 'local' or 'session'
@@ -40,7 +42,7 @@ export default function AdminPage() {
     const [rememberMe, setRememberMe] = useState(false);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isChecking, setIsChecking] = useState(true); // Loading state for auto-login
-    const [activeTab, setActiveTab] = useState<'posts' | 'articles' | 'events' | 'offers' | 'tweets' | 'settings'>('posts');
+    const [activeTab, setActiveTab] = useState<'analytics' | 'posts' | 'articles' | 'events' | 'offers' | 'tweets' | 'settings'>('analytics');
     const [toasts, setToasts] = useState<{ id: string; message: string; type: 'success' | 'error' }[]>([]);
 
     const addToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -249,6 +251,12 @@ export default function AdminPage() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <div className="admin-tabs">
                                 <button
+                                    className={`admin-tab ${activeTab === 'analytics' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('analytics')}
+                                >
+                                    📊 Thống Kê
+                                </button>
+                                <button
                                     className={`admin-tab ${activeTab === 'posts' ? 'active' : ''}`}
                                     onClick={() => setActiveTab('posts')}
                                 >
@@ -310,6 +318,7 @@ export default function AdminPage() {
             </div>
 
             <div className="app-container">
+                {activeTab === 'analytics' && <DashboardAnalytics addToast={addToast} />}
                 {activeTab === 'posts' && <AdminPosts addToast={addToast} />}
                 {activeTab === 'articles' && <AdminArticles addToast={addToast} />}
                 {activeTab === 'events' && <AdminEvents addToast={addToast} />}
