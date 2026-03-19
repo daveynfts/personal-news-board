@@ -318,3 +318,78 @@
 .analytics-recent-date {
     color: var(--text-muted);
 }
+
+/* ============================
+   MOBILE OPTIMIZATIONS
+   ============================ */
+
+@media (max-width: 768px) {
+    .analytics-dashboard {
+        gap: 24px;
+        padding-bottom: 24px;
+    }
+
+    .analytics-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .analytics-title {
+        font-size: 1.5rem;
+    }
+
+    .analytics-refresh-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .analytics-stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .analytics-stat-card {
+        padding: 16px;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    .analytics-stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .analytics-stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .analytics-stat-sparkline {
+        position: relative;
+        bottom: 0;
+        margin-top: 12px;
+        width: 100%;
+    }
+
+    .analytics-charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-recent-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .analytics-recent-meta {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 480px) {
+    .analytics-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
