@@ -128,36 +128,48 @@ export default function SpecialOfferPage() {
         <div className="so-blob so-blob-3" />
       </div>
 
-      {/* Hero Section */}
-      <section className="so-hero">
+      {/* Hero Section - Split Layout */}
+      <section className="so-hero" style={{ paddingBottom: '80px' }}>
         <Container>
-          <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%', marginBottom: '24px' }}>
-            <Link href="/" className="more-back-btn">← Back to Home</Link>
+          <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%', marginBottom: '40px' }}>
+            <Link href="/" className="more-back-btn">{t('btn.backToHome')}</Link>
           </div>
-          <div className="so-hero-content">
-            <div className="so-hero-badge">
-              <span className="so-badge-pulse" />
-              <span>🔥 {t('so.exclusivePartnerDeals')}</span>
+          
+          <div className="so-hero-split-layout">
+            {/* Left Column */}
+            <div className="so-hero-left">
+              <div className="so-hero-badge">
+                <span className="so-badge-pulse" />
+                <span>🔥 {t('so.exclusivePartnerDeals')}</span>
+              </div>
+              <h1 className="so-hero-title">
+                {t('so.hero.save')} <span className="so-gradient-text">20%</span>{t('so.hero.onEveryTrade')}
+              </h1>
+              <p className="so-hero-subtitle">
+                {t('so.hero.subtitle')}
+              </p>
+              
+              <div className="so-trust-inline">
+                <div className="so-trust-badge">
+                  <span>🔒</span> {t('so.trust.verified')}
+                </div>
+                <div className="so-trust-badge">
+                  <span>⚡</span> {t('so.trust.instant')}
+                </div>
+                <div className="so-trust-badge">
+                  <span>♾️</span> {t('so.trust.lifetime')}
+                </div>
+              </div>
             </div>
-            <h1 className="so-hero-title">
-              {t('so.hero.save')} <span className="so-gradient-text">20%</span>{t('so.hero.onEveryTrade')}
-            </h1>
-            <p className="so-hero-subtitle">
-              {t('so.hero.subtitle')}
-            </p>
-          </div>
-        </Container>
-      </section>
 
-      {/* Fee Savings Calculator */}
-      <section className="so-calculator-section">
-        <Container>
-          <div className="so-section-label">
-            <span className="so-section-icon">🧮</span>
-            <span>{t('so.calc.title')}</span>
-          </div>
-          <div
-            className={`so-calculator-card ${intensity > 0.5 ? 'so-calc-intense' : ''} ${intensity > 0.85 ? 'so-calc-max' : ''}`}
+            {/* Right Column (Calculator) */}
+            <div className="so-hero-right">
+              <div className="so-section-label">
+                <span className="so-section-icon">🧮</span>
+                <span>{t('so.calc.title')}</span>
+              </div>
+              <div
+                className={`so-calculator-card ${intensity > 0.5 ? 'so-calc-intense' : ''} ${intensity > 0.85 ? 'so-calc-max' : ''}`}
             style={{
               '--intensity': intensity,
               '--glow-opacity': 0.08 + intensity * 0.35,
@@ -280,6 +292,8 @@ export default function SpecialOfferPage() {
               {t('so.calc.claimDiscount')}
               <span className="so-cta-arrow">→</span>
             </a>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

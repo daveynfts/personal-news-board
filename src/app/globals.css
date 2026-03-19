@@ -6183,6 +6183,67 @@ select.form-input {
   gap: 16px;
 }
 
+/* Split Layout Hero */
+.so-hero-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.so-hero-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 24px;
+}
+
+.so-hero-left .so-hero-title {
+  max-width: 100%;
+}
+
+.so-hero-right {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.so-hero-right .so-calculator-card {
+  margin: 0;
+  max-width: 100%;
+}
+
+.so-hero-right .so-section-label {
+  margin-bottom: 12px;
+}
+
+.so-trust-inline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (max-width: 968px) {
+  .so-hero-split-layout {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  
+  .so-hero-left {
+    align-items: center;
+    text-align: center;
+  }
+
+  .so-trust-inline {
+    justify-content: center;
+  }
+}
+
 .so-hero-badge {
   display: inline-flex;
   align-items: center;
