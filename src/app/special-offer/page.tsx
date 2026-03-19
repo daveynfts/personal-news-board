@@ -352,7 +352,6 @@ export default function SpecialOfferPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="so-exchange-cta"
-                  style={{ background: ex.gradient }}
                 >
                   Sign Up & Claim Bonus
                   <span className="so-cta-arrow">→</span>
