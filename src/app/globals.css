@@ -6140,6 +6140,7 @@ select.form-input {
 .so-page {
   position: relative;
   overflow: hidden;
+  background-color: #000000;
 }
 
 /* Background blobs */
@@ -6153,15 +6154,15 @@ select.form-input {
 .so-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.3;
+  filter: blur(160px);
+  opacity: 0.55;
   mix-blend-mode: screen;
   animation: so-float 20s infinite alternate ease-in-out;
 }
 
-.so-blob-1 { width: 500px; height: 500px; background: #6366f1; top: -10%; left: -5%; }
-.so-blob-2 { width: 600px; height: 600px; background: #a855f7; bottom: -15%; right: -10%; animation-delay: -7s; }
-.so-blob-3 { width: 400px; height: 400px; background: #ec4899; top: 50%; left: 30%; animation-delay: -14s; }
+.so-blob-1 { width: 500px; height: 500px; background: #60a5fa; top: -10%; left: -5%; }
+.so-blob-2 { width: 600px; height: 600px; background: #d8b4fe; bottom: -15%; right: -10%; animation-delay: -7s; }
+.so-blob-3 { width: 400px; height: 400px; background: #fdba74; top: 50%; left: 30%; animation-delay: -14s; }
 
 @keyframes so-float {
   0% { transform: translate(0, 0) scale(1); }
@@ -6251,15 +6252,15 @@ select.form-input {
   gap: 12px;
   padding: 18px 32px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(249,115,22,0.05) 100%);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(239,68,68,0.35);
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.15), 0 12px 32px rgba(0,0,0,0.25);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 8px 32px rgba(0, 0, 0, 0.4);
   font-size: 1.15rem;
   font-weight: 900;
-  letter-spacing: 0.15em;
-  color: #fca5a5;
+  letter-spacing: 0.1rem;
+  color: #fff;
   position: relative;
   overflow: hidden;
 }
@@ -6277,9 +6278,9 @@ select.form-input {
 .so-badge-pulse {
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: #ef4444;
+  background: #60a5fa;
   animation: so-pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 12px rgba(239,68,68,0.6);
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.8);
 }
 
 @keyframes so-pulse {
@@ -6290,11 +6291,11 @@ select.form-input {
 .so-hero-title-glass-card {
   padding: 24px 32px;
   border-radius: 28px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 100%);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 12px 32px rgba(0,0,0,0.3);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 16px 40px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
   margin: 12px 0 24px 0;
@@ -6324,7 +6325,7 @@ select.form-input {
 }
 
 .so-hero-highlight {
-  background: linear-gradient(135deg, #a855f7, #6366f1);
+  background: linear-gradient(135deg, #d8b4fe, #60a5fa);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -6339,7 +6340,7 @@ select.form-input {
   left: 0;
   top: 0;
   filter: blur(12px);
-  background: linear-gradient(135deg, #a855f7, #6366f1);
+  background: linear-gradient(135deg, #d8b4fe, #60a5fa);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -6401,15 +6402,15 @@ select.form-input {
   margin: 0 auto;
   padding: 40px 36px;
   border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-top-color: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.15);
   box-shadow:
-    0 32px 64px -16px rgba(0,0,0,0.5),
-    0 0 80px -20px rgba(99,102,241,0.15),
-    inset 0 1px 1px rgba(255,255,255,0.1);
+    0 32px 64px -16px rgba(0,0,0,0.6),
+    0 0 80px -20px rgba(255,255,255,0.05),
+    inset 0 1px 1px rgba(255,255,255,0.15);
   overflow: hidden;
   transition: box-shadow 0.6s ease, border-color 0.6s ease;
 }
@@ -6849,15 +6850,14 @@ select.form-input {
   font-weight: 600;
 }
 
-/* Results */
 .so-calc-results {
   padding: 16px 20px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 4px 16px rgba(0, 0, 0, 0.25);
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
@@ -6907,11 +6907,11 @@ select.form-input {
   position: relative;
   padding: 24px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(99,102,241,0.1) 100%);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(168,85,247,0.3);
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.15), 0 8px 24px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.15), 0 12px 32px rgba(0, 0, 0, 0.35);
   margin-bottom: 24px;
   overflow: hidden;
   z-index: 2;
@@ -7280,19 +7280,19 @@ select.form-input {
   gap: 8px;
   padding: 14px 20px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
   color: #fff;
   font-size: 0.82rem;
   font-weight: 800;
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-top-color: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top-color: rgba(255, 255, 255, 0.25);
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   box-shadow:
-    0 4px 16px rgba(0,0,0,0.2),
-    inset 0 1px 1px rgba(255,255,255,0.25);
+    0 4px 16px rgba(0,0,0,0.3),
+    inset 0 1px 1px rgba(255,255,255,0.15);
   margin-top: auto;
   position: relative;
   overflow: hidden;
@@ -7312,13 +7312,13 @@ select.form-input {
 }
 
 .so-exchange-cta:hover {
-  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
-  border-color: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-3px) scale(1.03);
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.3),
-    0 0 30px -5px rgba(255,255,255,0.12),
-    inset 0 1px 2px rgba(255,255,255,0.35);
+    0 8px 32px rgba(0,0,0,0.4),
+    0 0 30px -5px rgba(255,255,255,0.1),
+    inset 0 1px 2px rgba(255,255,255,0.3);
   color: #fff;
 }
 
@@ -7341,11 +7341,11 @@ select.form-input {
   gap: 8px;
   padding: 10px 20px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 100%);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.25);
   font-size: 0.75rem;
   font-weight: 700;
   color: #fff;
@@ -7437,15 +7437,15 @@ select.form-input {
   margin: 0 auto;
   padding: 40px 36px;
   border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(99,102,241,0.06) 50%, rgba(236,72,153,0.05) 100%);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
-  border: 1px solid rgba(16,185,129,0.2);
-  border-top-color: rgba(16,185,129,0.35);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.15);
   box-shadow:
-    0 32px 64px -16px rgba(0,0,0,0.5),
-    0 0 60px -20px rgba(16,185,129,0.2),
-    inset 0 1px 1px rgba(255,255,255,0.1);
+    0 32px 64px -16px rgba(0, 0, 0, 0.6),
+    0 0 60px -20px rgba(255, 255, 255, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
   overflow: hidden;
 }
 
@@ -7456,7 +7456,7 @@ select.form-input {
   transform: translateX(-50%);
   width: 500px;
   height: 350px;
-  background: radial-gradient(ellipse, rgba(16,185,129,0.12), transparent 70%);
+  background: radial-gradient(ellipse, rgba(96,165,250,0.12), transparent 70%);
   pointer-events: none;
 }
 
@@ -7476,9 +7476,9 @@ select.form-input {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(16,185,129,0.03) 48%,
-    rgba(16,185,129,0.08) 50%,
-    rgba(16,185,129,0.03) 52%,
+    rgba(96,165,250,0.04) 48%,
+    rgba(96,165,250,0.08) 50%,
+    rgba(96,165,250,0.04) 52%,
     transparent 100%
   );
   background-size: 100% 400%;
