@@ -268,10 +268,20 @@ export default function SpecialOfferPage() {
             >
               <div className="so-savings-highlight-glow" />
               <div className="so-savings-content">
-                <span className="so-savings-emoji" style={{
+                <div className="so-3d-coin-wrap" style={{
                   transform: `scale(${1 + intensity * 0.3})`,
                   transition: 'transform 0.4s',
-                }}>💰</span>
+                }}>
+                  <div className="so-3d-coin">
+                    <div className="so-3d-coin-layer" />
+                    <div className="so-3d-coin-layer" />
+                    <div className="so-3d-coin-layer" />
+                    <div className="so-3d-coin-layer" />
+                    <div className="so-3d-coin-layer" />
+                    <div className="so-3d-coin-face so-3d-coin-front">$</div>
+                    <div className="so-3d-coin-face so-3d-coin-back">$</div>
+                  </div>
+                </div>
                 <div>
                   <div className="so-savings-label">{t('so.calc.youSave')}</div>
                   <div className="so-savings-amount" style={{
