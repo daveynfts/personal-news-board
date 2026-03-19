@@ -143,7 +143,19 @@ export default function SpecialOfferPage() {
                 <span>🔥 {t('so.exclusivePartnerDeals')}</span>
               </div>
               <h1 className="so-hero-title">
-                {t('so.hero.save')} <span className="so-gradient-text">20%</span>{t('so.hero.onEveryTrade')}
+                {t('so.hero.save')}
+                <span className="so-3d-pill-wrap">
+                  <span className="so-3d-pill">
+                    <span className="so-3d-pill-layer" />
+                    <span className="so-3d-pill-layer" />
+                    <span className="so-3d-pill-layer" />
+                    <span className="so-3d-pill-layer" />
+                    <span className="so-3d-pill-layer" />
+                    <span className="so-3d-pill-face so-3d-pill-front">20%</span>
+                    <span className="so-3d-pill-face so-3d-pill-back">20%</span>
+                  </span>
+                </span>
+                {t('so.hero.onEveryTrade')}
               </h1>
               <p className="so-hero-subtitle">
                 {t('so.hero.subtitle')}
@@ -278,8 +290,8 @@ export default function SpecialOfferPage() {
                     <div className="so-3d-coin-layer" />
                     <div className="so-3d-coin-layer" />
                     <div className="so-3d-coin-layer" />
-                    <div className="so-3d-coin-face so-3d-coin-front">$</div>
-                    <div className="so-3d-coin-face so-3d-coin-back">$</div>
+                    <div className="so-3d-coin-face so-3d-coin-front">₿</div>
+                    <div className="so-3d-coin-face so-3d-coin-back">₿</div>
                   </div>
                 </div>
                 <div>
