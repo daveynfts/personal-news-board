@@ -63,15 +63,19 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className="home-container">
+      {/* Animated background blobs (macOS Dark Mode logic) */}
+      <div className="so-bg-effects">
+        <div className="so-blob so-blob-1" />
+        <div className="so-blob so-blob-2" />
+        <div className="so-blob so-blob-3" />
+      </div>
+
       {visibleEvents.length > 0 ? (
         <Container style={{ marginTop: '16px' }}>
           <EventCalendar events={visibleEvents} />
         </Container>
       ) : (
-        <div className="hero-wrapper" style={{ margin: '40px auto 60px', padding: '0 20px' }}>
-          <div className="liquid-blob blob-1"></div>
-          <div className="liquid-blob blob-2"></div>
-          <div className="liquid-blob blob-3"></div>
+        <div className="hero-wrapper" style={{ margin: '40px auto 60px', padding: '0 20px', position: 'relative' }}>
           <section className="hero hero-glass-container">
             <HeroText />
           </section>

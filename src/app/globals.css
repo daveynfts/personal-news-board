@@ -70,13 +70,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
-  /* Premium Mesh Gradient Background */
-  background: 
-    radial-gradient(circle at 10% 10%, rgba(0, 113, 227, 0.18), transparent 50%),
-    radial-gradient(circle at 90% 10%, rgba(255, 59, 48, 0.14), transparent 45%),
-    radial-gradient(circle at 50% 90%, rgba(29, 155, 240, 0.15), transparent 60%),
-    radial-gradient(circle at 75% 60%, rgba(191, 90, 242, 0.12), transparent 50%),
-    #040406;
+  /* Premium Black Background */
+  background: #000000;
   background-attachment: fixed;
 }
 
@@ -985,13 +980,13 @@ a {
 .hero-glass-container {
   position: relative;
   border-radius: 40px;
-  background: rgba(20, 20, 25, 0.4);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top-color: rgba(255, 255, 255, 0.3);
-  border-left-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(255, 255, 255, 0.2);
+  border-left-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.2);
   overflow: hidden;
   margin-top: 60px;
   margin-bottom: 80px;
@@ -1304,10 +1299,10 @@ a {
   width: 100%;
   position: relative;
   border-radius: calc(var(--radius-lg) + 8px);
-  background: rgba(20, 20, 25, 0.3);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-top-color: rgba(255, 255, 255, 0.2);
   border-left-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.2);
@@ -1381,9 +1376,9 @@ a {
 }
 
 .post-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(20, 20, 25, 0.3) 100%);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top-color: rgba(255, 255, 255, 0.2);
   border-left-color: rgba(255, 255, 255, 0.15);
@@ -1430,7 +1425,7 @@ a {
 
 .post-card:hover {
   transform: translateY(-8px) scale(1.03);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(30, 30, 40, 0.4) 100%);
+  background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
@@ -1483,7 +1478,7 @@ a {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.1) 100%);
+  background: rgba(0,0,0,0.1);
   position: relative;
   z-index: 2;
 }
@@ -3597,49 +3592,7 @@ a {
 }
 
 
-.featured-event-card::before,
-.featured-event-card::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  z-index: -1;
-  opacity: 0.4;
-  transition: opacity 1s ease;
-  pointer-events: none;
-}
 
-
-
-.featured-event-card::before {
-  width: 400px;
-  height: 400px;
-  background: var(--news-color);
-  top: -100px;
-  left: -100px;
-}
-
-.featured-event-card::after {
-  width: 500px;
-  height: 500px;
-  background: rgba(191, 90, 242, 0.6);
-  bottom: -150px;
-  right: -100px;
-}
-
-.featured-event-card:hover::before,
-.featured-event-card:hover::after {
-  opacity: 0.85;
-}
-
-
-.featured-event-card:hover::before {
-  animation: liquid-blob 10s infinite alternate ease-in-out;
-}
-
-.featured-event-card:hover::after {
-  animation: liquid-blob 12s infinite alternate-reverse ease-in-out;
-}
 
 .featured-event-card:hover {
   transform: translateY(-8px);
@@ -3881,59 +3834,11 @@ a {
 
 
 
-/* Colorful animated glow blobs behind the content for liquid effect */
-.upcoming-events-list::before,
-.upcoming-events-list::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  z-index: -1;
-  opacity: 0.35; /* ALWAYS visible but subtle */
-  transition: opacity 0.8s ease;
-  pointer-events: none;
-}
-
-.upcoming-events-list::before {
-  width: 400px;
-  height: 400px;
-  background: var(--news-color); /* Apple Blue */
-  top: -100px;
-  left: -100px;
-}
-
-.upcoming-events-list::after {
-  width: 500px;
-  height: 500px;
-  background: rgba(191, 90, 242, 0.6); /* Apple Purple */
-  bottom: -150px;
-  right: -100px;
-}
-
 .upcoming-events-list:hover {
   transform: translateY(-8px) scale(1.01);
   box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
   border-color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.04);
-}
-
-.upcoming-events-list:hover::before,
-.upcoming-events-list:hover::after {
-  opacity: 0.85;
-}
-
-.upcoming-events-list::before {
-  animation: liquid-blob 15s infinite alternate ease-in-out;
-}
-
-.upcoming-events-list::after {
-  animation: liquid-blob 18s infinite alternate-reverse ease-in-out;
-}
-
-@keyframes liquid-blob {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  50% { transform: translate(150px, 80px) scale(1.1) rotate(180deg); }
-  100% { transform: translate(-50px, 150px) scale(0.9) rotate(360deg); }
 }
 
 /* Ensure inner cards don't have too much heavy background so the blobs show through */
