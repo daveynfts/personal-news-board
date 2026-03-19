@@ -6271,24 +6271,71 @@ select.form-input {
   50% { transform: scale(1.4); opacity: 0.4; }
 }
 
-.so-hero-title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  font-size: 4rem;
-  font-weight: 900;
-  line-height: 1.08;
-  letter-spacing: -2.5px;
-  max-width: 100%;
+.so-hero-title-glass-card {
+  padding: 24px 32px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 12px 32px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+  margin: 12px 0 24px 0;
 }
 
-.so-hero-title-text {
+.so-hero-title-glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.35) 25%, transparent 30%);
+  background-size: 200% 100%;
+  animation: so-glass-shimmer-sweep 4s infinite linear;
+  pointer-events: none;
+}
+
+.so-hero-title {
+  margin: 0;
+  font-size: 3.6rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -2px;
   background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  max-width: 100%;
+}
+
+.so-hero-highlight {
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
+
+.so-hero-highlight::after {
+  content: '20%';
+  position: absolute;
+  left: 0;
+  top: 0;
+  filter: blur(12px);
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+@media (max-width: 640px) {
+  .so-hero-title-glass-card {
+    padding: 20px 24px;
+    border-radius: 20px;
+  }
 }
 
 .so-gradient-text {
