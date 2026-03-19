@@ -6276,11 +6276,14 @@ select.form-input {
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: -2.5px;
+  max-width: 700px;
+}
+
+.so-hero-title-text {
   background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  max-width: 700px;
 }
 
 .so-gradient-text {

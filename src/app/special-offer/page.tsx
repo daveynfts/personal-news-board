@@ -143,7 +143,7 @@ export default function SpecialOfferPage() {
                 <span>🔥 {t('so.exclusivePartnerDeals')}</span>
               </div>
               <h1 className="so-hero-title">
-                {t('so.hero.save')}
+                <span className="so-hero-title-text">{t('so.hero.save')}</span>
                 <span className="so-3d-pill-wrap">
                   <span className="so-3d-pill">
                     <span className="so-3d-pill-layer" />
@@ -155,7 +155,7 @@ export default function SpecialOfferPage() {
                     <span className="so-3d-pill-face so-3d-pill-back">20%</span>
                   </span>
                 </span>
-                {t('so.hero.onEveryTrade')}
+                <span className="so-hero-title-text">{t('so.hero.onEveryTrade')}</span>
               </h1>
               <p className="so-hero-subtitle">
                 {t('so.hero.subtitle')}
