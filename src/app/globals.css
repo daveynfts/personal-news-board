@@ -8071,6 +8071,8 @@ select.form-input {
   box-shadow: 0 8px 24px -6px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
   flex: 0 0 380px;
   min-width: 380px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Liquid Light Sweep — slides across on hover */
@@ -8165,23 +8167,59 @@ select.form-input {
 }
 
 .tweet-wall-label {
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  z-index: 2;
-  padding: 3px 10px;
+  /* Sits ABOVE the tweet as a block element — no absolute overlap */
+  display: inline-block;
+  align-self: flex-start;
+  margin: 10px 12px 0;
+  padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(29,155,240,0.85);
-  color: #fff;
   font-size: 0.6rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(8px);
-  max-width: 80%;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.92);
+  max-width: calc(100% - 24px);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  position: relative;
+  z-index: 3;
+  /* Liquid glass */
+  background: linear-gradient(
+    135deg,
+    rgba(29,155,240,0.18) 0%,
+    rgba(29,155,240,0.08) 50%,
+    rgba(100,180,255,0.12) 100%
+  );
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(29,155,240,0.3);
+  border-top-color: rgba(180,220,255,0.5);
+  border-bottom-color: rgba(29,155,240,0.1);
+  box-shadow:
+    0 2px 12px rgba(29,155,240,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.2),
+    inset 0 -1px 0 rgba(0,0,0,0.08);
+  /* Shimmer sweep */
+  overflow: hidden;
+}
+
+.tweet-wall-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  animation: label-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes label-shimmer {
+  0%, 100% { left: -120%; opacity: 0.7; }
+  50% { left: 180%; opacity: 1; }
 }
 
 /* Override react-tweet dark theme styles */
