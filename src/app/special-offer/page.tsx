@@ -166,10 +166,6 @@ export default function SpecialOfferPage() {
 
             {/* Right Column (Calculator) */}
             <div className="so-hero-right">
-              <div className="so-section-label">
-                <span className="so-section-icon">🧮</span>
-                <span>{t('so.calc.title')}</span>
-              </div>
               <div
                 className={`so-calculator-card ${intensity > 0.5 ? 'so-calc-intense' : ''} ${intensity > 0.85 ? 'so-calc-max' : ''}`}
             style={{
