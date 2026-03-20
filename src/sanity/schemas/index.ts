@@ -10,10 +10,10 @@ import { siteSettingsType } from './siteSettings'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   articleType,
-  postType,
+  embeddedTweetType,
   eventType,
+  postType,
   exchangeType,
   cryptoEventType,
-  embeddedTweetType,
   siteSettingsType
 ]
