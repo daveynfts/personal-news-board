@@ -454,6 +454,9 @@ export async function getAllSiteSettings(): Promise<Record<string, string>> {
      const settings = await sanityClient.fetch(query);
      if (!settings) return {};
      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-     const { _id, _type, _rev, _updatedAt, _createdAt, ...rest } = settings;
-     return rest;
+     const { _id, _type, _rev, _updatedAt, _createdAt, avatar, ...rest } = settings;
+     return {
+         ...rest,
+         avatarUrl: getImageUrl(settings.avatar)
+     };
 }

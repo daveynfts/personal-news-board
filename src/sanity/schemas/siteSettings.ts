@@ -9,5 +9,18 @@ export const siteSettingsType = defineType({
     defineField({ name: 'siteDescription', title: 'Site Description', type: 'text' }),
     defineField({ name: 'email', title: 'Contact Email', type: 'string' }),
     defineField({ name: 'socialX', title: 'X (Twitter) URL', type: 'url' }),
+    defineField({ 
+      name: 'avatar', 
+      title: 'Avatar Logo', 
+      type: 'image', 
+      options: { hotspot: true },
+      description: 'Ảnh đại diện được gắn trên thanh điều hướng.'
+    }),
+    defineField({ 
+      name: 'bubbleText', 
+      title: 'Hiệu ứng bong bóng (Bubble Text)', 
+      type: 'string',
+      description: 'Đoạn văn bản sẽ bật bong bóng khi trỏ chuột vào Logo.'
+    }),
   ]
 })

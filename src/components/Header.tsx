@@ -215,12 +215,12 @@ export default function Header() {
         <LanguageToggle />
         <header className="app-header">
           <Container className="header-inner">
-            <div className="logo">
-              <div
-                className="logo-icon-wrapper"
-                onMouseEnter={startBubbles}
-                onMouseLeave={stopBubbles}
-              >
+            <div 
+              className="logo"
+              onMouseEnter={startBubbles}
+              onMouseLeave={stopBubbles}
+            >
+              <div className="logo-icon-wrapper">
                 <div className="logo-icon">
                   <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
                     {settingsLoaded && avatarUrl ? (
