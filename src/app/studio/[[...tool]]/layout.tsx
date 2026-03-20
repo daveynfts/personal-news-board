@@ -11,14 +11,23 @@ export const viewport = {
   userScalable: false,
 }
 
-export default function RootLayout({
+export default function StudioLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body style={{ margin: 0, padding: 0 }} suppressHydrationWarning>{children}</body>
-    </html>
+    <>
+      {/* Hide global layouts to let Sanity Studio take full window */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .header, .crypto-ticker { display: none !important; }
+        body > canvas { display: none !important; }
+        main { min-height: auto !important; padding: 0 !important; margin: 0 !important; }
+        body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; }
+      `}} />
+      <div style={{ height: '100vh', width: '100vw' }}>
+        {children}
+      </div>
+    </>
   )
 }
