@@ -1443,7 +1443,7 @@ a {
 
 .post-card-media {
   width: 100%;
-  height: 200px;
+  aspect-ratio: 16/9;
   position: relative;
   overflow: hidden;
   background: #080a0e;
