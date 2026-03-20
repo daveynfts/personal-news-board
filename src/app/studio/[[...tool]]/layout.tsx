@@ -20,7 +20,7 @@ export default function StudioLayout({
     <>
       {/* Hide global layouts to let Sanity Studio take full window */}
       <style dangerouslySetInnerHTML={{ __html: `
-        .header, .crypto-ticker { display: none !important; }
+        .header-row, .crypto-ticker-container, .floating-bubbles-portal { display: none !important; }
         body > canvas { display: none !important; }
         main { min-height: auto !important; padding: 0 !important; margin: 0 !important; }
         body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; }
