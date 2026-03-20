@@ -10,6 +10,8 @@ interface ArticlePageProps {
     params: Promise<{ id: string }>;
 }
 
+export const revalidate = 60; // Thêm tự động làm mới Cache mỗi 60s (Sửa lỗi 404 kẹt Cache trên Vercel)
+
 // ── Article-level SEO: generateMetadata ───────────────────────────────────────
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
     const { id } = await params;
