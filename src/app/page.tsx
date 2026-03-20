@@ -11,6 +11,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 import { HeroText, SectionHeader, EmptyState } from '@/components/TranslatableText';
+import NewsHero from '@/components/NewsHero';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,7 +56,9 @@ export default async function Home({ searchParams }: PageProps) {
     : allPosts.filter(p => !p.isMore);
 
   const editorialPicks = allArticles.filter(a => a.isEditorialPick && !a.isMore);
-  const standardArticles = allArticles.filter(a => !a.isEditorialPick && !a.isMore);
+  const hotStories = allArticles.filter(a => a.isHotStory && !a.isMore);
+  const featuredArticles = allArticles.filter(a => !a.isMore).slice(0, 3);
+  const standardArticles = allArticles.filter(a => !a.isEditorialPick && !a.isHotStory && !a.isMore);
 
   const visibleEvents = allEvents.filter(e => !e.isMore);
 
@@ -70,72 +73,29 @@ export default async function Home({ searchParams }: PageProps) {
         <div className="so-blob so-blob-3" />
       </div>
 
-      {visibleEvents.length > 0 ? (
-        <Container style={{ marginTop: '16px' }}>
-          <EventCalendar events={visibleEvents} />
-        </Container>
-      ) : (
-        <div className="hero-wrapper" style={{ margin: '40px auto 60px', padding: '0 20px', position: 'relative' }}>
-          <section className="hero hero-glass-container">
-            <HeroText />
-          </section>
-        </div>
-      )}
 
 
-      {/* EDITORIAL CAROUSEL */}
-      {editorialPicks.length > 0 && (
-        <section style={{ margin: '0 auto 60px', width: '100%', maxWidth: '1200px' }}>
-          <EditorialCarousel articles={editorialPicks} />
-        </section>
-      )}
+      {/* 1. NEWS (Top Level Container) */}
+      <Container style={{ marginTop: '30px', marginBottom: '60px' }}>
+        <NewsHero 
+           featuredArticles={featuredArticles}
+           editorChoices={editorialPicks}
+           hotStories={hotStories}
+           latestNews={allArticles.filter(a => !a.isMore)}
+        />
+      </Container>
 
-      {/* ARTICLE ARCHIVE - Bento Box Hero Section */}
-      {standardArticles.length > 0 && (
-        <section className="articles-archive">
-          <Container>
-            <SectionHeader
-              titleKey="section.latestFeatures"
-              viewAllKey="btn.viewAllArticles"
-              viewAllHref="/articles"
-            />
-            <div className="bento-grid">
-              {standardArticles.map((article, index) => (
-                <Link 
-                  href={`/article/${article.id}`} 
-                  key={article.id} 
-                  className={`bento-item ${index === 0 ? 'bento-featured' : 'bento-standard'}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <div className="post-card" style={{ width: '100%' }}>
-                    {article.coverImage && (
-                      <div 
-                        className="feature-card-media"
-                        style={{ 
-                          backgroundImage: `url(${article.coverImage})`,
-                          height: index === 0 ? '400px' : '200px' 
-                        }} 
-                      />
-                    )}
-                    <div className="post-card-body">
-                      <span className="type-tag" style={{ background: 'var(--blog-color)', position: index === 0 ? 'absolute' : 'static', marginBottom: index === 0 ? '0' : '16px', display: 'inline-block' }}>Editorial</span>
-                      <h3 className="post-title" style={{ fontSize: index === 0 ? '2.5rem' : '1.4rem' }}>{article.title}</h3>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 'auto' }}>
-                        {new Date(article.createdAt || '').toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </Container>
-        </section>
-      )}
-
-      {/* FEATURED TWEETS */}
-      <Container>
+      {/* 2. X PICK (FEATURED TWEETS) */}
+      <Container style={{ marginBottom: '60px' }}>
         <TweetWall />
       </Container>
+
+      {/* 3. EVENT CALENDAR */}
+      {visibleEvents.length > 0 && (
+        <Container style={{ marginBottom: '60px' }}>
+          <EventCalendar events={visibleEvents} />
+        </Container>
+      )}
 
       {/* CURATION FEED (POSTS) */}
       <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
@@ -147,7 +107,7 @@ export default async function Home({ searchParams }: PageProps) {
         
         <Suspense fallback={
           <div className="filter-container" style={{ margin: '0 auto 48px' }}>
-            {['All', 'News', 'Blog', 'X'].map(cat => (
+            {['All', 'News', 'Blog'].map(cat => (
               <span key={cat} className="filter-btn">{cat}</span>
             ))}
           </div>
@@ -161,12 +121,19 @@ export default async function Home({ searchParams }: PageProps) {
           ) : (
             <div className="rainbow-glow-container">
               <div className="marquee-wrapper">
-                <div className="marquee-content left-to-right">
-                  {filteredPosts.map((post) => (
+                <div className="marquee-content left-to-right" style={{ marginBottom: '24px' }}>
+                  {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <PostCard key={post.id} post={post} />
                   ))}
-                  {/* Duplicate set for infinite scroll effect */}
-                  {filteredPosts.map((post) => (
+                  {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
+                    <PostCard key={`dup-${post.id}`} post={post} />
+                  ))}
+                </div>
+                <div className="marquee-content right-to-left">
+                  {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                  {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <PostCard key={`dup-${post.id}`} post={post} />
                   ))}
                 </div>

@@ -1,4 +1,4 @@
-import { getArticleById } from '@/lib/db';
+import { getArticleById, getRelatedArticles } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import ArticleContent from '@/components/ArticleContent';
 import Link from 'next/link';
@@ -13,13 +13,8 @@ interface ArticlePageProps {
 // ── Article-level SEO: generateMetadata ───────────────────────────────────────
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
     const { id } = await params;
-    const articleId = parseInt(id, 10);
 
-    if (isNaN(articleId)) {
-        return buildMetadata({ allowIndexing: false });
-    }
-
-    const article = await getArticleById(articleId);
+    const article = await getArticleById(id);
 
     if (!article) {
         // Don't index 404'd articles
@@ -30,64 +25,113 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         });
     }
 
-    // Strip markdown syntax from content to generate a clean description
-    const plainDescription = article.content
-        .replace(/!\[.*?\]\(.*?\)/g, '')   // remove markdown images
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // replace links with text
-        .replace(/#{1,6}\s+/g, '')          // remove heading markers
-        .replace(/[*_`~>]/g, '')            // remove emphasis/code chars
-        .replace(/\n+/g, ' ')              // collapse newlines
-        .trim()
-        .slice(0, 155);
+  function extractPlainText(content: any): string {
+      if (!content) return '';
+      if (typeof content === 'string') {
+          return content
+              .replace(/!\[.*?\]\(.*?\)/g, '')   // remove markdown images
+              .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // replace links with text
+              .replace(/#{1,6}\s+/g, '')          // remove heading markers
+              .replace(/[*_`~>]/g, '')            // remove emphasis/code chars
+              .replace(/\n+/g, ' ')              // collapse newlines
+              .trim();
+      }
+      if (Array.isArray(content)) {
+          return content
+              .map(block => {
+                  if (block._type !== 'block' || !block.children) {
+                      return '';
+                  }
+                  return block.children.map((child: any) => child.text).join('');
+              })
+              .join(' ')
+              .trim();
+      }
+      return '';
+  }
 
-    return buildMetadata({
-        title: article.title,
-        description: plainDescription || `Read the full article: ${article.title}`,
-        canonicalPath: `/article/${article.id}`,
-        ogImage: article.coverImage || SITE_META.DEFAULT_OG_IMAGE,
+  const plainDescription = extractPlainText(article.content).slice(0, 155);
+
+  const seoTitle = article.seo?.metaTitle || article.title;
+  const seoDescription = article.seo?.metaDescription || plainDescription || `Read the full article: ${article.title}`;
+  const seoImage = article.seo?.openGraphImage ? article.seo.openGraphImage : (article.coverImage || SITE_META.DEFAULT_OG_IMAGE);
+
+  const allowIndexing = article.seo?.isIndexable !== false;
+  const customCanonical = article.seo?.canonicalUrl || `/article/${article.slug || article.id}`;
+
+  return buildMetadata({
+        title: seoTitle,
+        description: seoDescription,
+        canonicalPath: customCanonical,
+        ogImage: seoImage,
         type: 'article',
         publishedTime: article.createdAt
             ? new Date(article.createdAt).toISOString()
             : new Date().toISOString(),
         authorName: SITE_META.AUTHOR_NAME,
         keywords: [
+            article.seo?.focusKeyword || '',
             'crypto article',
             'web3',
             'blockchain',
             article.isEditorialPick ? 'editorial pick' : 'feature article',
             'DaveyNFTs',
-        ],
-        allowIndexing: true,
+        ].filter(Boolean),
+        allowIndexing: allowIndexing,
     });
 }
 
 // ── Page Component ────────────────────────────────────────────────────────────
 export default async function ArticlePage({ params }: ArticlePageProps) {
     const { id } = await params;
-    const articleId = parseInt(id, 10);
-    if (isNaN(articleId)) notFound();
+    if (!id) notFound();
 
-    const article = await getArticleById(articleId);
+    const article = await getArticleById(id);
     if (!article) notFound();
 
-    const canonicalUrl = buildCanonicalUrl(`/article/${article.id}`);
+    const relatedArticles = await getRelatedArticles(article.id as string, article.category, 3);
 
-    // Plain text description (same logic as in generateMetadata)
-    const plainDescription = article.content
-        .replace(/!\[.*?\]\(.*?\)/g, '')
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-        .replace(/#{1,6}\s+/g, '')
-        .replace(/[*_`~>]/g, '')
-        .replace(/\n+/g, ' ')
-        .trim()
-        .slice(0, 155);
+    const customCanonical = article.seo?.canonicalUrl 
+        ? article.seo.canonicalUrl 
+        : buildCanonicalUrl(`/article/${article.slug || article.id}`);
+
+    function extractPlainText(content: any): string {
+        if (!content) return '';
+        if (typeof content === 'string') {
+            return content
+                .replace(/!\[.*?\]\(.*?\)/g, '')
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                .replace(/#{1,6}\s+/g, '')
+                .replace(/[*_`~>]/g, '')
+                .replace(/\n+/g, ' ')
+                .trim();
+        }
+        if (Array.isArray(content)) {
+            return content
+                .map(block => {
+                    if (block._type !== 'block' || !block.children) {
+                        return '';
+                    }
+                    return block.children.map((child: any) => child.text).join('');
+                })
+                .join(' ')
+                .trim();
+        }
+        return '';
+    }
+
+    const plainDescription = extractPlainText(article.content).slice(0, 155);
+
+    const seoTitle = article.seo?.metaTitle || article.title;
+    const seoDescription = article.seo?.metaDescription || plainDescription || `Read the full article: ${article.title}`;
+    const seoImage = article.seo?.openGraphImage ? article.seo.openGraphImage : (article.coverImage || SITE_META.DEFAULT_OG_IMAGE);
 
     // JSON-LD payloads
     const articleJsonLd = buildArticleJsonLd({
-        title: article.title,
-        description: plainDescription,
-        url: canonicalUrl,
-        imageUrl: article.coverImage || SITE_META.DEFAULT_OG_IMAGE,
+        title: seoTitle,
+        description: seoDescription,
+        url: customCanonical,
+        imageUrl: seoImage,
         publishedTime: article.createdAt
             ? new Date(article.createdAt).toISOString()
             : new Date().toISOString(),
@@ -97,7 +141,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const breadcrumbJsonLd = buildBreadcrumbJsonLd([
         { name: 'Home', url: SITE_META.SITE_URL },
         { name: 'Articles', url: `${SITE_META.SITE_URL}/` },
-        { name: article.title, url: canonicalUrl },
+        { name: seoTitle, url: customCanonical },
     ]);
 
     return (
@@ -181,10 +225,93 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     </div>
                 )}
 
+                {/* Related Articles Styles */}
+                <style dangerouslySetInnerHTML={{ __html: `
+                    .related-articles-section {
+                        margin-top: 60px;
+                        padding-top: 40px;
+                        border-top: 1px solid rgba(255, 255, 255, 0.05);
+                    }
+                    .related-articles-title {
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        margin-bottom: 24px;
+                        color: #fff;
+                    }
+                    .related-articles-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                        gap: 20px;
+                    }
+                    .related-article-card {
+                        display: flex;
+                        flex-direction: column;
+                        background: rgba(255, 255, 255, 0.02);
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        border-radius: 16px;
+                        overflow: hidden;
+                        text-decoration: none;
+                        transition: all 0.3s ease;
+                    }
+                    .related-article-card:hover {
+                        transform: translateY(-4px);
+                        background: rgba(255, 255, 255, 0.05);
+                        border-color: rgba(255, 255, 255, 0.1);
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                    }
+                    .related-article-image {
+                        width: 100%;
+                        height: 160px;
+                        background-size: cover;
+                        background-position: center;
+                    }
+                    .related-article-content {
+                        padding: 20px;
+                    }
+                    .related-article-category {
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        color: rgba(255,255,255,0.6);
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                        display: block;
+                    }
+                    .related-article-heading {
+                        font-size: 1.1rem;
+                        font-weight: 600;
+                        color: #fff;
+                        margin: 0;
+                        line-height: 1.4;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                    }
+                `}} />
+
+                {/* Related Articles Section */}
+                {relatedArticles && relatedArticles.length > 0 && (
+                    <div className="related-articles-section">
+                        <h2 className="related-articles-title">Tin cùng chuyên mục</h2>
+                        <div className="related-articles-grid">
+                            {relatedArticles.map((rel) => (
+                                <Link href={`/article/${rel.slug || rel.id}`} key={rel.id} className="related-article-card">
+                                    <div className="related-article-image" style={{ backgroundImage: `url(${rel.coverImage || SITE_META.DEFAULT_OG_IMAGE})` }} />
+                                    <div className="related-article-content">
+                                        <span className="related-article-category">{rel.category || 'Tin tức'}</span>
+                                        <h3 className="related-article-heading">{rel.title}</h3>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Back to feed CTA */}
                 <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                    <Link href="/" className="submit-btn" style={{ display: 'inline-block', padding: '14px 40px', textDecoration: 'none' }}>
-                        ← Back to All Picks
+                    <Link href="/" className="submit-btn" style={{ display: 'inline-block', padding: '14px 40px', textDecoration: 'none', background: 'rgba(255,255,255,0.05)', color: '#fff' }}>
+                        ← Xem tất cả bài viết
                     </Link>
                 </div>
             </div>

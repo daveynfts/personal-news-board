@@ -1,143 +1,115 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { sanityClient } from '@/sanity/lib/client';
+import { urlForImage } from '@/sanity/lib/image';
 
 export const dynamic = 'force-dynamic';
 
 export interface SearchResult {
-    id: number;
+    id: string;
     title: string;
     type: 'post' | 'article' | 'event' | 'offer';
-    subType?: string; // 'News' | 'Blog' | 'X' for posts, 'Editorial' | 'Feature' for articles
+    subType?: string;
     url?: string;
     imageUrl?: string;
     date?: string;
     snippet?: string;
 }
 
+function getImageUrl(source: any): string {
+  if (!source) return '';
+  try { return urlForImage(source)?.url() || ''; } catch { return ''; }
+}
+
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const query = searchParams.get('q')?.trim();
-        const scope = searchParams.get('scope') || 'all'; // 'all' | 'posts' | 'articles' | 'events' | 'offers'
+        const scope = searchParams.get('scope') || 'all'; 
         const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 50);
 
         if (!query || query.length < 2) {
             return NextResponse.json({ results: [], total: 0 });
         }
 
-        // Escape special SQL LIKE characters
-        const safeTerm = `%${query.replace(/%/g, '\\%').replace(/_/g, '\\_')}%`;
+        const safeQuery = query + "*"; // wildcard match
         const results: SearchResult[] = [];
 
         // Search Posts
         if (scope === 'all' || scope === 'posts') {
-            const posts = await db.execute({
-                sql: `SELECT id, type, title, url, imageUrl, createdAt 
-                      FROM posts 
-                      WHERE title LIKE ? ESCAPE '\\' 
-                      ORDER BY createdAt DESC 
-                      LIMIT ?`,
-                args: [safeTerm, limit],
-            });
+            const posts = await sanityClient.fetch(
+                `*[_type == "post" && title match $q] | order(publishedAt desc) [0...$limit]`,
+                { q: safeQuery, limit }
+            );
 
-            for (const row of posts.rows) {
+            for (const p of posts) {
                 results.push({
-                    id: Number(row.id),
-                    title: String(row.title),
+                    id: p._id,
+                    title: p.title,
                     type: 'post',
-                    subType: String(row.type),
-                    url: String(row.url || ''),
-                    imageUrl: String(row.imageUrl || ''),
-                    date: String(row.createdAt || ''),
+                    subType: p.type || 'news',
+                    url: p.url || '',
+                    imageUrl: getImageUrl(p.imageUrl),
+                    date: p.publishedAt,
                 });
             }
         }
 
-        // Search Articles (title + content)
+        // Search Articles 
         if (scope === 'all' || scope === 'articles') {
-            const articles = await db.execute({
-                sql: `SELECT id, title, content, coverImage, isEditorialPick, createdAt 
-                      FROM articles 
-                      WHERE title LIKE ? ESCAPE '\\' OR content LIKE ? ESCAPE '\\'
-                      ORDER BY createdAt DESC 
-                      LIMIT ?`,
-                args: [safeTerm, safeTerm, limit],
-            });
+            const articles = await sanityClient.fetch(
+                `*[_type == "article" && (title match $q || pt::text(content) match $q)] | order(publishedAt desc) [0...$limit]`,
+                { q: safeQuery, limit }
+            );
 
-            for (const row of articles.rows) {
-                // Extract a snippet from content around the match
-                const content = String(row.content || '');
-                const lowerContent = content.toLowerCase();
-                const lowerQuery = query.toLowerCase();
-                const matchIndex = lowerContent.indexOf(lowerQuery);
-
-                let snippet = '';
-                if (matchIndex >= 0) {
-                    const start = Math.max(0, matchIndex - 40);
-                    const end = Math.min(content.length, matchIndex + query.length + 80);
-                    snippet = (start > 0 ? '...' : '') +
-                        content.slice(start, end).replace(/\n+/g, ' ').trim() +
-                        (end < content.length ? '...' : '');
-                } else {
-                    snippet = content.replace(/\n+/g, ' ').trim().slice(0, 120) + (content.length > 120 ? '...' : '');
-                }
-
+            for (const a of articles) {
                 results.push({
-                    id: Number(row.id),
-                    title: String(row.title),
+                    id: String(a.slug?.current || a._id),
+                    title: a.title,
                     type: 'article',
-                    subType: Number(row.isEditorialPick) === 1 ? 'Editorial Pick' : 'Feature',
-                    imageUrl: String(row.coverImage || ''),
-                    date: String(row.createdAt || ''),
-                    snippet,
+                    subType: a.isEditorialPick ? 'Editorial Pick' : 'Feature',
+                    imageUrl: getImageUrl(a.coverImage),
+                    date: a.publishedAt,
+                    snippet: '', // Simplified snippet for Sanity Search
                 });
             }
         }
 
-        // Search Events (title + description + location)
+        // Search Events
         if (scope === 'all' || scope === 'events') {
-            const events = await db.execute({
-                sql: `SELECT id, title, description, date, location, imageUrl, createdAt 
-                      FROM events 
-                      WHERE title LIKE ? ESCAPE '\\' OR description LIKE ? ESCAPE '\\' OR location LIKE ? ESCAPE '\\'
-                      ORDER BY date DESC 
-                      LIMIT ?`,
-                args: [safeTerm, safeTerm, safeTerm, limit],
-            });
+            const events = await sanityClient.fetch(
+                `*[_type == "event" && (title match $q || description match $q || location match $q)] | order(date desc) [0...$limit]`,
+                { q: safeQuery, limit }
+            );
 
-            for (const row of events.rows) {
+            for (const e of events) {
                 results.push({
-                    id: Number(row.id),
-                    title: String(row.title),
+                    id: e._id,
+                    title: e.title,
                     type: 'event',
-                    url: '',
-                    imageUrl: String(row.imageUrl || ''),
-                    date: String(row.date || ''),
-                    snippet: String(row.location || ''),
+                    url: e.link || '',
+                    imageUrl: getImageUrl(e.imageUrl),
+                    date: e.date,
+                    snippet: e.location || '',
                 });
             }
         }
 
-        // Search Exchanges (Special Offers)
+        // Search Exchanges
         if (scope === 'all' || scope === 'offers') {
-            const exchanges = await db.execute({
-                sql: `SELECT id, name, badge, bonus, features, link, createdAt 
-                      FROM exchanges 
-                      WHERE isVisible = 1 AND (name LIKE ? ESCAPE '\\' OR bonus LIKE ? ESCAPE '\\' OR features LIKE ? ESCAPE '\\')
-                      ORDER BY sortOrder ASC 
-                      LIMIT ?`,
-                args: [safeTerm, safeTerm, safeTerm, limit],
-            });
+            const exchanges = await sanityClient.fetch(
+                `*[_type == "exchange" && isVisible == true && (name match $q || bonus match $q || $raw match features[])] | order(sortOrder asc) [0...$limit]`,
+                { q: safeQuery, raw: query, limit }
+            );
 
-            for (const row of exchanges.rows) {
+            for (const ex of exchanges) {
                 results.push({
-                    id: Number(row.id),
-                    title: String(row.name),
+                    id: ex._id,
+                    title: ex.name,
                     type: 'offer',
-                    subType: String(row.badge || 'Offer'),
-                    url: String(row.link || '/special-offer'),
-                    date: String(row.createdAt || ''),
-                    snippet: String(row.bonus || ''),
+                    subType: ex.badge || 'Offer',
+                    url: ex.link || '/special-offer',
+                    date: ex._createdAt,
+                    snippet: ex.bonus || '',
                 });
             }
         }

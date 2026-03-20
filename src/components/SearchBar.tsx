@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/lib/LanguageContext';
+import { Pin, Edit3, Calendar, Search } from 'lucide-react';
 
 interface SearchResult {
     id: number;
@@ -170,10 +171,10 @@ export default function SearchBar({
         return acc;
     }, {} as Record<string, SearchResult[]>);
 
-    const typeConfig: Record<string, { label: string; icon: string; color: string }> = {
-        post: { label: t('searchbar.posts'), icon: '📌', color: 'var(--accent-color)' },
-        article: { label: t('searchbar.articles'), icon: '✍️', color: 'var(--blog-color)' },
-        event: { label: t('searchbar.events'), icon: '📅', color: '#10b981' },
+    const typeConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+        post: { label: t('searchbar.posts'), icon: <Pin size={14} />, color: 'var(--accent-color)' },
+        article: { label: t('searchbar.articles'), icon: <Edit3 size={14} />, color: 'var(--blog-color)' },
+        event: { label: t('searchbar.events'), icon: <Calendar size={14} />, color: '#10b981' },
     };
 
     const highlightMatch = (text: string, q: string) => {
@@ -316,7 +317,7 @@ export default function SearchBar({
             {isOpen && query.length >= 2 && results.length === 0 && !isLoading && (
                 <div ref={dropdownRef} className="search-dropdown">
                     <div className="search-no-results">
-                        <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px', color: 'rgba(255,255,255,0.5)' }}><Search size={32} /></div>
                         <p>{t('searchbar.noResultsFor')} &quot;{query}&quot;</p>
                         <span>{t('searchbar.tryDifferent')}</span>
                     </div>

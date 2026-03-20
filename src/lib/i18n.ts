@@ -69,8 +69,8 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Filter ────────────────────────────────────────────────────────────
     'filter.all': 'All',
-    'filter.news': 'News',
-    'filter.blog': 'Blog',
+    'filter.news': 'Research',
+    'filter.blog': 'Article',
     'filter.x': 'X',
 
     // ── Post Card ─────────────────────────────────────────────────────────
@@ -78,12 +78,12 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Tweet Wall ────────────────────────────────────────────────────────
     'tweet.curatedInsights': 'Curated insights from the crypto community',
-    'tweet.all': '🌐 All',
-    'tweet.general': '📌 General',
-    'tweet.breaking': '🔥 Breaking',
-    'tweet.analysis': '📊 Analysis',
-    'tweet.alpha': '💎 Alpha',
-    'tweet.thread': '🧵 Thread',
+    'tweet.all': 'All',
+    'tweet.general': 'General',
+    'tweet.breaking': 'Breaking',
+    'tweet.analysis': 'Analysis',
+    'tweet.alpha': 'Alpha',
+    'tweet.thread': 'Thread',
 
     // ── Archive Pages ─────────────────────────────────────────────────────
     'archive.fullArchive': '✍️ Full Archive',
@@ -111,20 +111,20 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.pastEvents': 'Past Events',
 
     // Picks Archive
-    'archive.picksLabel': '📌 Full Feed',
-    'archive.picksTitle': "DaveyNFTs' Picks",
+    'archive.picksLabel': 'Full Feed',
+    'archive.picksTitle': 'Deep Dive Zone',
     'archive.picksSubtitle': 'Every curated news, blog post, and X thread — the complete collection.',
     'archive.activePicksStat': 'Active Picks',
-    'archive.xThread': '𝕏 Thread',
+    'archive.xThread': 'X Thread',
     'archive.noPicks': 'No picks yet',
     'archive.picksAdminHint': 'Posts added through the admin panel will appear here.',
     'archive.allPicks': 'All Picks',
-    'archive.xThreadPicks': '𝕏 Thread Picks',
+    'archive.xThreadPicks': 'X Thread Picks',
     'archive.noPosts': 'No {filter} posts',
     'archive.tryFilter': 'Try a different filter or add posts from the admin panel.',
-    'archive.newsLabel': '📰 News',
-    'archive.blogLabel': '✍️ Blog',
-    'archive.xLabel': '𝕏 X Thread',
+    'archive.newsLabel': 'News',
+    'archive.blogLabel': 'Blog',
+    'archive.xLabel': 'X Thread',
 
     // ── Article Detail ────────────────────────────────────────────────────
     'article.editorialPick': '★ Editorial Pick',
@@ -146,6 +146,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     // ── Language Toggle ───────────────────────────────────────────────────
     'lang.en': 'EN',
     'lang.vi': 'VI',
+
+    // ── News Hero ─────────────────────────────────────────────────────────
+    'newshero.editorsChoice': 'Editor\'s choice',
+    'newshero.hotStories': 'Hot stories',
+    'newshero.latestNews': 'Latest News',
+    'newshero.by': 'by',
+    'newshero.noNews': 'No news available',
+    'newshero.waitForMore': 'Wait for more news',
 
     // ── Special Offer ─────────────────────────────────────────────────────
     'so.exclusivePartnerDeals': 'EXCLUSIVE PARTNER DEALS',
@@ -208,7 +216,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     // ── Section Titles ────────────────────────────────────────────────────
     'section.editorialPicks': 'Bài Biên Tập Chọn Lọc',
     'section.latestFeatures': 'Bài Viết Nổi Bật',
-    'section.daveyPicks': 'DaveyNFTs Chọn Lọc',
+    'section.daveyPicks': 'Deep Dive Zone',
     'section.eventsTimeline': 'Sự Kiện & Dòng Thời Gian',
     'section.featuredPosts': 'Bài Đăng Nổi Bật',
     'section.timeline': 'Dòng Thời Gian',
@@ -248,8 +256,8 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Filter ────────────────────────────────────────────────────────────
     'filter.all': 'Tất Cả',
-    'filter.news': 'Tin Tức',
-    'filter.blog': 'Blog',
+    'filter.news': 'Research',
+    'filter.blog': 'Article',
     'filter.x': 'X',
 
     // ── Post Card ─────────────────────────────────────────────────────────
@@ -257,12 +265,12 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Tweet Wall ────────────────────────────────────────────────────────
     'tweet.curatedInsights': 'Thông tin chọn lọc từ cộng đồng crypto',
-    'tweet.all': '🌐 Tất Cả',
-    'tweet.general': '📌 Chung',
-    'tweet.breaking': '🔥 Nóng',
-    'tweet.analysis': '📊 Phân Tích',
-    'tweet.alpha': '💎 Alpha',
-    'tweet.thread': '🧵 Thread',
+    'tweet.all': 'Tất Cả',
+    'tweet.general': 'Chung',
+    'tweet.breaking': 'Nóng',
+    'tweet.analysis': 'Phân Tích',
+    'tweet.alpha': 'Alpha',
+    'tweet.thread': 'Thread',
 
     // ── Archive Pages ─────────────────────────────────────────────────────
     'archive.fullArchive': '✍️ Kho Lưu Trữ',
@@ -325,6 +333,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     // ── Language Toggle ───────────────────────────────────────────────────
     'lang.en': 'EN',
     'lang.vi': 'VI',
+
+    // ── News Hero ─────────────────────────────────────────────────────────
+    'newshero.editorsChoice': 'Biên Tập Chọn',
+    'newshero.hotStories': 'Tin Nóng',
+    'newshero.latestNews': 'Tin Tức Mới Nhất',
+    'newshero.by': 'bởi',
+    'newshero.noNews': 'Không có tin tức',
+    'newshero.waitForMore': 'Đang tải thêm tin...',
 
     // ── Special Offer ─────────────────────────────────────────────────────
     'so.exclusivePartnerDeals': 'ƯU ĐÃI ĐỐI TÁC ĐỘC QUYỀN',

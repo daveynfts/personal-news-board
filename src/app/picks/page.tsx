@@ -6,6 +6,7 @@ import Container from '@/components/Container';
 import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
+import { Pin, Newspaper, Edit3, MessageCircle, Search } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,11 +61,11 @@ export default async function PicksPage({ searchParams }: PageProps) {
 
     const typeTextColor = (type: string) => type === 'X' ? '#fff' : '#000';
 
-    const categories: { label: string; value: FilterType }[] = [
+    const categories: { label: React.ReactNode; value: FilterType }[] = [
         { label: 'All', value: 'all' },
-        { label: '📰 News', value: 'news' },
-        { label: '✍️ Blog', value: 'blog' },
-        { label: '𝕏 X Thread', value: 'x' },
+        { label: <><Newspaper className="inline-block mr-1.5" size={14} /> News</>, value: 'news' },
+        { label: <><Edit3 className="inline-block mr-1.5" size={14} /> Blog</>, value: 'blog' },
+        { label: <><MessageCircle className="inline-block mr-1.5" size={14} /> X Thread</>, value: 'x' },
     ];
 
     return (
@@ -77,7 +78,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                     <div className="archive-hero-content">
                         <Link href="/" className="more-back-btn">← Back to Home</Link>
                         <div style={{ marginTop: '24px' }}>
-                            <span className="more-label">📌 Full Feed</span>
+                            <span className="more-label"><Pin className="inline-block mr-1" size={16} /> Full Feed</span>
                             <h1 className="archive-hero-title">DaveyNFTs&apos; Picks</h1>
                             <p className="archive-hero-subtitle">
                                 Every curated news, blog post, and X thread — the complete collection.
@@ -133,7 +134,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
 
                 {allPosts.length === 0 ? (
                     <div className="more-empty-state">
-                        <div className="more-empty-icon">📌</div>
+                        <div className="more-empty-icon"><Pin size={48} className="opacity-50" /></div>
                         <h2>No picks yet</h2>
                         <p>Posts added through the admin panel will appear here.</p>
                         <Link href="/admin" className="submit-btn" style={{ display: 'inline-block', textDecoration: 'none', marginTop: '24px' }}>Go to Admin</Link>
@@ -154,7 +155,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
 
                             {filteredPosts.length === 0 ? (
                                 <div className="more-empty-state" style={{ padding: '80px 40px' }}>
-                                    <div className="more-empty-icon">🔍</div>
+                                    <div className="more-empty-icon"><Search size={48} className="opacity-50" /></div>
                                     <h2 style={{ fontSize: '1.5rem' }}>No {activeFilter} posts</h2>
                                     <p>Try a different filter or add posts from the admin panel.</p>
                                 </div>

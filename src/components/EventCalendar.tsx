@@ -6,6 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import { useTranslation } from '@/lib/LanguageContext';
+import { Star, MapPin, Clock, CalendarIcon as Calendar, Users } from 'lucide-react';
 
 interface EventCalendarProps {
     events: CalendarEvent[];
@@ -15,18 +16,17 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
     const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
-    const orbRef = useRef<HTMLDivElement>(null);
-    const mousePos = useRef({ x: 0, y: 0 });
-    const orbPos = useRef({ x: 0, y: 0 });
-    const rafRef = useRef<number>(null);
-    const isHovering = useRef(false);
     const { t, locale } = useTranslation();
 
     // Filter events
     const now = new Date();
 
-    const upcomingEvents = events.filter(e => new Date(e.date) >= now).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    const pastEvents = events.filter(e => new Date(e.date) < now).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const allUpcoming = events.filter(e => new Date(e.date) >= now).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const allPast = events.filter(e => new Date(e.date) < now).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    const MAX_EVENTS = 4;
+    const upcomingEvents = allUpcoming.slice(0, MAX_EVENTS);
+    const pastEvents = allPast.slice(0, MAX_EVENTS);
 
     const featuredEventsList = upcomingEvents.length > 0 ? upcomingEvents : pastEvents;
     
@@ -42,68 +42,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         }, 7000);
         return () => clearInterval(interval);
     }, [featuredEventsList.length]);
-
-    // ── Liquid Glass Orb Animation ──────────────────────────────────────────
-    const animateOrb = useCallback(() => {
-        const lerp = 0.12;
-        orbPos.current.x += (mousePos.current.x - orbPos.current.x) * lerp;
-        orbPos.current.y += (mousePos.current.y - orbPos.current.y) * lerp;
-
-        if (orbRef.current) {
-            orbRef.current.style.transform = `translate(${orbPos.current.x}px, ${orbPos.current.y}px) translate(-50%, -50%)`;
-        }
-
-        rafRef.current = requestAnimationFrame(animateOrb);
-    }, []);
-
-    useEffect(() => {
-        rafRef.current = requestAnimationFrame(animateOrb);
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        };
-    }, [animateOrb]);
-
-    const handleMouseMove = useCallback((e: React.MouseEvent) => {
-        if (!sectionRef.current) return;
-        const rect = sectionRef.current.getBoundingClientRect();
-        mousePos.current.x = e.clientX - rect.left;
-        mousePos.current.y = e.clientY - rect.top;
-
-        // 3D tilt effect on cards
-        const cards = sectionRef.current.querySelectorAll<HTMLElement>('.featured-event-card, .timeline-event-card');
-        cards.forEach(card => {
-            const cardRect = card.getBoundingClientRect();
-            const cardCenterX = cardRect.left + cardRect.width / 2;
-            const cardCenterY = cardRect.top + cardRect.height / 2;
-            const deltaX = (e.clientX - cardCenterX) / cardRect.width;
-            const deltaY = (e.clientY - cardCenterY) / cardRect.height;
-            const dist = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-
-            if (dist < 1.5) {
-                const intensity = Math.max(0, 1 - dist / 1.5);
-                const rotateX = deltaY * intensity * -4;
-                const rotateY = deltaX * intensity * 4;
-                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${1 + intensity * 0.015})`;
-            } else {
-                card.style.transform = '';
-            }
-        });
-    }, []);
-
-    const handleMouseEnter = () => {
-        isHovering.current = true;
-        if (orbRef.current) orbRef.current.style.opacity = '1';
-    };
-
-    const handleMouseLeave = () => {
-        isHovering.current = false;
-        if (orbRef.current) orbRef.current.style.opacity = '0';
-        // Reset all card transforms
-        if (sectionRef.current) {
-            const cards = sectionRef.current.querySelectorAll<HTMLElement>('.featured-event-card, .timeline-event-card');
-            cards.forEach(card => { card.style.transform = ''; });
-        }
-    };
 
     if (events.length === 0) {
         return (
@@ -147,16 +85,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         <section
             className="event-calendar-section"
             ref={sectionRef}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
         >
-            {/* Liquid Glass Orb */}
-            <div ref={orbRef} className="liquid-orb" aria-hidden="true">
-                <div className="liquid-orb-inner" />
-                <div className="liquid-orb-ring" />
-                <div className="liquid-orb-specular" />
-            </div>
 
             <div className="section-header-premium trans-up" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
                 <div>
@@ -180,7 +109,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 <Image src={`${featuredEvent.imageUrl}?t=${featuredEvent.createdAt ? new Date(featuredEvent.createdAt).getTime() : 0}`} alt={featuredEvent.title} fill style={{ objectFit: 'cover' }} unoptimized />
                             ) : (
                                 <div className="event-image-placeholder">
-                                    <span>📅</span>
+                                    <Calendar size={32} className="opacity-50" />
                                 </div>
                             )}
                             <div className="event-date-badge">
@@ -190,8 +119,8 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                         </div>
                         <div className="event-info">
                             <div className="event-info-header">
-                                <div className="event-type-badge">
-                                    <span>⭐</span> {t('events.featuredEvent')}
+                                <div className="event-type-badge flex items-center gap-1">
+                                    <Star size={14} className="text-yellow-400 fill-yellow-400" /> {t('events.featuredEvent')}
                                 </div>
                                 {featuredEventsList.length > 1 && (
                                     <div className="featured-controls">
@@ -204,20 +133,22 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                     </div>
                                 )}
                             </div>
-                            <h3 className="event-title">
-                                {featuredEvent.title}
-                            </h3>
+                            <div className="inline-flex items-center px-6 py-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg auto-shine glass-shine mb-6">
+                                <h3 className="event-title relative z-10 text-white" style={{ marginBottom: 0, marginTop: 0 }}>
+                                    {featuredEvent.title}
+                                </h3>
+                            </div>
                             <div className="event-desc-markdown">
                                 <ReactMarkdown>
                                     {featuredEvent.description || t('events.noDescription')}
                                 </ReactMarkdown>
                             </div>
                             <div className="event-meta-premium">
-                                <div className="meta-item-badge">
-                                    📍 <span>{featuredEvent.location || t('events.online')}</span>
+                                <div className="meta-item-badge flex items-center gap-1.5">
+                                    <MapPin size={14} className="text-red-400" /> <span>{featuredEvent.location || t('events.online')}</span>
                                 </div>
-                                <div className="meta-item-badge">
-                                    ⏰ <span>{formatDate(featuredEvent.date).time}</span>
+                                <div className="meta-item-badge flex items-center gap-1.5">
+                                    <Clock size={14} className="text-blue-400" /> <span>{formatDate(featuredEvent.date).time}</span>
                                 </div>
                             </div>
                             {featuredEvent.link && (
@@ -242,7 +173,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     <div className="timeline-wrapper">
                         {displayEvents.length === 0 ? (
                             <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
-                                <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>📅</div>
+                                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}><Calendar size={48} className="opacity-50" /></div>
                                 <p style={{ color: 'var(--text-secondary)' }}>{activeTab === 'upcoming' ? t('events.noUpcoming') : t('events.noPast')}</p>
                             </div>
                         ) : (
@@ -261,11 +192,11 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                         {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </div>
                                                     <div className="timeline-event-title">{event.title}</div>
-                                                    <div className="timeline-event-host">
-                                                        🤝 <span>{t('events.byDavey')}</span>
+                                                    <div className="timeline-event-host flex items-center gap-1.5">
+                                                        <Users size={12} className="text-gray-400" /> <span>{t('events.byDavey')}</span>
                                                     </div>
-                                                    <div className="timeline-event-location">
-                                                        📍 {event.location || t('events.onlineLink')}
+                                                    <div className="timeline-event-location flex items-center gap-1.5 mt-1">
+                                                        <MapPin size={12} className="text-red-400" /> {event.location || t('events.onlineLink')}
                                                     </div>
                                                     <div className="timeline-event-actions">
                                                         <div className={`status-badge ${activeTab === 'upcoming' ? 'going' : 'past'}`}>

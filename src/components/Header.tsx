@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Container from './Container';
 import LanguageToggle from './LanguageToggle';
 import { useTranslation } from '@/lib/LanguageContext';
+import { Pin, Edit3, Calendar, Gift, Search, Sparkles } from 'lucide-react';
 
 interface SearchResult {
     id: number;
@@ -190,11 +191,11 @@ export default function Header() {
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, []);
 
-  const typeConfig: Record<string, { icon: string; color: string }> = {
-    post: { icon: '📌', color: 'var(--accent-color)' },
-    article: { icon: '✍️', color: 'var(--blog-color)' },
-    event: { icon: '📅', color: '#10b981' },
-    offer: { icon: '🎁', color: '#f0b90b' },
+  const typeConfig: Record<string, { icon: React.ReactNode; color: string }> = {
+    post: { icon: <Pin size={14} />, color: 'var(--accent-color)' },
+    article: { icon: <Edit3 size={14} />, color: 'var(--blog-color)' },
+    event: { icon: <Calendar size={14} />, color: '#10b981' },
+    offer: { icon: <Gift size={14} />, color: '#f0b90b' },
   };
 
   const highlightMatch = (text: string, q: string) => {
@@ -236,7 +237,7 @@ export default function Header() {
             </div>
             <nav className="main-nav">
               <Link href="/special-offer" className="nav-link nav-link-special">
-                <span className="nav-special-icon">✨</span>
+                <span className="nav-special-icon"><Sparkles size={16} /></span>
                 {t('nav.specialOffer')}
               </Link>
               <button
@@ -334,7 +335,7 @@ export default function Header() {
             {query.length >= 2 && results.length === 0 && !isLoading && (
               <div className="search-overlay-results">
                 <div className="search-no-results">
-                  <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px', color: 'rgba(255,255,255,0.5)' }}><Search size={32} /></div>
                   <p>{t('search.noResults')} &quot;{query}&quot;</p>
                   <span>{t('search.tryDifferent')}</span>
                 </div>

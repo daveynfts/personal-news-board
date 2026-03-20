@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --bg-color: #030305;
   --surface-color: rgba(255, 255, 255, 0.04);
@@ -1333,7 +1337,12 @@ a {
   animation: scroll-left-to-right 50s linear infinite;
 }
 
-.marquee-wrapper:hover .left-to-right {
+.right-to-left {
+  animation: scroll-right-to-left 50s linear infinite;
+}
+
+.marquee-wrapper:hover .left-to-right,
+.marquee-wrapper:hover .right-to-left {
   animation-play-state: paused;
 }
 
@@ -1364,13 +1373,13 @@ a {
 }
 
 @keyframes scroll-left-to-right {
-  0% {
-    transform: translateX(calc(-50% - 20px));
-  }
+  0% { transform: translateX(calc(-50% - 20px)); }
+  100% { transform: translateX(0); }
+}
 
-  100% {
-    transform: translateX(0);
-  }
+@keyframes scroll-right-to-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 20px)); }
 }
 
 .post-card {
@@ -1388,7 +1397,7 @@ a {
   flex-direction: column;
   height: 100%;
   position: relative;
-  width: 380px;
+  width: 320px;
   flex-shrink: 0;
 }
 
@@ -1434,7 +1443,7 @@ a {
 
 .post-card-media {
   width: 100%;
-  height: 250px;
+  height: 200px;
   position: relative;
   overflow: hidden;
   background: #080a0e;
@@ -1470,6 +1479,21 @@ a {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.4);
 }
 
+.post-card-label {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid;
+  border-top-color: rgba(255,255,255,0.5) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
 
 .post-card-body {
   padding: 24px;
@@ -3557,7 +3581,7 @@ a {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 24px; /* Tighter gap for better visual connection */
-  align-items: flex-start; /* Don't stretch by default to avoid dead space */
+  align-items: stretch; /* Stretch left column to match right column height */
 }
 
 @media (max-width: 1200px) {
@@ -3587,14 +3611,6 @@ a {
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   position: relative;
   z-index: 10;
-}
-
-
-
-
-.featured-event-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--accent-color);
 }
 
 .featured-event-card .event-image {
@@ -3656,6 +3672,8 @@ a {
 .featured-event-card .event-info {
   padding: 32px; /* Matched with upcoming-events-list padding */
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -6016,19 +6034,42 @@ select.form-input {
 
 /* Nav link special */
 .nav-link-special {
-  background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.1) 100%) !important;
-  border: 1px solid rgba(99,102,241,0.2) !important;
-  animation: nav-special-glow 3s ease-in-out infinite;
+  background: linear-gradient(135deg, rgba(240, 185, 11, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+  border: 1px solid rgba(240, 185, 11, 0.25) !important;
+  color: #fce28b !important;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2) !important;
+  backdrop-filter: blur(12px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(150%) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px !important;
+  position: relative;
+  overflow: hidden;
+  animation: nav-special-glow 4s ease-in-out infinite;
+}
+
+.nav-link-special::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  animation: shine 4s infinite 2s;
 }
 
 @keyframes nav-special-glow {
-  0%, 100% { box-shadow: 0 0 8px rgba(99,102,241,0.2); }
-  50% { box-shadow: 0 0 20px rgba(168,85,247,0.35); }
+  0%, 100% { box-shadow: 0 0 10px rgba(240, 185, 11, 0.15), inset 0 1px 1px rgba(255,255,255,0.2) !important; }
+  50% { box-shadow: 0 0 25px rgba(240, 185, 11, 0.35), inset 0 1px 1px rgba(255,255,255,0.3) !important; }
 }
 
 .nav-link-special:hover {
-  background: linear-gradient(135deg, rgba(99,102,241,0.25) 0%, rgba(168,85,247,0.2) 100%) !important;
-  border-color: rgba(99,102,241,0.4) !important;
+  background: linear-gradient(135deg, rgba(240, 185, 11, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%) !important;
+  border-color: rgba(240, 185, 11, 0.5) !important;
+  transform: translateY(-1px);
 }
 
 /* Page Container */
@@ -8639,4 +8680,44 @@ select.form-input {
   border-radius: 12px !important;
 }
 
-
+/* ── Glass Pill Shine Effects (Global) ── */
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+.glass-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-25deg);
+  transition: all 0.7s ease;
+  pointer-events: none;
+}
+.glass-shine:hover::after {
+  left: 200%;
+}
+@keyframes auto-shine-anim {
+  0% { left: -200%; }
+  35% { left: 200%; }
+  100% { left: 200%; }
+}
+.auto-shine {
+  position: relative;
+  overflow: hidden;
+}
+.auto-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 250%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.05) 70%, transparent 100%);
+  transform: skewX(-25deg);
+  animation: auto-shine-anim 8s infinite ease-in-out;
+  pointer-events: none;
+}

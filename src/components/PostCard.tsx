@@ -40,9 +40,17 @@ export default function PostCard({ post }: { post: Post }) {
 
     return (
         <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card">
-            <div className="post-card-media">
-                <div className="type-tag" style={{ borderLeft: `4px solid ${typeColor}` }}>
-                    {post.type}
+            <div className="post-card-media relative">
+                <div 
+                    className="absolute top-4 left-4 z-10 post-card-label auto-shine glass-shine"
+                    style={{
+                        background: `linear-gradient(135deg, ${typeColor}70 0%, rgba(0,0,0,0.8) 100%)`,
+                        borderColor: `${typeColor}80`
+                    }}
+                >
+                    <span className="align-middle inline-block mt-[1px] tracking-[0.1em] drop-shadow-md relative z-10">
+                        {post.type === 'News' ? t('filter.news') : post.type === 'Blog' ? t('filter.blog') : post.type}
+                    </span>
                 </div>
                 <Image
                     src={displayImg}

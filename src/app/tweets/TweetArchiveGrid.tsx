@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { Tweet } from 'react-tweet';
 import Link from 'next/link';
+import { Globe, Pin, Flame, BarChart2, Diamond, List, X } from 'lucide-react';
 
 interface TweetData {
-    id: number;
+    id: string | number;
     tweetId: string;
     label: string;
     category: string;
@@ -18,12 +19,24 @@ export default function TweetArchiveGrid({ tweets }: { tweets: TweetData[] }) {
     const filtered = filter === 'all' ? tweets : tweets.filter(tw => tw.category === filter);
 
     const categoryLabels: Record<string, string> = {
-        all: '🌐 All',
-        general: '📌 General',
-        breaking: '🔥 Breaking',
-        analysis: '📊 Analysis',
-        alpha: '💎 Alpha',
-        thread: '🧵 Thread',
+        all: 'All',
+        general: 'General',
+        breaking: 'Breaking',
+        analysis: 'Analysis',
+        alpha: 'Alpha',
+        thread: 'Thread',
+    };
+
+    const CategoryIcon = ({ type }: { type: string }) => {
+        switch (type) {
+            case 'all': return <Globe size={14} className="mr-1.5 inline-block text-gray-300" />;
+            case 'general': return <Pin size={14} className="mr-1.5 inline-block text-accent-color" />;
+            case 'breaking': return <Flame size={14} className="mr-1.5 inline-block text-orange-500" />;
+            case 'analysis': return <BarChart2 size={14} className="mr-1.5 inline-block text-purple-400" />;
+            case 'alpha': return <Diamond size={14} className="mr-1.5 inline-block text-blue-400" />;
+            case 'thread': return <List size={14} className="mr-1.5 inline-block text-gray-400" />;
+            default: return null;
+        }
     };
 
     return (
@@ -40,17 +53,17 @@ export default function TweetArchiveGrid({ tweets }: { tweets: TweetData[] }) {
                         <button
                             key={cat}
                             onClick={() => setFilter(cat)}
-                            className={`tweet-filter-btn ${filter === cat ? 'active' : ''}`}
+                            className={`tweet-filter-btn ${filter === cat ? 'active' : ''} flex items-center!`}
                         >
-                            {categoryLabels[cat] || cat}
+                            <CategoryIcon type={cat} /> {categoryLabels[cat] || cat}
                         </button>
                     ))}
                 </div>
             )}
 
             {filtered.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '80px 40px', opacity: 0.5 }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>𝕏</div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 40px', opacity: 0.5 }}>
+                    <X size={48} className="text-gray-500 mb-4" />
                     <p style={{ color: 'var(--text-secondary)' }}>No posts found.</p>
                 </div>
             ) : (

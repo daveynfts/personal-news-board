@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Container from '@/components/Container';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
+import { Pin, Edit3, Calendar } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 type ContentItem = {
-    id: number;
+    id: string | number;
     type: 'post' | 'article' | 'event';
     title: string;
     subtitle?: string;
@@ -185,8 +186,8 @@ export default async function MorePage() {
                                                 </div>
                                             ) : (
                                                 <div className="more-card-image more-card-image-placeholder">
-                                                    <span style={{ fontSize: '2.5rem', opacity: 0.3 }}>
-                                                        {item.type === 'post' ? '📌' : item.type === 'article' ? '✍️' : '📅'}
+                                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, width: '100%', height: '100%' }}>
+                                                        {item.type === 'post' ? <Pin size={48} /> : item.type === 'article' ? <Edit3 size={48} /> : <Calendar size={48} />}
                                                     </span>
                                                 </div>
                                             )}

@@ -1,134 +1,19 @@
-import { createClient, type InValue } from '@libsql/client';
+import { sanityClient } from '@/sanity/lib/client';
+import { urlForImage } from '@/sanity/lib/image';
 
-// Connect to the Turso database
-// In Vercel, these must be set in Environment Variables
-const url = process.env.TURSO_DATABASE_URL || 'file:data/database.sqlite';
-const authToken = process.env.TURSO_AUTH_TOKEN;
-
-export const db = createClient({
-    url,
-    authToken,
-});
-
-// Initialize the posts table
-async function initDb() {
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        type TEXT NOT NULL,
-        title TEXT NOT NULL,
-        url TEXT NOT NULL,
-        imageUrl TEXT,
-        isMore BOOLEAN DEFAULT 0,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS articles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        coverImage TEXT,
-        xSourceUrl TEXT,
-        isEditorialPick BOOLEAN DEFAULT 0,
-        isMore BOOLEAN DEFAULT 0,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT,
-        date TEXT NOT NULL,
-        location TEXT,
-        link TEXT,
-        imageUrl TEXT,
-        timelineImageUrl TEXT,
-        isMore BOOLEAN DEFAULT 0,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS exchanges (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        badge TEXT,
-        badgeColor TEXT DEFAULT '#f0b90b',
-        bonus TEXT,
-        gradient TEXT,
-        glowColor TEXT,
-        logo TEXT DEFAULT '🟡',
-        features TEXT DEFAULT '[]',
-        link TEXT DEFAULT '#',
-        sortOrder INTEGER DEFAULT 0,
-        isVisible BOOLEAN DEFAULT 1,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS crypto_events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        platform TEXT NOT NULL,
-        platformIcon TEXT DEFAULT '🟡',
-        platformColor TEXT DEFAULT '#f0b90b',
-        eventType TEXT DEFAULT 'Launchpool',
-        tokenSymbol TEXT NOT NULL,
-        tokenName TEXT,
-        description TEXT,
-        status TEXT DEFAULT 'upcoming',
-        endDate TEXT,
-        totalRewards TEXT,
-        stakingAssets TEXT DEFAULT '[]',
-        apr TEXT,
-        tags TEXT DEFAULT '[]',
-        ctaLink TEXT DEFAULT '#',
-        sortOrder INTEGER DEFAULT 0,
-        isVisible BOOLEAN DEFAULT 1,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS embedded_tweets (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tweetId TEXT NOT NULL,
-        label TEXT,
-        category TEXT DEFAULT 'general',
-        sortOrder INTEGER DEFAULT 0,
-        isVisible BOOLEAN DEFAULT 1,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS site_settings (
-        key TEXT PRIMARY KEY,
-        value TEXT NOT NULL DEFAULT ''
-      )
-    `);
-
-    // Migrations for existing databases
-    const migrations = [
-        'ALTER TABLE events ADD COLUMN timelineImageUrl TEXT',
-        'ALTER TABLE posts ADD COLUMN isMore BOOLEAN DEFAULT 0',
-        'ALTER TABLE articles ADD COLUMN isMore BOOLEAN DEFAULT 0',
-        'ALTER TABLE events ADD COLUMN isMore BOOLEAN DEFAULT 0',
-    ];
-    for (const sql of migrations) {
-        try { await db.execute(sql); } catch { /* Ignore if column already exists */ }
-    }
+// Helper to Safely Generate Image URL
+function getImageUrl(source: any): string {
+  if (!source) return '';
+  try {
+    return urlForImage(source)?.url() || '';
+  } catch (e) {
+    return '';
+  }
 }
 
-// Fire and forget initialization for simpler entry
-initDb().catch(err => console.error('Database initialization failed:', err));
-
+// --- POSTS ---
 export interface Post {
-    id?: number;
+    id?: string | number;
     type: string;
     title: string;
     url: string;
@@ -138,165 +23,193 @@ export interface Post {
 }
 
 export async function getAllPosts(): Promise<Post[]> {
-    const result = await db.execute('SELECT * FROM posts ORDER BY createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        type: String(row.type),
-        title: String(row.title),
-        url: String(row.url),
-        imageUrl: String(row.imageUrl || ''),
-        isMore: Number(row.isMore) === 1,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "post"] | order(publishedAt desc)`;
+    const posts = await sanityClient.fetch(query);
+    return posts.map((p: any) => ({
+        id: p._id,
+        type: p.type || 'news',
+        title: p.title,
+        url: p.url,
+        imageUrl: getImageUrl(p.imageUrl),
+        isMore: p.isMore || false,
+        createdAt: p.publishedAt,
     }));
 }
 
 export async function getMorePosts(): Promise<Post[]> {
-    const result = await db.execute('SELECT * FROM posts WHERE isMore = 1 ORDER BY createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        type: String(row.type),
-        title: String(row.title),
-        url: String(row.url),
-        imageUrl: String(row.imageUrl || ''),
+    const query = `*[_type == "post" && isMore == true] | order(publishedAt desc)`;
+    const posts = await sanityClient.fetch(query);
+    return posts.map((p: any) => ({
+        id: p._id,
+        type: p.type || 'news',
+        title: p.title,
+        url: p.url,
+        imageUrl: getImageUrl(p.imageUrl),
         isMore: true,
-        createdAt: String(row.createdAt || ''),
+        createdAt: p.publishedAt,
     }));
 }
 
-export async function togglePostMore(id: number, isMore: boolean): Promise<boolean> {
-    const result = await db.execute({
-        sql: 'UPDATE posts SET isMore = ? WHERE id = ?',
-        args: [isMore ? 1 : 0, id]
-    });
-    return result.rowsAffected > 0;
+export async function togglePostMore(id: string, isMore: boolean): Promise<boolean> {
+    try {
+        await sanityClient.patch(id).set({ isMore }).commit();
+        return true;
+    } catch { return false; }
 }
 
-export async function createPost(post: Omit<Post, 'id' | 'createdAt'>): Promise<number> {
-    const result = await db.execute({
-        sql: 'INSERT INTO posts (type, title, url, imageUrl, isMore) VALUES (?, ?, ?, ?, ?)',
-        args: [post.type, post.title, post.url, post.imageUrl || '', post.isMore ? 1 : 0]
+export async function createPost(post: Omit<Post, 'id' | 'createdAt'>): Promise<string> {
+    const result = await sanityClient.create({
+        _type: 'post',
+        ...post,
+        publishedAt: new Date().toISOString()
     });
-    return Number(result.lastInsertRowid || 0);
+    return result._id;
 }
 
-export async function deletePost(id: number): Promise<boolean> {
-    const result = await db.execute({
-        sql: 'DELETE FROM posts WHERE id = ?',
-        args: [id]
-    });
-    return result.rowsAffected > 0;
+export async function deletePost(id: string): Promise<boolean> {
+    try { await sanityClient.delete(id); return true; } catch { return false; }
 }
 
 // --- ARTICLES ---
 
 export interface Article {
-    id?: number;
+    id?: string | number;
     title: string;
-    content: string;
+    content: any; // Updated to accept block content array from Sanity or string
     coverImage?: string;
+    category?: string;
+    authorName?: string;
     xSourceUrl?: string;
     isEditorialPick: boolean;
+    isHotStory?: boolean;
     isMore?: boolean;
     createdAt?: string;
+    // SEO
+    seo?: any;
+    slug?: string;
 }
 
 export async function getAllArticles(): Promise<Article[]> {
-    const result = await db.execute('SELECT * FROM articles ORDER BY createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        title: String(row.title),
-        content: String(row.content),
-        coverImage: String(row.coverImage || ''),
-        xSourceUrl: String(row.xSourceUrl || ''),
-        isEditorialPick: Number(row.isEditorialPick) === 1,
-        isMore: Number(row.isMore) === 1,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "article"] | order(publishedAt desc)`;
+    const articles = await sanityClient.fetch(query);
+    return articles.map((a: any) => ({
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        coverImage: getImageUrl(a.coverImage),
+        category: a.category,
+        authorName: a.authorName,
+        xSourceUrl: a.xSourceUrl,
+        isEditorialPick: a.isEditorialPick || false,
+        isHotStory: a.isHotStory || false,
+        isMore: a.isMore || false,
+        createdAt: a.publishedAt,
+        seo: a.seo ? {
+            ...a.seo,
+            openGraphImage: getImageUrl(a.seo.openGraphImage)
+        } : undefined,
+        slug: a.slug?.current
     }));
 }
 
 export async function getMoreArticles(): Promise<Article[]> {
-    const result = await db.execute('SELECT * FROM articles WHERE isMore = 1 ORDER BY createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        title: String(row.title),
-        content: String(row.content),
-        coverImage: String(row.coverImage || ''),
-        xSourceUrl: String(row.xSourceUrl || ''),
-        isEditorialPick: Number(row.isEditorialPick) === 1,
+    const query = `*[_type == "article" && isMore == true] | order(publishedAt desc)`;
+    const articles = await sanityClient.fetch(query);
+    return articles.map((a: any) => ({
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        coverImage: getImageUrl(a.coverImage),
+        xSourceUrl: a.xSourceUrl,
+        isEditorialPick: a.isEditorialPick || false,
         isMore: true,
-        createdAt: String(row.createdAt || ''),
+        createdAt: a.publishedAt,
+        seo: a.seo ? {
+            ...a.seo,
+            openGraphImage: getImageUrl(a.seo.openGraphImage)
+        } : undefined,
+        slug: a.slug?.current
     }));
 }
 
-export async function toggleArticleMore(id: number, isMore: boolean): Promise<boolean> {
-    const result = await db.execute({
-        sql: 'UPDATE articles SET isMore = ? WHERE id = ?',
-        args: [isMore ? 1 : 0, id]
-    });
-    return result.rowsAffected > 0;
+export async function toggleArticleMore(id: string, isMore: boolean): Promise<boolean> {
+    try { await sanityClient.patch(id).set({ isMore }).commit(); return true; } catch { return false; }
 }
 
-export async function getArticleById(id: number): Promise<Article | null> {
-    const result = await db.execute({
-        sql: 'SELECT * FROM articles WHERE id = ?',
-        args: [id]
-    });
-
-    if (result.rows.length === 0) return null;
-
-    const row = result.rows[0];
+// Accept both numeric string (old sqlite) or sanity strict id for fallback
+export async function getArticleById(id: string | number): Promise<Article | null> {
+    const query = `*[_type == "article" && (_id == $id || slug.current == $id)] [0]`;
+    const a = await sanityClient.fetch(query, { id: String(id) });
+    if (!a) return null;
     return {
-        id: Number(row.id),
-        title: String(row.title),
-        content: String(row.content),
-        coverImage: String(row.coverImage || ''),
-        xSourceUrl: String(row.xSourceUrl || ''),
-        isEditorialPick: Number(row.isEditorialPick) === 1,
-        isMore: Number(row.isMore) === 1,
-        createdAt: String(row.createdAt || ''),
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        coverImage: getImageUrl(a.coverImage),
+        xSourceUrl: a.xSourceUrl,
+        isEditorialPick: a.isEditorialPick || false,
+        isMore: a.isMore || false,
+        createdAt: a.publishedAt,
+        seo: a.seo ? {
+            ...a.seo,
+            openGraphImage: getImageUrl(a.seo.openGraphImage)
+        } : undefined,
+        slug: a.slug?.current
     };
 }
 
-export async function createArticle(article: Omit<Article, 'id' | 'createdAt'>): Promise<number> {
-    const result = await db.execute({
-        sql: 'INSERT INTO articles (title, content, coverImage, xSourceUrl, isEditorialPick, isMore) VALUES (?, ?, ?, ?, ?, ?)',
-        args: [article.title, article.content, article.coverImage || '', article.xSourceUrl || '', article.isEditorialPick ? 1 : 0, article.isMore ? 1 : 0]
+export async function createArticle(article: Omit<Article, 'id' | 'createdAt'>): Promise<string> {
+    const result = await sanityClient.create({
+        _type: 'article',
+        ...article,
+        publishedAt: new Date().toISOString()
     });
-    return Number(result.lastInsertRowid || 0);
+    return result._id;
 }
 
-export async function updateArticle(id: number, article: Partial<Article>): Promise<boolean> {
-    const setClauses: string[] = [];
-    const args: InValue[] = [];
-
-    if (article.title !== undefined) { setClauses.push('title = ?'); args.push(article.title); }
-    if (article.content !== undefined) { setClauses.push('content = ?'); args.push(article.content); }
-    if (article.coverImage !== undefined) { setClauses.push('coverImage = ?'); args.push(article.coverImage); }
-    if (article.xSourceUrl !== undefined) { setClauses.push('xSourceUrl = ?'); args.push(article.xSourceUrl); }
-    if (article.isEditorialPick !== undefined) { setClauses.push('isEditorialPick = ?'); args.push(article.isEditorialPick ? 1 : 0); }
-    if (article.isMore !== undefined) { setClauses.push('isMore = ?'); args.push(article.isMore ? 1 : 0); }
-
-    if (setClauses.length === 0) return false;
-
-    args.push(id);
-    const sql = `UPDATE articles SET ${setClauses.join(', ')} WHERE id = ?`;
-
-    const result = await db.execute({ sql, args });
-    return result.rowsAffected > 0;
+export async function updateArticle(id: string, article: Partial<Article>): Promise<boolean> {
+    try { await sanityClient.patch(id).set(article as any).commit(); return true; } catch { return false; }
 }
 
-export async function deleteArticle(id: number): Promise<boolean> {
-    const result = await db.execute({
-        sql: 'DELETE FROM articles WHERE id = ?',
-        args: [id]
-    });
-    return result.rowsAffected > 0;
+export async function getRelatedArticles(idToExclude: string | number, category?: string, limit: number = 3): Promise<Article[]> {
+    let filter = `_type == "article" && _id != $id && slug.current != $id`;
+    if (category) filter += ` && category == $category`;
+
+    const query = `*[${filter}] | order(publishedAt desc) [0...${limit}]`;
+    let articles = await sanityClient.fetch(query, { id: String(idToExclude), category: category || '' });
+
+    // Fallback if not enough articles in the same category
+    if (category && articles.length < limit) {
+        const remaining = limit - articles.length;
+        const exclusionIds = [String(idToExclude), ...articles.map((a: any) => a._id)];
+        const genericQuery = `*[_type == "article" && !(_id in $exclusionIds)] | order(publishedAt desc) [0...${remaining}]`;
+        const moreArticles = await sanityClient.fetch(genericQuery, { exclusionIds });
+        articles = [...articles, ...moreArticles];
+    }
+
+    return articles.map((a: any) => ({
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        coverImage: getImageUrl(a.coverImage),
+        category: a.category,
+        authorName: a.authorName,
+        isEditorialPick: a.isEditorialPick || false,
+        isHotStory: a.isHotStory || false,
+        isMore: a.isMore || false,
+        createdAt: a.publishedAt,
+        slug: a.slug?.current
+    }));
+}
+
+export async function deleteArticle(id: string): Promise<boolean> {
+    try { await sanityClient.delete(id); return true; } catch { return false; }
 }
 
 // --- EVENTS ---
 
 export interface CalendarEvent {
-    id?: number;
+    id?: string | number;
     title: string;
     description?: string;
     date: string;
@@ -309,87 +222,60 @@ export interface CalendarEvent {
 }
 
 export async function getAllEvents(): Promise<CalendarEvent[]> {
-    const result = await db.execute('SELECT * FROM events ORDER BY date ASC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        title: String(row.title),
-        description: String(row.description || ''),
-        date: String(row.date),
-        location: String(row.location || ''),
-        link: String(row.link || ''),
-        imageUrl: String(row.imageUrl || ''),
-        timelineImageUrl: String(row.timelineImageUrl || ''),
-        isMore: Number(row.isMore) === 1,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "event"] | order(date asc)`;
+    const events = await sanityClient.fetch(query);
+    return events.map((e: any) => ({
+        id: e._id,
+        title: e.title,
+        description: e.description,
+        date: e.date,
+        location: e.location,
+        link: e.link,
+        imageUrl: getImageUrl(e.imageUrl),
+        timelineImageUrl: getImageUrl(e.timelineImageUrl),
+        isMore: e.isMore || false,
+        createdAt: e._createdAt,
     }));
 }
 
 export async function getMoreEvents(): Promise<CalendarEvent[]> {
-    const result = await db.execute('SELECT * FROM events WHERE isMore = 1 ORDER BY createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        title: String(row.title),
-        description: String(row.description || ''),
-        date: String(row.date),
-        location: String(row.location || ''),
-        link: String(row.link || ''),
-        imageUrl: String(row.imageUrl || ''),
-        timelineImageUrl: String(row.timelineImageUrl || ''),
+    const query = `*[_type == "event" && isMore == true] | order(_createdAt desc)`;
+    const events = await sanityClient.fetch(query);
+    return events.map((e: any) => ({
+        id: e._id,
+        title: e.title,
+        description: e.description,
+        date: e.date,
+        location: e.location,
+        link: e.link,
+        imageUrl: getImageUrl(e.imageUrl),
+        timelineImageUrl: getImageUrl(e.timelineImageUrl),
         isMore: true,
-        createdAt: String(row.createdAt || ''),
+        createdAt: e._createdAt,
     }));
 }
 
-export async function toggleEventMore(id: number, isMore: boolean): Promise<boolean> {
-    const result = await db.execute({
-        sql: 'UPDATE events SET isMore = ? WHERE id = ?',
-        args: [isMore ? 1 : 0, id]
-    });
-    return result.rowsAffected > 0;
+export async function toggleEventMore(id: string, isMore: boolean): Promise<boolean> {
+    try { await sanityClient.patch(id).set({ isMore }).commit(); return true; } catch { return false; }
 }
 
-export async function createEvent(event: Omit<CalendarEvent, 'id' | 'createdAt'>): Promise<number> {
-    const result = await db.execute({
-        sql: 'INSERT INTO events (title, description, date, location, link, imageUrl, timelineImageUrl) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        args: [event.title, event.description || '', event.date, event.location || '', event.link || '', event.imageUrl || '', event.timelineImageUrl || '']
-    });
-    return Number(result.lastInsertRowid || 0);
+export async function createEvent(event: Omit<CalendarEvent, 'id' | 'createdAt'>): Promise<string> {
+    const result = await sanityClient.create({ _type: 'event', ...event });
+    return result._id;
 }
 
-export async function updateEvent(id: number, event: Partial<CalendarEvent>): Promise<boolean> {
-    const setClauses: string[] = [];
-    const args: InValue[] = [];
-
-    if (event.title !== undefined) { setClauses.push('title = ?'); args.push(event.title); }
-    if (event.description !== undefined) { setClauses.push('description = ?'); args.push(event.description); }
-    if (event.date !== undefined) { setClauses.push('date = ?'); args.push(event.date); }
-    if (event.location !== undefined) { setClauses.push('location = ?'); args.push(event.location); }
-    if (event.link !== undefined) { setClauses.push('link = ?'); args.push(event.link); }
-    if (event.imageUrl !== undefined) { setClauses.push('imageUrl = ?'); args.push(event.imageUrl); }
-    if (event.timelineImageUrl !== undefined) { setClauses.push('timelineImageUrl = ?'); args.push(event.timelineImageUrl); }
-    if (event.isMore !== undefined) { setClauses.push('isMore = ?'); args.push(event.isMore ? 1 : 0); }
-
-    if (setClauses.length === 0) return false;
-
-    args.push(id);
-    const sql = `UPDATE events SET ${setClauses.join(', ')} WHERE id = ?`;
-
-    const result = await db.execute({ sql, args });
-    return result.rowsAffected > 0;
+export async function updateEvent(id: string, event: Partial<CalendarEvent>): Promise<boolean> {
+    try { await sanityClient.patch(id).set(event as any).commit(); return true; } catch { return false; }
 }
 
-export async function deleteEvent(id: number): Promise<boolean> {
-    const result = await db.execute({
-        sql: 'DELETE FROM events WHERE id = ?',
-        args: [id]
-    });
-    return result.rowsAffected > 0;
+export async function deleteEvent(id: string): Promise<boolean> {
+    try { await sanityClient.delete(id); return true; } catch { return false; }
 }
 
 // --- EXCHANGES (Special Offer page) ---
 
 export interface Exchange {
-    id?: number;
+    id?: string | number;
     name: string;
     badge: string;
     badgeColor: string;
@@ -397,7 +283,7 @@ export interface Exchange {
     gradient: string;
     glowColor: string;
     logo: string;
-    features: string; // JSON array string
+    features: string | any[]; 
     link: string;
     sortOrder: number;
     isVisible: boolean;
@@ -405,80 +291,44 @@ export interface Exchange {
 }
 
 export async function getAllExchanges(): Promise<Exchange[]> {
-    const result = await db.execute('SELECT * FROM exchanges ORDER BY sortOrder ASC, createdAt ASC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        name: String(row.name),
-        badge: String(row.badge || ''),
-        badgeColor: String(row.badgeColor || '#f0b90b'),
-        bonus: String(row.bonus || ''),
-        gradient: String(row.gradient || ''),
-        glowColor: String(row.glowColor || ''),
-        logo: String(row.logo || '🟡'),
-        features: String(row.features || '[]'),
-        link: String(row.link || '#'),
-        sortOrder: Number(row.sortOrder || 0),
-        isVisible: Number(row.isVisible) !== 0,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "exchange"] | order(sortOrder asc, _createdAt asc)`;
+    const exchanges = await sanityClient.fetch(query);
+    return exchanges.map((ex: any) => ({
+        ...ex,
+        id: ex._id,
+        features: JSON.stringify(ex.features || []), // Mock old string format if ui parses it
+        createdAt: ex._createdAt,
     }));
 }
 
 export async function getVisibleExchanges(): Promise<Exchange[]> {
-    const result = await db.execute('SELECT * FROM exchanges WHERE isVisible = 1 ORDER BY sortOrder ASC, createdAt ASC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        name: String(row.name),
-        badge: String(row.badge || ''),
-        badgeColor: String(row.badgeColor || '#f0b90b'),
-        bonus: String(row.bonus || ''),
-        gradient: String(row.gradient || ''),
-        glowColor: String(row.glowColor || ''),
-        logo: String(row.logo || '🟡'),
-        features: String(row.features || '[]'),
-        link: String(row.link || '#'),
-        sortOrder: Number(row.sortOrder || 0),
-        isVisible: true,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "exchange" && isVisible == true] | order(sortOrder asc, _createdAt asc)`;
+    const exchanges = await sanityClient.fetch(query);
+    return exchanges.map((ex: any) => ({
+        ...ex,
+        id: ex._id,
+        features: JSON.stringify(ex.features || []),
+        createdAt: ex._createdAt,
     }));
 }
 
-export async function createExchange(ex: Omit<Exchange, 'id' | 'createdAt'>): Promise<number> {
-    const result = await db.execute({
-        sql: 'INSERT INTO exchanges (name, badge, badgeColor, bonus, gradient, glowColor, logo, features, link, sortOrder, isVisible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        args: [ex.name, ex.badge, ex.badgeColor, ex.bonus, ex.gradient, ex.glowColor, ex.logo, ex.features, ex.link, ex.sortOrder, ex.isVisible ? 1 : 0]
-    });
-    return Number(result.lastInsertRowid || 0);
+export async function createExchange(ex: Omit<Exchange, 'id' | 'createdAt'>): Promise<string> {
+    const result = await sanityClient.create({ _type: 'exchange', ...ex });
+    return result._id;
 }
 
-export async function updateExchange(id: number, ex: Partial<Exchange>): Promise<boolean> {
-    const setClauses: string[] = [];
-    const args: InValue[] = [];
-    if (ex.name !== undefined) { setClauses.push('name = ?'); args.push(ex.name); }
-    if (ex.badge !== undefined) { setClauses.push('badge = ?'); args.push(ex.badge); }
-    if (ex.badgeColor !== undefined) { setClauses.push('badgeColor = ?'); args.push(ex.badgeColor); }
-    if (ex.bonus !== undefined) { setClauses.push('bonus = ?'); args.push(ex.bonus); }
-    if (ex.gradient !== undefined) { setClauses.push('gradient = ?'); args.push(ex.gradient); }
-    if (ex.glowColor !== undefined) { setClauses.push('glowColor = ?'); args.push(ex.glowColor); }
-    if (ex.logo !== undefined) { setClauses.push('logo = ?'); args.push(ex.logo); }
-    if (ex.features !== undefined) { setClauses.push('features = ?'); args.push(ex.features); }
-    if (ex.link !== undefined) { setClauses.push('link = ?'); args.push(ex.link); }
-    if (ex.sortOrder !== undefined) { setClauses.push('sortOrder = ?'); args.push(ex.sortOrder); }
-    if (ex.isVisible !== undefined) { setClauses.push('isVisible = ?'); args.push(ex.isVisible ? 1 : 0); }
-    if (setClauses.length === 0) return false;
-    args.push(id);
-    const result = await db.execute({ sql: `UPDATE exchanges SET ${setClauses.join(', ')} WHERE id = ?`, args });
-    return result.rowsAffected > 0;
+export async function updateExchange(id: string, ex: Partial<Exchange>): Promise<boolean> {
+    try { await sanityClient.patch(id).set(ex as any).commit(); return true; } catch { return false; }
 }
 
-export async function deleteExchange(id: number): Promise<boolean> {
-    const result = await db.execute({ sql: 'DELETE FROM exchanges WHERE id = ?', args: [id] });
-    return result.rowsAffected > 0;
+export async function deleteExchange(id: string): Promise<boolean> {
+    try { await sanityClient.delete(id); return true; } catch { return false; }
 }
 
 // --- CRYPTO EVENTS (Airdrop Radar) ---
 
 export interface CryptoEvent {
-    id?: number;
+    id?: string | number;
     platform: string;
     platformIcon: string;
     platformColor: string;
@@ -486,12 +336,12 @@ export interface CryptoEvent {
     tokenSymbol: string;
     tokenName: string;
     description: string;
-    status: string; // 'live' | 'upcoming' | 'ended'
+    status: string;
     endDate: string;
     totalRewards: string;
-    stakingAssets: string; // JSON array string
+    stakingAssets: string | any[];
     apr: string;
-    tags: string; // JSON array string
+    tags: string | any[];
     ctaLink: string;
     sortOrder: number;
     isVisible: boolean;
@@ -499,94 +349,45 @@ export interface CryptoEvent {
 }
 
 export async function getAllCryptoEvents(): Promise<CryptoEvent[]> {
-    const result = await db.execute('SELECT * FROM crypto_events ORDER BY sortOrder ASC, createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        platform: String(row.platform || ''),
-        platformIcon: String(row.platformIcon || '🟡'),
-        platformColor: String(row.platformColor || '#f0b90b'),
-        eventType: String(row.eventType || 'Launchpool'),
-        tokenSymbol: String(row.tokenSymbol || ''),
-        tokenName: String(row.tokenName || ''),
-        description: String(row.description || ''),
-        status: String(row.status || 'upcoming'),
-        endDate: String(row.endDate || ''),
-        totalRewards: String(row.totalRewards || ''),
-        stakingAssets: String(row.stakingAssets || '[]'),
-        apr: String(row.apr || ''),
-        tags: String(row.tags || '[]'),
-        ctaLink: String(row.ctaLink || '#'),
-        sortOrder: Number(row.sortOrder || 0),
-        isVisible: Number(row.isVisible) !== 0,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "cryptoEvent"] | order(sortOrder asc, _createdAt desc)`;
+    const events = await sanityClient.fetch(query);
+    return events.map((ev: any) => ({
+        ...ev,
+        id: ev._id,
+        stakingAssets: JSON.stringify(ev.stakingAssets || []),
+        tags: JSON.stringify(ev.tags || []),
+        createdAt: ev._createdAt,
     }));
 }
 
 export async function getVisibleCryptoEvents(): Promise<CryptoEvent[]> {
-    const result = await db.execute('SELECT * FROM crypto_events WHERE isVisible = 1 ORDER BY sortOrder ASC, createdAt DESC');
-    return result.rows.map(row => ({
-        id: Number(row.id),
-        platform: String(row.platform || ''),
-        platformIcon: String(row.platformIcon || '🟡'),
-        platformColor: String(row.platformColor || '#f0b90b'),
-        eventType: String(row.eventType || 'Launchpool'),
-        tokenSymbol: String(row.tokenSymbol || ''),
-        tokenName: String(row.tokenName || ''),
-        description: String(row.description || ''),
-        status: String(row.status || 'upcoming'),
-        endDate: String(row.endDate || ''),
-        totalRewards: String(row.totalRewards || ''),
-        stakingAssets: String(row.stakingAssets || '[]'),
-        apr: String(row.apr || ''),
-        tags: String(row.tags || '[]'),
-        ctaLink: String(row.ctaLink || '#'),
-        sortOrder: Number(row.sortOrder || 0),
-        isVisible: true,
-        createdAt: String(row.createdAt || ''),
+    const query = `*[_type == "cryptoEvent" && isVisible == true] | order(sortOrder asc, _createdAt desc)`;
+    const events = await sanityClient.fetch(query);
+    return events.map((ev: any) => ({
+        ...ev,
+        id: ev._id,
+        stakingAssets: JSON.stringify(ev.stakingAssets || []),
+        tags: JSON.stringify(ev.tags || []),
+        createdAt: ev._createdAt,
     }));
 }
 
-export async function createCryptoEvent(ev: Omit<CryptoEvent, 'id' | 'createdAt'>): Promise<number> {
-    const result = await db.execute({
-        sql: 'INSERT INTO crypto_events (platform, platformIcon, platformColor, eventType, tokenSymbol, tokenName, description, status, endDate, totalRewards, stakingAssets, apr, tags, ctaLink, sortOrder, isVisible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        args: [ev.platform, ev.platformIcon, ev.platformColor, ev.eventType, ev.tokenSymbol, ev.tokenName, ev.description, ev.status, ev.endDate, ev.totalRewards, ev.stakingAssets, ev.apr, ev.tags, ev.ctaLink, ev.sortOrder, ev.isVisible ? 1 : 0]
-    });
-    return Number(result.lastInsertRowid || 0);
+export async function createCryptoEvent(ev: Omit<CryptoEvent, 'id' | 'createdAt'>): Promise<string> {
+    const result = await sanityClient.create({ _type: 'cryptoEvent', ...ev });
+    return result._id;
 }
 
-export async function updateCryptoEvent(id: number, ev: Partial<CryptoEvent>): Promise<boolean> {
-    const setClauses: string[] = [];
-    const args: InValue[] = [];
-    if (ev.platform !== undefined) { setClauses.push('platform = ?'); args.push(ev.platform); }
-    if (ev.platformIcon !== undefined) { setClauses.push('platformIcon = ?'); args.push(ev.platformIcon); }
-    if (ev.platformColor !== undefined) { setClauses.push('platformColor = ?'); args.push(ev.platformColor); }
-    if (ev.eventType !== undefined) { setClauses.push('eventType = ?'); args.push(ev.eventType); }
-    if (ev.tokenSymbol !== undefined) { setClauses.push('tokenSymbol = ?'); args.push(ev.tokenSymbol); }
-    if (ev.tokenName !== undefined) { setClauses.push('tokenName = ?'); args.push(ev.tokenName); }
-    if (ev.description !== undefined) { setClauses.push('description = ?'); args.push(ev.description); }
-    if (ev.status !== undefined) { setClauses.push('status = ?'); args.push(ev.status); }
-    if (ev.endDate !== undefined) { setClauses.push('endDate = ?'); args.push(ev.endDate); }
-    if (ev.totalRewards !== undefined) { setClauses.push('totalRewards = ?'); args.push(ev.totalRewards); }
-    if (ev.stakingAssets !== undefined) { setClauses.push('stakingAssets = ?'); args.push(ev.stakingAssets); }
-    if (ev.apr !== undefined) { setClauses.push('apr = ?'); args.push(ev.apr); }
-    if (ev.tags !== undefined) { setClauses.push('tags = ?'); args.push(ev.tags); }
-    if (ev.ctaLink !== undefined) { setClauses.push('ctaLink = ?'); args.push(ev.ctaLink); }
-    if (ev.sortOrder !== undefined) { setClauses.push('sortOrder = ?'); args.push(ev.sortOrder); }
-    if (ev.isVisible !== undefined) { setClauses.push('isVisible = ?'); args.push(ev.isVisible ? 1 : 0); }
-    if (setClauses.length === 0) return false;
-    args.push(id);
-    const result = await db.execute({ sql: `UPDATE crypto_events SET ${setClauses.join(', ')} WHERE id = ?`, args });
-    return result.rowsAffected > 0;
+export async function updateCryptoEvent(id: string, ev: Partial<CryptoEvent>): Promise<boolean> {
+    try { await sanityClient.patch(id).set(ev as any).commit(); return true; } catch { return false; }
 }
 
-export async function deleteCryptoEvent(id: number): Promise<boolean> {
-    const result = await db.execute({ sql: 'DELETE FROM crypto_events WHERE id = ?', args: [id] });
-    return result.rowsAffected > 0;
+export async function deleteCryptoEvent(id: string): Promise<boolean> {
+    try { await sanityClient.delete(id); return true; } catch { return false; }
 }
 
 // ── Embedded Tweets ──
 export interface EmbeddedTweet {
-    id?: number;
+    id?: string | number;
     tweetId: string;
     label?: string;
     category?: string;
@@ -596,70 +397,54 @@ export interface EmbeddedTweet {
 }
 
 export async function getEmbeddedTweets(allIncludingHidden = false): Promise<EmbeddedTweet[]> {
-    // DB initializes at module load
-    const sql = allIncludingHidden
-        ? 'SELECT * FROM embedded_tweets ORDER BY sortOrder ASC, createdAt DESC'
-        : 'SELECT * FROM embedded_tweets WHERE isVisible = 1 ORDER BY sortOrder ASC, createdAt DESC';
-    const result = await db.execute(sql);
-    return result.rows.map(r => ({
-        id: r.id as number,
-        tweetId: r.tweetId as string,
-        label: r.label as string || '',
-        category: r.category as string || 'general',
-        sortOrder: r.sortOrder as number || 0,
-        isVisible: Boolean(r.isVisible),
-        createdAt: r.createdAt as string,
+    const query = allIncludingHidden 
+        ? `*[_type == "embeddedTweet"] | order(sortOrder asc, _createdAt desc)`
+        : `*[_type == "embeddedTweet" && (isVisible == true || !defined(isVisible))] | order(sortOrder asc, _createdAt desc)`;
+    const tweets = await sanityClient.fetch(query);
+    return tweets.map((t: any) => ({
+        id: t._id,
+        tweetId: t.tweetId,
+        label: t.label || '',
+        category: t.category || 'general',
+        sortOrder: t.sortOrder || 0,
+        isVisible: t.isVisible,
+        createdAt: t._createdAt,
     }));
 }
 
-export async function createEmbeddedTweet(tweet: Omit<EmbeddedTweet, 'id' | 'createdAt'>): Promise<number> {
-    // DB initializes at module load
-    const result = await db.execute({
-        sql: 'INSERT INTO embedded_tweets (tweetId, label, category, sortOrder, isVisible) VALUES (?, ?, ?, ?, ?)',
-        args: [tweet.tweetId, tweet.label || '', tweet.category || 'general', tweet.sortOrder || 0, tweet.isVisible !== false ? 1 : 0],
-    });
-    return Number(result.lastInsertRowid);
+export async function createEmbeddedTweet(tweet: Omit<EmbeddedTweet, 'id' | 'createdAt'>): Promise<string> {
+    const result = await sanityClient.create({ _type: 'embeddedTweet', ...tweet });
+    return result._id;
 }
 
-export async function updateEmbeddedTweet(id: number, tweet: Partial<EmbeddedTweet>): Promise<boolean> {
-    // DB initializes at module load
-    const setClauses: string[] = [];
-    const args: InValue[] = [];
-    if (tweet.tweetId !== undefined) { setClauses.push('tweetId = ?'); args.push(tweet.tweetId); }
-    if (tweet.label !== undefined) { setClauses.push('label = ?'); args.push(tweet.label); }
-    if (tweet.category !== undefined) { setClauses.push('category = ?'); args.push(tweet.category); }
-    if (tweet.sortOrder !== undefined) { setClauses.push('sortOrder = ?'); args.push(tweet.sortOrder); }
-    if (tweet.isVisible !== undefined) { setClauses.push('isVisible = ?'); args.push(tweet.isVisible ? 1 : 0); }
-    if (setClauses.length === 0) return false;
-    args.push(id);
-    const result = await db.execute({ sql: `UPDATE embedded_tweets SET ${setClauses.join(', ')} WHERE id = ?`, args });
-    return result.rowsAffected > 0;
+export async function updateEmbeddedTweet(id: string, tweet: Partial<EmbeddedTweet>): Promise<boolean> {
+    try { await sanityClient.patch(id).set(tweet as any).commit(); return true; } catch { return false; }
 }
 
-export async function deleteEmbeddedTweet(id: number): Promise<boolean> {
-    const result = await db.execute({ sql: 'DELETE FROM embedded_tweets WHERE id = ?', args: [id] });
-    return result.rowsAffected > 0;
+export async function deleteEmbeddedTweet(id: string): Promise<boolean> {
+    try { await sanityClient.delete(id); return true; } catch { return false; }
 }
 
 // ── Site Settings ──
 export async function getSiteSetting(key: string): Promise<string> {
-    const result = await db.execute({ sql: 'SELECT value FROM site_settings WHERE key = ?', args: [key] });
-    if (result.rows.length === 0) return '';
-    return String(result.rows[0].value || '');
+    const query = `*[_type == "siteSettings"][0]`;
+    const settings = await sanityClient.fetch(query);
+    return settings ? settings[key] || '' : '';
 }
 
 export async function setSiteSetting(key: string, value: string): Promise<void> {
-    await db.execute({
-        sql: 'INSERT INTO site_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
-        args: [key, value]
-    });
+    try {
+        await sanityClient.patch('siteSettings').set({ [key]: value }).commit();
+    } catch {
+        await sanityClient.createIfNotExists({ _id: 'siteSettings', _type: 'siteSettings', [key]: value });
+    }
 }
 
 export async function getAllSiteSettings(): Promise<Record<string, string>> {
-    const result = await db.execute('SELECT key, value FROM site_settings');
-    const settings: Record<string, string> = {};
-    for (const row of result.rows) {
-        settings[String(row.key)] = String(row.value || '');
-    }
-    return settings;
+     const query = `*[_type == "siteSettings"][0]`;
+     const settings = await sanityClient.fetch(query);
+     if (!settings) return {};
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     const { _id, _type, _rev, _updatedAt, _createdAt, ...rest } = settings;
+     return rest;
 }

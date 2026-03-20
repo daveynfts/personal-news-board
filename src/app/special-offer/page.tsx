@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
 import { useTranslation } from '@/lib/LanguageContext';
+import { Flame, ShieldCheck, Zap, Infinity as InfinityIcon, Gift, Sparkles, Trophy, Check, Circle, Timer, Rocket, CircleDot } from 'lucide-react';
 
 interface ExchangeData {
   name: string;
@@ -138,9 +139,9 @@ export default function SpecialOfferPage() {
           <div className="so-hero-split-layout">
             {/* Left Column */}
             <div className="so-hero-left">
-              <div className="so-hero-badge">
+              <div className="so-hero-badge flex items-center">
                 <span className="so-badge-pulse" />
-                <span>🔥 {t('so.exclusivePartnerDeals')}</span>
+                <span className="flex items-center"><Flame size={16} className="text-orange-500 mr-1.5" /> {t('so.exclusivePartnerDeals')}</span>
               </div>
               <div className="so-hero-title-glass-card">
                 <h1 className="so-hero-title">
@@ -152,14 +153,14 @@ export default function SpecialOfferPage() {
               </p>
               
               <div className="so-trust-inline">
-                <div className="so-trust-badge">
-                  <span>🔒</span> {t('so.trust.verified')}
+                <div className="so-trust-badge flex items-center">
+                  <ShieldCheck size={16} className="text-emerald-400 mr-1.5" /> {t('so.trust.verified')}
                 </div>
-                <div className="so-trust-badge">
-                  <span>⚡</span> {t('so.trust.instant')}
+                <div className="so-trust-badge flex items-center">
+                  <Zap size={16} className="text-yellow-400 mr-1.5" /> {t('so.trust.instant')}
                 </div>
-                <div className="so-trust-badge">
-                  <span>♾️</span> {t('so.trust.lifetime')}
+                <div className="so-trust-badge flex items-center">
+                  <InfinityIcon size={16} className="text-blue-400 mr-1.5" /> {t('so.trust.lifetime')}
                 </div>
               </div>
             </div>
@@ -249,7 +250,7 @@ export default function SpecialOfferPage() {
               </div>
               <div className="so-calc-divider" />
               <div className="so-calc-result-item so-calc-result-savings">
-                <span className="so-calc-result-label">🎉 {t('so.calc.vipDiscount')}</span>
+                <span className="so-calc-result-label flex items-center"><Gift size={16} className="text-purple-400 mr-1.5" /> {t('so.calc.vipDiscount')}</span>
                 <span className="so-calc-result-value so-savings-value">
                   − {formatCurrencyDecimal(standardFee * 0.2)}
                 </span>
@@ -295,10 +296,10 @@ export default function SpecialOfferPage() {
               </div>
             </div>
 
-            <a href="#exchanges" className="so-cta-primary">
-              <span className="so-cta-sparkle">✨</span>
+            <a href="#exchanges" className="so-cta-primary flex items-center justify-center">
+              <Sparkles size={16} className="text-yellow-200 mr-2" />
               {t('so.calc.claimDiscount')}
-              <span className="so-cta-arrow">→</span>
+              <span className="so-cta-arrow ml-2">→</span>
             </a>
               </div>
             </div>
@@ -316,8 +317,8 @@ export default function SpecialOfferPage() {
             <div className="so-ex-orb so-ex-orb-3" />
           </div>
 
-          <div className="so-section-label">
-            <span className="so-section-icon">🏆</span>
+          <div className="so-section-label flex items-center">
+            <Trophy size={18} className="text-yellow-400 mr-2" />
             <span>{t('so.exchange.title')}</span>
           </div>
           <h2 className="so-exchanges-title">
@@ -351,8 +352,8 @@ export default function SpecialOfferPage() {
                 </div>
 
                 {/* Bonus */}
-                <div className="so-exchange-bonus">
-                  <span className="so-bonus-icon">🎁</span>
+                <div className="so-exchange-bonus flex items-center">
+                  <Gift size={16} className="text-pink-400 mr-1.5" />
                   <span className="so-bonus-text">{ex.bonus}</span>
                 </div>
 
@@ -387,14 +388,14 @@ export default function SpecialOfferPage() {
 
           {/* Trust badges */}
           <div className="so-trust-section">
-            <div className="so-trust-badge">
-              <span>🔒</span> {t('so.trust.verified')}
+            <div className="so-trust-badge flex items-center">
+              <ShieldCheck size={16} className="text-emerald-400 mr-1.5" /> {t('so.trust.verified')}
             </div>
-            <div className="so-trust-badge">
-              <span>⚡</span> {t('so.trust.instant')}
+            <div className="so-trust-badge flex items-center">
+              <Zap size={16} className="text-yellow-400 mr-1.5" /> {t('so.trust.instant')}
             </div>
-            <div className="so-trust-badge">
-              <span>♾️</span> {t('so.trust.lifetime')}
+            <div className="so-trust-badge flex items-center">
+              <InfinityIcon size={16} className="text-blue-400 mr-1.5" /> {t('so.trust.lifetime')}
             </div>
           </div>
         </Container>
@@ -443,10 +444,10 @@ export default function SpecialOfferPage() {
               ))}
             </div>
 
-            <Link href="/crypto-events" className="so-radar-cta">
-              <span>🚀</span>
+            <Link href="/crypto-events" className="so-radar-cta flex items-center justify-center">
+              <Rocket size={16} className="text-blue-400 mr-2" />
               {t('so.radar.viewTracker')}
-              <span className="so-cta-arrow">→</span>
+              <span className="so-cta-arrow ml-2">→</span>
             </Link>
           </div>
         </Container>
