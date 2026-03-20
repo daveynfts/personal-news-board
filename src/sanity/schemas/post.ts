@@ -10,7 +10,7 @@ export const postType = defineType({
     { name: 'status', title: 'Trạng thái' }
   ],
   fields: [
-    defineField({ name: 'type', title: 'Post Type', type: 'string', initialValue: 'news', options: { list: ['news', 'video', 'article', 'tweet'] }, group: 'general' }),
+    defineField({ name: 'type', title: 'Post Type', type: 'string', initialValue: 'Research', options: { list: ['Research', 'Article'] }, group: 'general' }),
     defineField({ name: 'title', title: 'Title', type: 'string', validation: Rule => Rule.required(), group: 'general' }),
     defineField({ name: 'url', title: 'Source URL', type: 'url', validation: Rule => Rule.required(), group: 'general' }),
     defineField({ 

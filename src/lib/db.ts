@@ -36,7 +36,7 @@ export async function getAllPosts(): Promise<Post[]> {
     const posts = await sanityClient.fetch(query);
     return posts.map((p: any) => ({
         id: p._id,
-        type: p.type || 'news',
+        type: p.type || 'Research',
         title: p.title,
         url: p.url,
         imageUrl: getImageUrl(p.imageUrl),
@@ -50,7 +50,7 @@ export async function getMorePosts(): Promise<Post[]> {
     const posts = await sanityClient.fetch(query);
     return posts.map((p: any) => ({
         id: p._id,
-        type: p.type || 'news',
+        type: p.type || 'Research',
         title: p.title,
         url: p.url,
         imageUrl: getImageUrl(p.imageUrl),

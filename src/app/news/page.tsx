@@ -11,7 +11,7 @@ export default async function NewsArchivePage() {
   const allArticles = await getAllArticles();
   
   const formattedNews = allPosts
-    .filter(p => p.type.toLowerCase() === 'news')
+    .filter(p => p.type.toLowerCase() === 'news' || p.type.toLowerCase() === 'research')
     .map(p => ({
       id: p.id,
       title: p.title,
