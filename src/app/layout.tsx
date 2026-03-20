@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${beVietnam.variable}`}>
+    <html lang="en" className={`${inter.variable} ${beVietnam.variable}`} suppressHydrationWarning>
       <head>
         {/* WebSite JSON-LD — injected once at root layout level */}
         <script
@@ -35,7 +35,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <LanguageProvider>
           <CryptoTicker />
           <Header />
