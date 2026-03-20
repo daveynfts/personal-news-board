@@ -1,11 +1,20 @@
 import { sanityClient } from '@/sanity/lib/client';
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage, urlForOgImage } from '@/sanity/lib/image';
 
 // Helper to Safely Generate Image URL
 function getImageUrl(source: any): string {
   if (!source) return '';
   try {
     return urlForImage(source)?.url() || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function getOgImageUrl(source: any): string {
+  if (!source) return '';
+  try {
+    return urlForOgImage(source)?.url() || '';
   } catch (e) {
     return '';
   }
@@ -106,7 +115,7 @@ export async function getAllArticles(): Promise<Article[]> {
         createdAt: a.publishedAt,
         seo: a.seo ? {
             ...a.seo,
-            openGraphImage: getImageUrl(a.seo.openGraphImage)
+            openGraphImage: getOgImageUrl(a.seo.openGraphImage)
         } : undefined,
         slug: a.slug?.current
     }));
@@ -126,7 +135,7 @@ export async function getMoreArticles(): Promise<Article[]> {
         createdAt: a.publishedAt,
         seo: a.seo ? {
             ...a.seo,
-            openGraphImage: getImageUrl(a.seo.openGraphImage)
+            openGraphImage: getOgImageUrl(a.seo.openGraphImage)
         } : undefined,
         slug: a.slug?.current
     }));
@@ -152,7 +161,7 @@ export async function getArticleById(id: string | number): Promise<Article | nul
         createdAt: a.publishedAt,
         seo: a.seo ? {
             ...a.seo,
-            openGraphImage: getImageUrl(a.seo.openGraphImage)
+            openGraphImage: getOgImageUrl(a.seo.openGraphImage)
         } : undefined,
         slug: a.slug?.current
     };

@@ -8,5 +8,9 @@ const imageBuilder = createImageUrlBuilder({
 })
 
 export const urlForImage = (source: Image) => {
-  return imageBuilder?.image(source).auto('format').fit('max')
+  return imageBuilder?.image(source).auto('format').fit('max').width(1920)
+}
+
+export const urlForOgImage = (source: Image) => {
+  return imageBuilder?.image(source).auto('format').fit('crop').width(1200).height(630)
 }

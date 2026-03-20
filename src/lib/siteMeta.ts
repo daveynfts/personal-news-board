@@ -7,7 +7,7 @@
 
 export const SITE_META = {
   /** Canonical production URL — no trailing slash */
-  SITE_URL: 'https://personal-news-board.vercel.app',
+  SITE_URL: 'https://daveynfts.com',
 
   /** Site name used in og:site_name and title templates */
   SITE_NAME: 'Personal News Board',
@@ -35,6 +35,7 @@ export const SITE_META = {
 
 /** Helper: build the canonical URL for a given path (must start with '/') */
 export function buildCanonicalUrl(path: string = '/'): string {
+  if (path.startsWith('http')) return path;
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${SITE_META.SITE_URL}${cleanPath}`;
 }
