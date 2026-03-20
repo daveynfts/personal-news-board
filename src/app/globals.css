@@ -5256,14 +5256,14 @@ select.form-input {
 
 /* ======= EVENTS PAGE ======= */
 .archive-events-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
 }
 
 .archive-event-card {
-  display: grid;
-  grid-template-columns: 280px 1fr;
+  display: flex;
+  flex-direction: column;
   border-radius: 20px;
   overflow: hidden;
   background: rgba(255,255,255,0.04);
@@ -5285,7 +5285,7 @@ select.form-input {
 .archive-event-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/10;
+  aspect-ratio: 16/9;
   overflow: hidden;
   background: rgba(255,255,255,0.05);
 }
@@ -5314,8 +5314,8 @@ select.form-input {
 .archive-event-body {
   display: flex;
   align-items: flex-start;
-  gap: 20px;
-  padding: 28px;
+  gap: 16px;
+  padding: 20px;
 }
 
 .archive-event-date-badge {
