@@ -360,7 +360,7 @@ export default function Header() {
                 '--bubble-hue': bubble.hue,
               } as React.CSSProperties}
             >
-              <span>{bubble.text}</span>
+              <span style={{ whiteSpace: 'pre-wrap', textAlign: 'center', display: 'inline-block' }}>{bubble.text}</span>
             </div>
           ))}
         </div>

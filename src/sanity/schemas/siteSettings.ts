@@ -19,8 +19,8 @@ export const siteSettingsType = defineType({
     defineField({ 
       name: 'bubbleText', 
       title: 'Hiệu ứng bong bóng (Bubble Text)', 
-      type: 'string',
-      description: 'Đoạn văn bản sẽ bật bong bóng khi trỏ chuột vào Logo.'
+      type: 'text',
+      description: 'Văn bản hiển thị khi trỏ chuột vào Logo. Có thể bấm Enter để xuống dòng và chèn Emoji tự do (Cửa sổ chat Emoji: Windows + . hoặc Ctrl + Cmd + Space).'
     }),
   ]
 })
