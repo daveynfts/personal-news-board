@@ -8,7 +8,7 @@ export default defineConfig({
   projectId,
   dataset,
   
-  title: 'Personal News Board Studio',
+  title: 'DaveyNFTs Studio',
 
   schema: {
     types: schemaTypes,

@@ -10,10 +10,10 @@ export const SITE_META = {
   SITE_URL: 'https://daveynfts.com',
 
   /** Site name used in og:site_name and title templates */
-  SITE_NAME: 'Personal News Board',
+  SITE_NAME: 'DaveyNFTs Hub',
 
   /** Falls back to this for pages without a custom title */
-  DEFAULT_TITLE: 'Personal News Board | Elite Curation',
+  DEFAULT_TITLE: 'DaveyNFTs Hub | Elite Web3 Curation',
 
   /** Falls back to this for pages without a custom description */
   DEFAULT_DESCRIPTION:
