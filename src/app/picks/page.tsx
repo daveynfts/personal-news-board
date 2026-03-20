@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
     return buildMetadata({
-        title: "DaveyNFTs' Picks",
+        title: "Deep Dive Zone",
         description: "The complete curated feed of news, blog posts, and X threads by DaveyNFTs — all picks, sorted by date.",
         canonicalPath: '/picks',
         type: 'website',
@@ -79,7 +79,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                         <Link href="/" className="more-back-btn">← Back to Home</Link>
                         <div style={{ marginTop: '24px' }}>
                             <span className="more-label"><Pin className="inline-block mr-1" size={16} /> Full Feed</span>
-                            <h1 className="archive-hero-title">DaveyNFTs&apos; Picks</h1>
+                            <h1 className="archive-hero-title">Deep Dive Zone</h1>
                             <p className="archive-hero-subtitle">
                                 Every curated news, blog post, and X thread — the complete collection.
                             </p>

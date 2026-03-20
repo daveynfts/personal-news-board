@@ -1,4 +1,4 @@
-import { getAllPosts } from '@/lib/db';
+import { getAllPosts, getAllArticles } from '@/lib/db';
 import Container from '@/components/Container';
 import NewsGridClient from './NewsGridClient';
 import Link from 'next/link';
@@ -8,9 +8,35 @@ export const dynamic = 'force-dynamic';
 
 export default async function NewsArchivePage() {
   const allPosts = await getAllPosts();
+  const allArticles = await getAllArticles();
   
-  // Lọc lấy các post thuộc type 'news' (Bao gồm cả isMore)
-  const filterNews = allPosts.filter(p => p.type.toLowerCase() === 'news');
+  const formattedNews = allPosts
+    .filter(p => p.type.toLowerCase() === 'news')
+    .map(p => ({
+      id: p.id,
+      title: p.title,
+      url: p.url,
+      imageUrl: p.imageUrl,
+      createdAt: p.createdAt,
+      type: 'Research',
+      isMore: p.isMore
+    }));
+
+  const formattedArticles = allArticles.map(a => ({
+    id: a.id,
+    title: a.title,
+    slug: a.slug,
+    imageUrl: a.coverImage,
+    createdAt: a.createdAt,
+    type: 'Article',
+    isMore: a.isMore
+  }));
+
+  const combinedItems = [...formattedNews, ...formattedArticles].sort((a, b) => {
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return timeB - timeA;
+  });
 
   return (
     <div className="archive-page-container min-h-screen pb-24">
@@ -34,7 +60,7 @@ export default async function NewsArchivePage() {
 
       {/* Grid Content */}
       <Container className="relative z-10 pt-8">
-         <NewsGridClient items={filterNews} />
+         <NewsGridClient items={combinedItems} />
       </Container>
     </div>
   );

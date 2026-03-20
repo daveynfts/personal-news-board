@@ -29,7 +29,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     // ── Section Titles ────────────────────────────────────────────────────
     'section.editorialPicks': 'Editorial Picks',
     'section.latestFeatures': 'Latest Features',
-    'section.daveyPicks': "DaveyNFTs' Picks",
+    'section.daveyPicks': 'Deep Dive Zone',
     'section.eventsTimeline': 'Events & Timeline',
     'section.featuredPosts': 'Featured Posts',
     'section.timeline': 'Timeline',
@@ -299,7 +299,7 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // Picks Archive
     'archive.picksLabel': '📌 Bảng Tin Đầy Đủ',
-    'archive.picksTitle': 'DaveyNFTs Chọn Lọc',
+    'archive.picksTitle': 'Deep Dive Zone',
     'archive.picksSubtitle': 'Mọi tin tức, bài blog và thread X được tuyển chọn — bộ sưu tập đầy đủ.',
     'archive.activePicksStat': 'Đang Hoạt Động',
     'archive.xThread': '𝕏 Thread',

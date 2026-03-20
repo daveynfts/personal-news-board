@@ -33,16 +33,24 @@ export default function NewsHero({
   const [activeTab, setActiveTab] = useState<'editor' | 'hot'>('editor');
   const [currentFeaturedIdx, setCurrentFeaturedIdx] = useState(0);
 
-  const featured = featuredArticles[currentFeaturedIdx];
-  const rightColArticles = activeTab === 'editor' ? editorChoices : hotStories;
+  const currentList = activeTab === 'editor' ? editorChoices : hotStories;
+  const featured = currentList[currentFeaturedIdx] || featuredArticles[currentFeaturedIdx] || featuredArticles[0];
+  const rightColArticles = currentList;
 
   const nextFeatured = () => {
-    if(featuredArticles.length > 0)
-        setCurrentFeaturedIdx((prev) => (prev + 1) % featuredArticles.length);
+    const listLen = currentList.length > 0 ? currentList.length : featuredArticles.length;
+    if(listLen > 0)
+        setCurrentFeaturedIdx((prev) => (prev + 1) % listLen);
   };
   const prevFeatured = () => {
-    if(featuredArticles.length > 0)
-        setCurrentFeaturedIdx((prev) => (prev - 1 + featuredArticles.length) % featuredArticles.length);
+    const listLen = currentList.length > 0 ? currentList.length : featuredArticles.length;
+    if(listLen > 0)
+        setCurrentFeaturedIdx((prev) => (prev - 1 + listLen) % listLen);
+  };
+
+  const handleTabChange = (tab: 'editor' | 'hot') => {
+    setActiveTab(tab);
+    setCurrentFeaturedIdx(0);
   };
 
   return (
@@ -116,7 +124,10 @@ export default function NewsHero({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
         
         {/* LETS COLUMN (2/3): Featured Image Hero */}
-        <div className="lg:col-span-2 relative rounded-2xl overflow-hidden flex flex-col justify-between group h-[400px] md:h-[500px] bg-black/50 shadow-inner ring-1 ring-white/10">
+        <div 
+          onClick={() => { if (featured) window.location.href = `/article/${featured.slug || featured.id}` }}
+          className="lg:col-span-2 relative rounded-2xl overflow-hidden flex flex-col justify-between group h-[400px] md:h-[500px] bg-black/50 shadow-inner ring-1 ring-white/10 cursor-pointer"
+        >
           {featured?.coverImage ? (
             <img 
               src={featured.coverImage} 
@@ -153,10 +164,18 @@ export default function NewsHero({
             
             {/* Nav Arrows */}
             <div className="flex space-x-3 mt-3 sm:mt-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <button onClick={prevFeatured} className="carousel-control" aria-label="Previous">
+              <button 
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); prevFeatured(); }} 
+                className="carousel-control" 
+                aria-label="Previous"
+              >
                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
               </button>
-              <button onClick={nextFeatured} className="carousel-control" aria-label="Next">
+              <button 
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); nextFeatured(); }} 
+                className="carousel-control" 
+                aria-label="Next"
+              >
                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
               </button>
             </div>
@@ -168,14 +187,14 @@ export default function NewsHero({
           {/* Custom Tabs */}
           <div className="flex mb-6 relative bg-black/20 p-1.5 rounded-xl border border-white/10">
             <button 
-              onClick={() => setActiveTab('editor')}
+              onClick={() => handleTabChange('editor')}
               className={`flex-1 py-3 px-2 font-bold text-[15px] transition-all duration-300 rounded-lg relative overflow-hidden glass-shine ${activeTab === 'editor' ? 'bg-white/10 border border-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5'} flex justify-center items-center gap-2`}
             >
               <svg className="w-4 h-4 opacity-80 relative z-10" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" /></svg>
               <span className="relative z-10">{t('newshero.editorsChoice')}</span>
             </button>
             <button 
-              onClick={() => setActiveTab('hot')}
+              onClick={() => handleTabChange('hot')}
               className={`flex-1 py-3 px-2 font-bold text-[15px] transition-all duration-300 rounded-lg relative overflow-hidden glass-shine ${activeTab === 'hot' ? 'bg-white/10 border border-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5'} flex justify-center items-center gap-2`}
             >
               <svg className="w-4 h-4 opacity-80 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
@@ -186,8 +205,13 @@ export default function NewsHero({
           {/* List Content */}
           <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
             {rightColArticles.length > 0 ? rightColArticles.map((article, idx) => (
-              <a href={`/article/${article.slug || article.id}`} key={article.id || idx} className="block group cursor-pointer border-b border-white/10 last:border-0 pb-4">
-                <h3 className={`text-[16px] text-gray-300 group-hover:text-white transition-all duration-300 leading-[1.5] group-hover:drop-shadow-[0_0_6px_rgba(255,255,255,0.5)] ${idx === 1 ? 'font-bold text-gray-100 drop-shadow-sm' : 'font-medium'}`}>
+              <a 
+                href={`/article/${article.slug || article.id}`} 
+                key={article.id || idx} 
+                onMouseEnter={() => setCurrentFeaturedIdx(idx)}
+                className="block group cursor-pointer border-b border-white/10 last:border-0 pb-4"
+              >
+                <h3 className={`text-[16px] transition-all duration-300 leading-[1.5] group-hover:text-white group-hover:drop-shadow-[0_0_6px_rgba(255,255,255,0.5)] ${idx === currentFeaturedIdx ? 'font-bold text-gray-100 drop-shadow-sm' : 'font-medium text-gray-300'}`}>
                   {article.title}
                 </h3>
               </a>
