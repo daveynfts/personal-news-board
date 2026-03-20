@@ -20,9 +20,8 @@ function isValidImageUrl(url?: string): boolean {
 }
 
 export default function PostCard({ post }: { post: Post }) {
-    const isX = post.type === 'X';
-    const isNews = post.type === 'News';
-    const typeColor = isX ? 'var(--x-color)' : isNews ? 'var(--news-color)' : 'var(--blog-color)';
+    const isNews = post.type?.toLowerCase() === 'research' || post.type?.toLowerCase() === 'news';
+    const typeColor = isNews ? 'var(--news-color)' : 'var(--blog-color)';
     const { t, locale } = useTranslation();
 
     // Fallback image if none provided
@@ -49,7 +48,7 @@ export default function PostCard({ post }: { post: Post }) {
                     }}
                 >
                     <span className="align-middle inline-block mt-[1px] tracking-[0.1em] drop-shadow-md relative z-10">
-                        {post.type === 'News' ? t('filter.news') : post.type === 'Blog' ? t('filter.blog') : post.type}
+                        {isNews ? t('filter.news') : t('filter.blog')}
                     </span>
                 </div>
                 <Image

@@ -36,7 +36,7 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Buttons & Actions ─────────────────────────────────────────────────
     'btn.viewAllArticles': 'View All Articles →',
-    'btn.viewAllPicks': 'View All Picks →',
+    'btn.viewAllPicks': 'View All Deep Dive →',
     'btn.viewAllEvents': 'View All Events →',
     'btn.viewAllTweets': 'View All Posts →',
     'btn.readArticle': 'Read Article',
@@ -47,7 +47,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'btn.registerNowArrow': 'Register Now ↗',
     'btn.backToHome': '← Back to Home',
     'btn.backToFeed': 'Back to Feed',
-    'btn.backToAllPicks': '← Back to All Picks',
+    'btn.backToAllPicks': '← Back to All Deep Dive',
     'btn.goToAdmin': 'Go to Admin',
 
     // ── Carousel ──────────────────────────────────────────────────────────
@@ -118,7 +118,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.xThread': 'X Thread',
     'archive.noPicks': 'No picks yet',
     'archive.picksAdminHint': 'Posts added through the admin panel will appear here.',
-    'archive.allPicks': 'All Picks',
+    'archive.allPicks': 'All Deep Dive',
     'archive.xThreadPicks': 'X Thread Picks',
     'archive.noPosts': 'No {filter} posts',
     'archive.tryFilter': 'Try a different filter or add posts from the admin panel.',
@@ -223,7 +223,7 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Buttons & Actions ─────────────────────────────────────────────────
     'btn.viewAllArticles': 'Xem Tất Cả Bài Viết →',
-    'btn.viewAllPicks': 'Xem Tất Cả Picks →',
+    'btn.viewAllPicks': 'Xem Tất Cả Bài Deep Dive →',
     'btn.viewAllEvents': 'Xem Tất Cả Sự Kiện →',
     'btn.viewAllTweets': 'Xem Tất Cả Bài Đăng →',
     'btn.readArticle': 'Đọc Bài Viết',
@@ -234,7 +234,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'btn.registerNowArrow': 'Đăng Ký Ngay ↗',
     'btn.backToHome': '← Về Trang Chủ',
     'btn.backToFeed': 'Về Bảng Tin',
-    'btn.backToAllPicks': '← Về Tất Cả Picks',
+    'btn.backToAllPicks': '← Về Tất Cả Bài Deep Dive',
     'btn.goToAdmin': 'Vào Quản Trị',
 
     // ── Carousel ──────────────────────────────────────────────────────────
@@ -305,7 +305,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.xThread': '𝕏 Thread',
     'archive.noPicks': 'Chưa có picks',
     'archive.picksAdminHint': 'Bài đăng được thêm qua trang quản trị sẽ xuất hiện ở đây.',
-    'archive.allPicks': 'Tất Cả Picks',
+    'archive.allPicks': 'Tất Cả Bài Deep Dive',
     'archive.xThreadPicks': '𝕏 Thread Picks',
     'archive.noPosts': 'Không có bài {filter}',
     'archive.tryFilter': 'Thử bộ lọc khác hoặc thêm bài đăng từ trang quản trị.',

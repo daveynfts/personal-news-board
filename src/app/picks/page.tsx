@@ -33,7 +33,7 @@ function isValidImageUrl(url?: string): boolean {
     return true;
 }
 
-type FilterType = 'all' | 'news' | 'blog' | 'x';
+type FilterType = 'all' | 'research' | 'article';
 
 interface PageProps {
     searchParams: Promise<{ filter?: string }>;
@@ -48,7 +48,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
     const visiblePosts = allPosts.filter(p => !p.isMore);
     const morePosts = allPosts.filter(p => p.isMore);
 
-    const activeFilter = (filter && ['news', 'blog', 'x'].includes(filter.toLowerCase()))
+    const activeFilter = (filter && ['research', 'article'].includes(filter.toLowerCase()))
         ? filter.toLowerCase() as FilterType
         : 'all';
 
@@ -57,15 +57,14 @@ export default async function PicksPage({ searchParams }: PageProps) {
         : visiblePosts.filter(p => p.type.toLowerCase() === activeFilter);
 
     const typeColor = (type: string) =>
-        type === 'X' ? 'var(--x-color)' : type === 'News' ? 'var(--news-color)' : 'var(--blog-color)';
+        type.toLowerCase() === 'research' ? 'var(--news-color)' : 'var(--blog-color)';
 
-    const typeTextColor = (type: string) => type === 'X' ? '#fff' : '#000';
+    const typeTextColor = (type: string) => '#000';
 
     const categories: { label: React.ReactNode; value: FilterType }[] = [
         { label: 'All', value: 'all' },
-        { label: <><Newspaper className="inline-block mr-1.5" size={14} /> News</>, value: 'news' },
-        { label: <><Edit3 className="inline-block mr-1.5" size={14} /> Blog</>, value: 'blog' },
-        { label: <><MessageCircle className="inline-block mr-1.5" size={14} /> X Thread</>, value: 'x' },
+        { label: <><Newspaper className="inline-block mr-1.5" size={14} /> Research</>, value: 'research' },
+        { label: <><Edit3 className="inline-block mr-1.5" size={14} /> Article</>, value: 'article' },
     ];
 
     return (
@@ -92,14 +91,14 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                 <span className="archive-stat-num">{visiblePosts.length}</span>
                                 <span className="archive-stat-label">Active Picks</span>
                             </div>
-                            {['News', 'Blog', 'X'].map(type => {
-                                const count = visiblePosts.filter(p => p.type === type).length;
+                            {['Research', 'Article'].map(type => {
+                                const count = visiblePosts.filter(p => p.type.toLowerCase() === type.toLowerCase()).length;
                                 return count > 0 ? (
                                     <div key={type} style={{ display: 'contents' }}>
                                         <div className="archive-stat-sep" />
                                         <div className="archive-stat">
                                             <span className="archive-stat-num">{count}</span>
-                                            <span className="archive-stat-label">{type === 'X' ? '𝕏 Thread' : type}</span>
+                                            <span className="archive-stat-label">{type}</span>
                                         </div>
                                     </div>
                                 ) : null;
@@ -146,9 +145,8 @@ export default async function PicksPage({ searchParams }: PageProps) {
                             <div className="archive-section-header">
                                 <h2 className="archive-section-title">
                                     <span className="archive-section-dot" style={{ background: 'var(--accent-color)' }} />
-                                    {activeFilter === 'all' ? 'All Picks' :
-                                        activeFilter === 'x' ? '𝕏 Thread Picks' :
-                                            `${activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)} Picks`}
+                                    {activeFilter === 'all' ? 'All Deep Dive' :
+                                            `${activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)}`}
                                 </h2>
                                 <span className="more-month-count">{filteredPosts.length}</span>
                             </div>
