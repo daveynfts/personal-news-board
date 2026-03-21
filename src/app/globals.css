@@ -3285,26 +3285,6 @@ a {
   text-shadow: 0 4px 16px rgba(247,147,26,0.3);
 }
 
-.daveys-take-icon-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 65px;
-  height: 65px;
-  z-index: 2;
-}
-
-.daveys-take-icon {
-  position: relative;
-  z-index: 2;
-  width: 140%;
-  height: 140%;
-  object-fit: cover;
-  mix-blend-mode: screen;
-  animation: glass-pulse 3s ease-in-out infinite;
-}
-
 .daveys-take-content {
   font-size: 1.05rem;
   line-height: 1.6;

@@ -226,13 +226,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     {article.daveysTake && (
                         <div className="daveys-take-box" style={{ marginTop: '60px' }}>
                             <h3 className="daveys-take-title">
-                                <div className="daveys-take-icon-wrapper">
-                                    <img 
-                                        src="/liquid_glass_lightbulb.png" 
-                                        alt="Liquid Glass Lightbulb" 
-                                        className="daveys-take-icon"
-                                    />
-                                </div>
                                 <span className="daveys-take-text">DaveyNFTs' Take</span>
                             </h3>
                             <p className="daveys-take-content">{article.daveysTake}</p>
