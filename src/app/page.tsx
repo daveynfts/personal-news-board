@@ -12,6 +12,7 @@ import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 import { HeroText, SectionHeader, EmptyState } from '@/components/TranslatableText';
 import NewsHero from '@/components/NewsHero';
+import AutoDraggableMarquee from '@/components/AutoDraggableMarquee';
 
 export const dynamic = 'force-dynamic';
 
@@ -121,22 +122,23 @@ export default async function Home({ searchParams }: PageProps) {
           ) : (
             <div className="rainbow-glow-container">
               <div className="marquee-wrapper">
-                <div className="marquee-content left-to-right" style={{ marginBottom: '24px' }}>
+                <AutoDraggableMarquee direction="left" speed={0.5} className="mb-6">
                   {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <PostCard key={post.id} post={post} />
                   ))}
                   {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <PostCard key={`dup-${post.id}`} post={post} />
                   ))}
-                </div>
-                <div className="marquee-content right-to-left">
+                </AutoDraggableMarquee>
+                
+                <AutoDraggableMarquee direction="right" speed={0.5}>
                   {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <PostCard key={post.id} post={post} />
                   ))}
                   {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <PostCard key={`dup-${post.id}`} post={post} />
                   ))}
-                </div>
+                </AutoDraggableMarquee>
               </div>
             </div>
           )}

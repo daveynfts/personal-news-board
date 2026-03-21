@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Tweet } from 'react-tweet';
 import { useTranslation } from '@/lib/LanguageContext';
 import { useSwipe } from '@/hooks/useSwipe';
+import { useAutoDragScroll } from '@/hooks/useAutoDragScroll';
 
 interface EmbeddedTweetData {
     id: number;
@@ -18,8 +19,7 @@ export default function TweetWall() {
     const [filter, setFilter] = useState('all');
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const { scrollRef, setIsPaused } = useAutoDragScroll<HTMLDivElement>({ speed: 0.5, direction: 'left' });
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -135,7 +135,7 @@ export default function TweetWall() {
                     data-theme="dark"
                     ref={scrollRef}
                 >
-                    <div className={`tweet-marquee-track ${isPaused ? 'paused' : ''}`}>
+                    <div className="tweet-marquee-track-js" style={{ display: 'flex', gap: '24px', width: 'max-content', padding: '0 16px' }}>
                         {filtered.map(tw => (
                             <div key={tw.id} className="tweet-wall-card">
                                 {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
