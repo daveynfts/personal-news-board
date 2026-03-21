@@ -58,20 +58,27 @@ export function useAutoDragScroll<T extends HTMLElement>({
         el.addEventListener('mousemove', onMouseMove);
         el.style.cursor = 'grab';
 
+        // Using a persistent fractional accumulator prevents browsers from silently truncating scrollLeft += 0.5 into 0
+        let fractionalScroll = el.scrollLeft;
+
         // Infinite loop auto-scroll logic
         const loop = () => {
             if (!isPaused && !isDown) {
                 if (direction === 'left') {
-                    el.scrollLeft += speed;
-                    if (el.scrollLeft >= el.scrollWidth / 2) {
-                        el.scrollLeft = 0;
+                    fractionalScroll += speed;
+                    if (fractionalScroll >= el.scrollWidth / 2) {
+                        fractionalScroll = 0;
                     }
                 } else {
-                    el.scrollLeft -= speed;
-                    if (el.scrollLeft <= 0) {
-                        el.scrollLeft = el.scrollWidth / 2;
+                    fractionalScroll -= speed;
+                    if (fractionalScroll <= 0) {
+                        fractionalScroll = el.scrollWidth / 2;
                     }
                 }
+                el.scrollLeft = fractionalScroll;
+            } else {
+                // Keep the fraction synced with reality if the user drags or pauses
+                fractionalScroll = el.scrollLeft;
             }
             animationFrameId = requestAnimationFrame(loop);
         };

@@ -34,6 +34,11 @@ export default function TweetWall() {
         const el = scrollRef.current;
         if (!el) return;
         
+        // PAUSE the manual requestAnimationFrame loop temporarily!
+        // Otherwise, rAF will override scrollLeft instantly and cancel the smooth scrolling animation!
+        setIsPaused(true);
+        setTimeout(() => setIsPaused(false), 800);
+        
         const cardWidth = 380;
         
         // Handling infinite loop jumps before smooth scrolling
