@@ -21,7 +21,7 @@ export default function TokenRain() {
 
     return (
         <>
-            {/* Floating Toggle Button */}
+            {/* Floating Toggle Button — BTC Liquid Glass */}
             <button
                 onClick={() => setIsRaining(!isRaining)}
                 style={{
@@ -29,9 +29,12 @@ export default function TokenRain() {
                     bottom: '30px',
                     right: '30px',
                     zIndex: 9999,
-                    background: isRaining ? 'var(--accent-color)' : 'rgba(15, 18, 25, 0.85)',
+                    background: isRaining 
+                      ? 'linear-gradient(135deg, rgba(247,147,26,0.9) 0%, rgba(255,200,50,0.85) 100%)' 
+                      : 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
                     color: isRaining ? '#000' : 'rgba(255, 255, 255, 0.9)',
-                    border: `1.5px solid ${isRaining ? 'var(--accent-color)' : 'rgba(255, 255, 255, 0.25)'}`,
+                    border: `1.5px solid ${isRaining ? 'rgba(247,147,26,0.8)' : 'rgba(255, 255, 255, 0.18)'}`,
+                    borderTopColor: isRaining ? 'rgba(255,220,100,0.9)' : 'rgba(255,255,255,0.35)',
                     padding: '12px',
                     borderRadius: '50%',
                     width: '56px',
@@ -39,16 +42,21 @@ export default function TokenRain() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.5rem',
+                    fontSize: '1.4rem',
+                    fontWeight: 900,
                     cursor: 'pointer',
-                    boxShadow: isRaining ? '0 0 20px rgba(243, 186, 47, 0.5)' : '0 8px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)',
-                    transition: 'all 0.3s ease',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
+                    boxShadow: isRaining 
+                      ? '0 0 30px rgba(247,147,26,0.5), 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.4)' 
+                      : '0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 1px rgba(255,255,255,0.15)',
+                    transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    letterSpacing: '-0.02em',
+                    fontFamily: 'system-ui, -apple-system, sans-serif',
                 }}
                 title={isRaining ? "Stop the Rain" : "Make it Rain Tokens!"}
             >
-                🌧️
+                ₿
             </button>
 
             {/* Rain Container */}

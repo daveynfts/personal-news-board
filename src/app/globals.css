@@ -9067,6 +9067,148 @@ select.form-input {
   .container-glass {
     padding: 0 16px !important;
   }
+
+  /* ── Event Calendar Grid ── */
+  .event-calendar-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* Featured event card */
+  .featured-event-card {
+    border-radius: 20px !important;
+  }
+
+  .featured-event-card .event-info {
+    padding: 20px !important;
+  }
+
+  .featured-event-card h3 {
+    font-size: 1.4rem !important;
+  }
+
+  .event-date-badge {
+    width: 56px !important;
+    height: 56px !important;
+    top: 16px !important;
+    left: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .event-date-badge .day {
+    font-size: 1.4rem !important;
+  }
+
+  .event-date-badge .month {
+    font-size: 0.65rem !important;
+  }
+
+  /* Timeline section */
+  .upcoming-events-list {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .upcoming-events-list .manage-header {
+    margin-bottom: 24px !important;
+  }
+
+  .timeline-section-title {
+    font-size: 1.4rem !important;
+  }
+
+  /* Timeline date column — narrower */
+  .timeline-date-col {
+    width: 65px !important;
+    padding-right: 12px !important;
+    padding-top: 16px !important;
+  }
+
+  .timeline-date-text {
+    font-size: 0.85rem !important;
+  }
+
+  .timeline-day-text {
+    font-size: 0.7rem !important;
+  }
+
+  /* Timeline event cards — stack vertically */
+  .timeline-event-card {
+    flex-direction: column !important;
+    padding: 16px !important;
+    gap: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .timeline-event-title {
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .timeline-event-time {
+    font-size: 0.78rem !important;
+  }
+
+  /* Thumbnail under content */
+  .timeline-event-thumb {
+    width: 100% !important;
+    height: 120px !important;
+    border-radius: 12px !important;
+    order: -1;
+  }
+
+  .timeline-events-col {
+    padding-left: 14px !important;
+  }
+
+  /* Event description */
+  .event-desc-markdown {
+    font-size: 0.85rem !important;
+  }
+
+  /* Event meta */
+  .event-meta-premium {
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .meta-item-badge {
+    padding: 6px 10px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .event-main-btn {
+    padding: 14px !important;
+    font-size: 0.95rem !important;
+    border-radius: 14px !important;
+  }
+
+  /* Section header on mobile */
+  .event-calendar-section .section-header-premium {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  /* Event info header controls */
+  .event-info-header {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Event type badge pill */
+  .event-type-badge {
+    font-size: 0.7rem !important;
+  }
+
+  /* Featured title glass pill */
+  .featured-event-card .inline-flex {
+    padding: 12px 16px !important;
+  }
+
+  .event-title {
+    font-size: 1.1rem !important;
+  }
 }
 
 
@@ -9236,5 +9378,43 @@ select.form-input {
   /* ── So-blobs (Special Offer bg blobs) ── */
   .so-blob {
     filter: blur(60px);
+  }
+
+  /* ── Event Timeline — tighter ── */
+  .timeline-date-col {
+    width: 55px !important;
+    padding-right: 8px !important;
+  }
+
+  .upcoming-events-list {
+    padding: 16px !important;
+  }
+
+  .timeline-event-card {
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+
+  .timeline-event-title {
+    font-size: 0.88rem !important;
+  }
+
+  .timeline-event-thumb {
+    height: 100px !important;
+  }
+
+  .event-date-badge {
+    width: 48px !important;
+    height: 48px !important;
+    top: 12px !important;
+    left: 12px !important;
+  }
+
+  .event-date-badge .day {
+    font-size: 1.2rem !important;
+  }
+
+  .featured-event-card h3 {
+    font-size: 1.2rem !important;
   }
 }
