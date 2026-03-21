@@ -243,3 +243,29 @@ export function buildBreadcrumbJsonLd(items: { name: string; url: string }[]): o
     })),
   };
 }
+
+/**
+ * Generates a JSON-LD `ItemList` schema for listing / archive pages.
+ * Helps search engines understand that the page contains a curated collection.
+ *
+ * Usage:
+ *   <script type="application/ld+json">{JSON.stringify(buildItemListJsonLd([...]))}</script>
+ */
+export function buildItemListJsonLd(
+  items: { name: string; url: string }[],
+  listName?: string
+): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    ...(listName ? { name: listName } : {}),
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: item.url,
+    })),
+  };
+}
+

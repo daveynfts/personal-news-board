@@ -2,6 +2,7 @@ import { getArticleById, getRelatedArticles } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import ArticleContent from '@/components/ArticleContent';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import { buildMetadata, buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/seo';
 import { buildCanonicalUrl, SITE_META } from '@/lib/siteMeta';
@@ -170,7 +171,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Hero / Cover Image */}
                 {article.coverImage && (
-                    <div className="article-cover" style={{ backgroundImage: `url(${article.coverImage})` }}>
+                    <div className="article-cover" style={{ position: 'relative' }}>
+                        <Image
+                            src={article.coverImage}
+                            alt={article.title}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            priority
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1100px"
+                            unoptimized
+                        />
                         <div className="article-cover-overlay" />
                     </div>
                 )}
@@ -299,7 +309,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <div className="related-articles-grid">
                             {relatedArticles.map((rel) => (
                                 <Link href={`/article/${rel.slug || rel.id}`} key={rel.id} className="related-article-card">
-                                    <div className="related-article-image" style={{ backgroundImage: `url(${rel.coverImage || SITE_META.DEFAULT_OG_IMAGE})` }} />
+                                    <div className="related-article-image" style={{ position: 'relative', overflow: 'hidden' }}>
+                                        <Image
+                                            src={rel.coverImage || SITE_META.DEFAULT_OG_IMAGE}
+                                            alt={rel.title}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            sizes="(max-width: 768px) 100vw, 300px"
+                                            loading="lazy"
+                                            unoptimized
+                                        />
+                                    </div>
                                     <div className="related-article-content">
                                         <span className="related-article-category">{rel.category || 'Tin tức'}</span>
                                         <h3 className="related-article-heading">{rel.title}</h3>

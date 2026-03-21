@@ -5,7 +5,8 @@ import Image from 'next/image';
 import Container from '@/components/Container';
 import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata, buildItemListJsonLd } from '@/lib/seo';
+import { SITE_META } from '@/lib/siteMeta';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,8 +75,23 @@ export default async function ArticlesPage() {
         </Link>
     );
 
+    // Build ItemList JSON-LD for all articles
+    const allVisibleArticles = [...editorialPicks, ...features];
+    const itemListJsonLd = buildItemListJsonLd(
+        allVisibleArticles.map(a => ({
+            name: a.title,
+            url: `${SITE_META.SITE_URL}/article/${a.slug || a.id}`,
+        })),
+        'Editorial & Feature Articles'
+    );
+
     return (
         <div className="archive-page-container">
+            {/* ItemList JSON-LD for article listing */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+            />
             {/* Hero */}
             <div className="archive-hero">
                 <div className="liquid-blob blob-1" style={{ opacity: 0.25, top: '-10%', left: '-5%', background: 'var(--blog-color)' }} />

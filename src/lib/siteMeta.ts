@@ -20,7 +20,7 @@ export const SITE_META = {
     'A premium, personal collection of top news, insightful blogs, and curated X threads. Discover elite content curated by DaveyNFTs.',
 
   /** Default OG image — 1200×630 px, stored in /public */
-  DEFAULT_OG_IMAGE: 'https://personal-news-board.vercel.app/og-default.png',
+  DEFAULT_OG_IMAGE: 'https://daveynfts.com/og-default.png',
 
   /** Author / publisher info */
   AUTHOR_NAME: 'DaveyNFTs',

@@ -3,8 +3,22 @@ import Container from '@/components/Container';
 import NewsGridClient from './NewsGridClient';
 import Link from 'next/link';
 import { Newspaper } from 'lucide-react';
+import type { Metadata } from 'next';
+import { buildMetadata, buildItemListJsonLd } from '@/lib/seo';
+import { SITE_META } from '@/lib/siteMeta';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+    return buildMetadata({
+        title: "DaveyNFTs' Studio — Research & Articles",
+        description: 'All research posts and articles curated by DaveyNFTs — your daily dose of crypto, web3, and blockchain insights.',
+        canonicalPath: '/news',
+        type: 'website',
+        keywords: ['crypto news', 'web3 research', 'blockchain articles', 'DaveyNFTs', 'crypto analysis'],
+        allowIndexing: true,
+    });
+}
 
 export default async function NewsArchivePage() {
   const allPosts = await getAllPosts();
@@ -37,9 +51,24 @@ export default async function NewsArchivePage() {
     const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
     return timeB - timeA;
   });
+  // Build ItemList JSON-LD
+  const itemListJsonLd = buildItemListJsonLd(
+    combinedItems.filter(i => !i.isMore).slice(0, 50).map(item => ({
+      name: item.title,
+      url: 'slug' in item && item.slug
+        ? `${SITE_META.SITE_URL}/article/${item.slug}`
+        : ('url' in item && item.url ? item.url as string : `${SITE_META.SITE_URL}/article/${item.id}`),
+    })),
+    "DaveyNFTs' Studio"
+  );
 
   return (
     <div className="archive-page-container min-h-screen pb-24">
+      {/* ItemList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       {/* Hero Section */}
       <div className="archive-hero relative overflow-hidden">
         <div className="liquid-blob blob-1" style={{ opacity: 0.15, top: '-10%', left: '-5%', background: 'var(--news-color)' }} />

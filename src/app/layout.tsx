@@ -29,6 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${beVietnam.variable}`} suppressHydrationWarning>
       <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#f7931a" />
         {/* WebSite JSON-LD — injected once at root layout level */}
         <script
           type="application/ld+json"
