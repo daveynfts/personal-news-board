@@ -38,12 +38,31 @@ export const articleType = defineType({
       group: 'general',
       of: [
         { type: 'block' },
-        { type: 'image', options: { hotspot: true } },
+        { 
+          type: 'image', 
+          options: { hotspot: true },
+          fields: [
+            { name: 'caption', type: 'string', title: 'Caption (Mô tả ảnh)' },
+            { name: 'attribution', type: 'string', title: 'Attribution (Nguồn ảnh)' },
+            { name: 'attributionUrl', type: 'url', title: 'Attribution URL (Link nguồn)' }
+          ]
+        },
         { 
           type: 'object',
           name: 'twitter',
           title: 'Twitter Embed',
           fields: [{ name: 'url', type: 'url', title: 'Tweet URL' }]
+        },
+        {
+          type: 'object',
+          name: 'pullQuote',
+          title: 'Trích Dẫn (Pull Quote)',
+          fields: [
+            { name: 'quote', type: 'text', title: 'Câu Phát Biểu', rows: 4, validation: Rule => Rule.required() },
+            { name: 'author', type: 'string', title: 'Người Phát Biểu', validation: Rule => Rule.required() },
+            { name: 'roleOrSource', type: 'string', title: 'Chức vụ / Nguồn' },
+            { name: 'sourceUrl', type: 'url', title: 'Link Nguồn (Nếu có)' }
+          ]
         }
       ]
     }),

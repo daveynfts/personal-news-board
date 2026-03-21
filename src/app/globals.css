@@ -3265,6 +3265,117 @@ a {
   }
 }
 
+/* ── Pull Quote (Trích dẫn nổi bật) ── */
+.pull-quote-wrapper {
+  position: relative;
+  margin: 48px 0;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.pull-quote-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: var(--accent-color);
+  border-radius: 4px 0 0 4px;
+}
+
+.pull-quote-icon {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  color: rgba(255, 255, 255, 0.05);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pull-quote-text {
+  position: relative;
+  z-index: 1;
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #fff;
+  margin: 0 0 20px 0;
+  font-style: italic;
+}
+
+.pull-quote-meta {
+  position: relative;
+  z-index: 1;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pull-quote-author {
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pull-quote-role a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.pull-quote-role a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .pull-quote-wrapper {
+    padding: 24px;
+    margin: 32px 0;
+  }
+  .pull-quote-text {
+    font-size: 1.15rem;
+  }
+}
+
+/* ── Image Caption & Attribution ── */
+.article-image-caption {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.caption-text {
+  font-style: italic;
+}
+
+.caption-divider {
+  display: inline-block;
+  margin: 0 8px;
+  opacity: 0.5;
+}
+
+.attribution-text a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,0.2);
+  transition: color 0.2s ease;
+}
+
+.attribution-text a:hover {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
 .article-back-link {
   display: inline-flex;
   align-items: center;

@@ -61,20 +61,58 @@ const customPortableTextComponents = {
        if (!url) return null;
        
        return (
-           <figure className="article-image-figure" style={{ margin: '32px 0', width: '100%' }}>
+           <figure className="article-image-figure" style={{ margin: '32px 0 40px', width: '100%' }}>
                <img 
                    src={url} 
-                   alt={value.alt || 'Article embedded image'} 
+                   alt={value.caption || value.attribution || 'Article embed'} 
                    style={{ width: '100%', height: 'auto', borderRadius: '12px', display: 'block' }}
                    loading="lazy"
                />
-               {value.caption && (
-                   <figcaption style={{ marginTop: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-                       {value.caption}
+               {(value.caption || value.attribution) && (
+                   <figcaption className="article-image-caption">
+                       {value.caption && <span className="caption-text">{value.caption}</span>}
+                       {value.caption && value.attribution && <span className="caption-divider"> | </span>}
+                       {value.attribution && (
+                           <span className="attribution-text">
+                               {value.attributionUrl ? (
+                                   <a href={value.attributionUrl} target="_blank" rel="noopener nofollow">
+                                       Nguồn: {value.attribution}
+                                   </a>
+                               ) : `Nguồn: ${value.attribution}`}
+                           </span>
+                       )}
                    </figcaption>
                )}
            </figure>
        );
+    },
+    pullQuote: ({ value }: any) => {
+      if (!value || !value.quote) return null;
+      return (
+          <div className="pull-quote-wrapper">
+              <svg className="pull-quote-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.570 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              </svg>
+              <blockquote className="pull-quote-text">
+                  {value.quote}
+              </blockquote>
+              <div className="pull-quote-meta">
+                  <span className="pull-quote-author">— {value.author}</span>
+                  {value.roleOrSource && (
+                      <>
+                          <span className="pull-quote-divider">,</span>
+                          <span className="pull-quote-role">
+                              {value.sourceUrl ? (
+                                  <a href={value.sourceUrl} target="_blank" rel="noopener nofollow">
+                                      {value.roleOrSource}
+                                  </a>
+                              ) : value.roleOrSource}
+                          </span>
+                      </>
+                  )}
+              </div>
+          </div>
+      );
     }
   }
 };
