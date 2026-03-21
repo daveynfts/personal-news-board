@@ -30,7 +30,7 @@ export default function DragScrollContainer({
                     display: 'flex', 
                     gap: '40px',
                     width: 'max-content',
-                    padding: '16px 0 20px 0',
+                    padding: '28px 0 32px 0',
                     alignItems: 'stretch'
                 }}
             >
