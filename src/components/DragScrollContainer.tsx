@@ -26,6 +26,7 @@ export default function DragScrollContainer({
            }}
         >
             <div 
+                className="drag-scroll-inner"
                 style={{ 
                     display: 'flex', 
                     gap: '40px',

@@ -9230,16 +9230,53 @@ select.form-input {
 
   /* ── Deep Dive Cards (Mobile) ── */
   .dd-card {
-    width: 260px;
+    width: 280px;
+    border-radius: 14px;
+  }
+  .dd-card:hover {
+    transform: none;  /* Disable hover lift on touch devices */
+  }
+
+  .dd-card-badge {
+    padding: 4px 12px;
+    font-size: 0.58rem;
+    border-radius: 16px;
+    left: 16px;
+  }
+  .dd-card:hover .dd-card-badge {
+    transform: translateY(-50%);  /* No hover lift on mobile */
+  }
+
+  .dd-card-cover {
+    border-radius: 14px 14px 0 0;
   }
 
   .dd-card-content {
-    padding: 16px;
+    padding: 14px 16px;
   }
 
   .dd-card-title {
     font-size: 1.05rem;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .dd-card-footer {
+    padding-top: 10px;
+  }
+
+  .dd-card-date {
+    font-size: 0.72rem;
+  }
+
+  .dd-card-cta {
+    font-size: 0.75rem;
+  }
+
+  .drag-scroll-inner {
+    gap: 24px !important;
+    padding: 20px 0 24px 0 !important;
   }
 
   .marquee-content {
@@ -9665,22 +9702,49 @@ select.form-input {
     height: 65px !important;
   }
 
-  /* ── Deep Dive Cards (Small Mobile) ── */
+  /* ── Deep Dive Cards (Small Mobile ≤480px) ── */
   .dd-card {
-    width: 240px;
+    width: 250px;
+    border-radius: 12px;
+  }
+
+  .dd-card-badge {
+    padding: 3px 10px;
+    font-size: 0.55rem;
+    left: 12px;
+    border-radius: 14px;
+  }
+
+  .dd-card-cover {
+    border-radius: 12px 12px 0 0;
   }
 
   .dd-card-content {
-    padding: 14px;
+    padding: 12px 14px;
   }
 
   .dd-card-title {
-    font-size: 1rem;
-    margin-bottom: 10px;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
   }
 
   .dd-card-footer {
-    font-size: 0.75rem;
+    padding-top: 8px;
+    font-size: 0.7rem;
+  }
+
+  .dd-card-date {
+    font-size: 0.68rem;
+  }
+
+  .dd-card-cta {
+    font-size: 0.7rem;
+    gap: 4px;
+  }
+
+  .drag-scroll-inner {
+    gap: 16px !important;
+    padding: 16px 0 20px 0 !important;
   }
 
   /* ── Article Page ── */
