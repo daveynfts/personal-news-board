@@ -3217,20 +3217,36 @@ a {
 }
 
 /* ── Davey's Take Block (SEO Unique Value) ── */
+@keyframes glass-pulse {
+  0% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(247,147,26,0.6)) brightness(1.2); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 25px rgba(255,200,50,1)) brightness(1.5); }
+  100% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(247,147,26,0.6)) brightness(1.2); }
+}
+
+@keyframes glass-rotate-glow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes text-shine {
+  to { background-position: 200% center; }
+}
+
 .daveys-take-box {
   position: relative;
-  background: linear-gradient(135deg, rgba(255,200,50,0.04) 0%, rgba(247,147,26,0.02) 100%);
-  border: 1px solid rgba(247,147,26,0.25);
-  border-top: 1px solid rgba(255,255,255,0.15);
+  background: linear-gradient(135deg, rgba(255,200,50,0.06) 0%, rgba(247,147,26,0.02) 100%);
+  border: 1px solid rgba(247,147,26,0.3);
+  border-top: 1px solid rgba(255,255,255,0.25);
+  border-left: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius-lg);
-  padding: 32px 40px;
+  padding: 36px 40px;
   margin-bottom: 40px;
   box-shadow: 
-    0 24px 40px -12px rgba(0,0,0,0.5), 
-    inset 0 1px 1px rgba(255,255,255,0.15),
-    inset 0 0 30px rgba(247,147,26,0.05);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+    0 30px 50px -15px rgba(0,0,0,0.6), 
+    inset 0 1px 2px rgba(255,255,255,0.2),
+    inset 0 0 40px rgba(247,147,26,0.08);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
   overflow: hidden;
   z-index: 1;
 }
@@ -3240,46 +3256,76 @@ a {
   position: absolute;
   top: -50%; left: -20%;
   width: 150%; height: 200%;
-  background: radial-gradient(circle at 50% 50%, rgba(247,147,26,0.12), transparent 50%);
+  background: radial-gradient(circle at 50% 50%, rgba(247,147,26,0.15), transparent 50%);
   pointer-events: none;
   z-index: -1;
-  mix-blend-mode: screen;
 }
 
 .daveys-take-title {
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #F7931A;
-  text-shadow: 0 2px 12px rgba(247,147,26,0.4);
+  gap: 20px;
   margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   letter-spacing: -0.01em;
 }
 
+.daveys-take-text {
+  font-size: 1.5rem;
+  font-weight: 900;
+  background: linear-gradient(to right, #F7931A, #ffdc73, #F7931A);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shine 4s linear infinite;
+  text-shadow: 0 4px 16px rgba(247,147,26,0.3);
+}
+
 .daveys-take-icon-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: rgba(0,0,0,0.4);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-top-color: rgba(255,255,255,0.2);
-  box-shadow: inset 0 2px 10px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.3);
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-top-color: rgba(255,255,255,0.5);
+  box-shadow: 
+    0 10px 20px rgba(0,0,0,0.5), 
+    inset 0 4px 12px rgba(255,255,255,0.15),
+    inset 0 0 20px rgba(247,147,26,0.3);
   overflow: hidden;
 }
 
+.daveys-take-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(247,147,26,0.8) 15%, transparent 30%, rgba(255,200,50,0.6) 65%, transparent 80%);
+  animation: glass-rotate-glow 4s linear infinite;
+  z-index: 0;
+}
+
+.daveys-take-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: #000; /* Pure black needed for mix-blend-mode: screen */
+  border-radius: 14px;
+  z-index: 1;
+}
+
 .daveys-take-icon {
-  width: 100%;
-  height: 100%;
+  position: relative;
+  z-index: 2;
+  width: 130%;
+  height: 130%;
   object-fit: cover;
   mix-blend-mode: screen;
-  transform: scale(1.2); /* Zoom in to hide some black padding of the generated image */
-  filter: drop-shadow(0 0 8px rgba(247,147,26,0.6)) contrast(1.2) brightness(1.2);
+  animation: glass-pulse 3s ease-in-out infinite;
 }
 
 .daveys-take-content {
