@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Article } from '@/lib/db';
 import Container from './Container';
 import { useTranslation } from '@/lib/LanguageContext';
+import { useSwipe } from '@/hooks/useSwipe';
 
 interface EditorialCarouselProps {
     articles: Article[];
@@ -36,6 +37,13 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
     const currentArticle = articles[currentIndex];
     const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
+    // Swipe left/right to navigate carousel
+    const swipeRef = useSwipe<HTMLDivElement>({
+        onSwipeLeft: handleNext,
+        onSwipeRight: handlePrevious,
+        threshold: 40,
+    });
+
     return (
         <div className="editorial-carousel-container">
             <Container>
@@ -44,7 +52,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                     <Link href="/articles" className="archive-view-all-btn">{t('btn.viewAllArticles')}</Link>
                 </div>
 
-                <div className="editorial-carousel-premium">
+                <div className="editorial-carousel-premium" ref={swipeRef}>
                     {/* Background Image - crossfade style */}
                     {articles.map((article, idx) => (
                         <div

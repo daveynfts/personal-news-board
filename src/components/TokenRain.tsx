@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 /* ── Token Definitions ── */
 interface TokenDef {
@@ -61,8 +61,21 @@ const DROP_CONFIGS = Array.from({ length: 35 }).map((_, i) => {
 
 export default function TokenRain() {
     const [isRaining, setIsRaining] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Detect mobile — hide token rain entirely on small screens
+    useEffect(() => {
+        const mq = window.matchMedia('(max-width: 768px)');
+        setIsMobile(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
 
     const drops = useMemo(() => (isRaining ? DROP_CONFIGS : []), [isRaining]);
+
+    // Don't render anything on mobile
+    if (isMobile) return null;
 
     return (
         <>

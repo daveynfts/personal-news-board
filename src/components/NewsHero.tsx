@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/LanguageContext';
+import { useSwipe } from '@/hooks/useSwipe';
 
 export interface SanityNewsArticle {
   id?: string | number;
@@ -52,6 +53,13 @@ export default function NewsHero({
     setActiveTab(tab);
     setCurrentFeaturedIdx(0);
   };
+
+  // Swipe left/right to navigate featured articles
+  const swipeRef = useSwipe<HTMLDivElement>({
+    onSwipeLeft: nextFeatured,
+    onSwipeRight: prevFeatured,
+    threshold: 40,
+  });
 
   return (
     <>
@@ -157,6 +165,7 @@ export default function NewsHero({
         
         {/* LETS COLUMN (2/3): Featured Image Hero */}
         <div 
+          ref={swipeRef}
           onClick={() => { if (featured) window.location.href = `/article/${featured.slug || featured.id}` }}
           className="lg:col-span-2 relative rounded-2xl overflow-hidden flex flex-col justify-between group h-[400px] md:h-[500px] bg-black/50 shadow-inner ring-1 ring-white/10 cursor-pointer"
         >

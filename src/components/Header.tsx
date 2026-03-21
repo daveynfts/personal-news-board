@@ -64,24 +64,7 @@ export default function Header() {
     }, 3500);
   }, [bubblePhrases]);
 
-  const startBubbles = useCallback(() => {
-    if (bubblePhrases.length === 0) return;
-    for (let i = 0; i < Math.min(3, bubblePhrases.length); i++) {
-      setTimeout(() => spawnBubble(), i * 200);
-    }
-    hoverTimerRef.current = setInterval(spawnBubble, 1800);
-  }, [spawnBubble, bubblePhrases]);
-
-  const stopBubbles = useCallback(() => {
-    if (hoverTimerRef.current) {
-      clearInterval(hoverTimerRef.current);
-      hoverTimerRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => { if (hoverTimerRef.current) clearInterval(hoverTimerRef.current); };
-  }, []);
+  // Bubbles only show once via welcome effect — no hover spawning
 
   // Fetch site settings — avatar won't render until this completes
   useEffect(() => {
@@ -99,14 +82,14 @@ export default function Header() {
       });
   }, []);
 
-  // Auto-spawn 5 welcome bubbles on first visit (once per session)
+  // Auto-spawn welcome bubbles ONCE per session (no repeat)
   useEffect(() => {
     if (!settingsLoaded || !bubbleText) return;
     const shown = sessionStorage.getItem('welcome_bubbles_shown');
     if (shown) return;
     sessionStorage.setItem('welcome_bubbles_shown', '1');
-    for (let i = 0; i < 5; i++) {
-      setTimeout(() => spawnBubble(), 800 + i * 400);
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => spawnBubble(), 1000 + i * 500);
     }
   }, [settingsLoaded, bubbleText, spawnBubble]);
 
@@ -215,11 +198,7 @@ export default function Header() {
         <LanguageToggle />
         <header className="app-header">
           <Container className="header-inner">
-            <div 
-              className="logo"
-              onMouseEnter={startBubbles}
-              onMouseLeave={stopBubbles}
-            >
+            <div className="logo">
               <div className="logo-icon-wrapper">
                 <div className="logo-icon">
                   <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>

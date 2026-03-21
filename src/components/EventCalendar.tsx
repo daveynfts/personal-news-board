@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import { useTranslation } from '@/lib/LanguageContext';
 import { Star, MapPin, Clock, CalendarIcon as Calendar, Users } from 'lucide-react';
+import { useSwipe } from '@/hooks/useSwipe';
 
 interface EventCalendarProps {
     events: CalendarEvent[];
@@ -59,6 +60,13 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     
     const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
+    // Swipe left/right on featured event card
+    const eventSwipeRef = useSwipe<HTMLDivElement>({
+        onSwipeLeft: handleNextFeatured,
+        onSwipeRight: handlePrevFeatured,
+        threshold: 40,
+    });
+
     // Group events for timeline
     const groupedEvents = displayEvents.reduce((acc, event) => {
         const d = new Date(event.date);
@@ -103,7 +111,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
             <div className="event-calendar-grid">
                 {/* Left: Featured */}
                 {featuredEvent && (
-                    <div key={featuredEvent.id} className="featured-event-card trans-up">
+                    <div key={featuredEvent.id} className="featured-event-card trans-up" ref={eventSwipeRef}>
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
                                 <Image src={featuredEvent.imageUrl} alt={featuredEvent.title} fill style={{ objectFit: 'cover' }} unoptimized />
