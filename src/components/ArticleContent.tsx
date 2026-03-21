@@ -51,18 +51,18 @@ const customPortableTextComponents = {
       if (!tweetId) return null;
       return (
         <div className="article-tweet-embed-container" style={{ margin: '40px 0' }}>
-            {value.contextTop && (
-                <div className="tweet-context-top" style={{ marginBottom: '16px', fontSize: '1.05rem', lineHeight: 1.6, color: 'rgba(255,255,255,0.95)' }}>
-                    {value.contextTop.split('\n').map((line: string, i: number) => (
-                        <p key={i} style={{ margin: '0 0 8px 0' }}>{line}</p>
-                    ))}
-                </div>
-            )}
             <div className="article-tweet-embed" data-theme="dark" style={{ margin: '0 auto', maxWidth: '550px' }}>
                 <Tweet id={tweetId} />
             </div>
+            {value.contextTop && (
+                <div className="tweet-context-top" style={{ marginTop: '12px', textAlign: 'center', fontSize: '0.9rem', fontStyle: 'italic', lineHeight: 1.5, color: 'var(--text-muted)' }}>
+                    {value.contextTop.split('\n').map((line: string, i: number) => (
+                        <p key={i} style={{ margin: '0 0 4px 0' }}>{line}</p>
+                    ))}
+                </div>
+            )}
             {value.contextBottom && (
-                <div className="tweet-context-bottom" style={{ marginTop: '16px', paddingLeft: '16px', borderLeft: '3px solid var(--accent-color)', fontSize: '1.05rem', fontStyle: 'italic', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>
+                <div className="tweet-context-bottom" style={{ marginTop: '24px', paddingLeft: '16px', borderLeft: '3px solid var(--accent-color)', fontSize: '1.05rem', fontStyle: 'italic', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>
                     {value.contextBottom.split('\n').map((line: string, i: number) => (
                         <p key={i} style={{ margin: '0 0 8px 0' }}>{line}</p>
                     ))}

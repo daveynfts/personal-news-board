@@ -220,17 +220,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Article Body */}
                 <article className="article-body">
+                    <ArticleContent content={article.content} />
+
                     {/* Davey's Take / Key Takeaway (Unique Value for SEO) */}
                     {article.daveysTake && (
-                        <div className="daveys-take-box">
+                        <div className="daveys-take-box" style={{ marginTop: '40px' }}>
                             <h3 className="daveys-take-title">
                                 <span className="daveys-take-icon">💡</span> Davey's Take
                             </h3>
                             <p className="daveys-take-content">{article.daveysTake}</p>
                         </div>
                     )}
-                    
-                    <ArticleContent content={article.content} />
                 </article>
 
                 {/* Footer attribution */}

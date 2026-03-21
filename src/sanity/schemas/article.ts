@@ -53,8 +53,8 @@ export const articleType = defineType({
           title: 'Twitter Embed (Kèm Context SEO)',
           fields: [
             { name: 'url', type: 'url', title: 'Tweet URL', validation: Rule => Rule.required() },
-            { name: 'contextTop', type: 'text', title: 'Lời dẫn trước (Tùy chọn)', rows: 3, description: 'Ví dụ: "Nhà sáng lập này vừa có nhận định mới về..."' },
-            { name: 'contextBottom', type: 'text', title: 'Lời bình sau (Tùy chọn)', rows: 3, description: 'Ví dụ: "Góc nhìn của chúng tôi là..."' }
+            { name: 'contextTop', type: 'text', title: 'Caption / Nguồn (Nằm giữa, dưới Tweet)', rows: 2, description: 'Ví dụ: "CEO Vinh The Nguyen chia sẻ từ bài đăng X"' },
+            { name: 'contextBottom', type: 'text', title: 'Lời bình luận (Nằm dưới cùng, in nghiêng)', rows: 3, description: 'Ví dụ: "Góc nhìn của chúng tôi là..."' }
           ]
         },
         {
