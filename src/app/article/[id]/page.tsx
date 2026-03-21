@@ -60,7 +60,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const seoImage = article.seo?.openGraphImage ? article.seo.openGraphImage : (article.coverImage || SITE_META.DEFAULT_OG_IMAGE);
 
   const allowIndexing = article.seo?.isIndexable !== false;
-  const customCanonical = article.seo?.canonicalUrl || `/article/${article.slug || article.id}`;
+  // Use original source URL as priority for Canonical Tag (prevents duplicate content)
+  const customCanonical = article.seo?.originalSourceUrl || article.seo?.canonicalUrl || `/article/${article.slug || article.id}`;
 
   return buildMetadata({
         title: seoTitle,
@@ -94,8 +95,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
     const relatedArticles = await getRelatedArticles(article.id as string, article.category, 3);
 
-    const customCanonical = article.seo?.canonicalUrl 
-        ? article.seo.canonicalUrl 
+    const customCanonical = article.seo?.originalSourceUrl || article.seo?.canonicalUrl 
+        ? (article.seo?.originalSourceUrl || article.seo?.canonicalUrl)
         : buildCanonicalUrl(`/article/${article.slug || article.id}`);
 
     function extractPlainText(content: any): string {
@@ -219,10 +220,35 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Article Body */}
                 <article className="article-body">
+                    {/* Davey's Take / Key Takeaway (Unique Value for SEO) */}
+                    {article.daveysTake && (
+                        <div className="daveys-take-box">
+                            <h3 className="daveys-take-title">
+                                <span className="daveys-take-icon">💡</span> Davey's Take
+                            </h3>
+                            <p className="daveys-take-content">{article.daveysTake}</p>
+                        </div>
+                    )}
+                    
                     <ArticleContent content={article.content} />
                 </article>
 
                 {/* Footer attribution */}
+                {article.seo?.originalSourceUrl && (
+                    <div className="article-source-footer original-source">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                        <div>
+                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>Original Source</p>
+                            <a href={article.seo.originalSourceUrl} target="_blank" rel="noopener nofollow" style={{ color: 'var(--accent-color)' }}>
+                                {article.seo?.originalSourceName ? `Read the full article at ${article.seo.originalSourceName}` : 'Read the full original article'} →
+                            </a>
+                        </div>
+                    </div>
+                )}
+
                 {article.xSourceUrl && (
                     <div className="article-source-footer">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

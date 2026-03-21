@@ -3216,6 +3216,55 @@ a {
   padding: 40px 20px 80px;
 }
 
+/* ── Davey's Take Block (SEO Unique Value) ── */
+.daveys-take-box {
+  background: linear-gradient(135deg, rgba(247,147,26,0.1) 0%, rgba(255,200,50,0.02) 100%);
+  border: 1px solid rgba(247,147,26,0.3);
+  border-left: 4px solid #F7931A;
+  border-radius: var(--radius-md);
+  padding: 24px 32px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.daveys-take-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #F7931A;
+  margin-top: 0;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.daveys-take-icon {
+  font-size: 1.4rem;
+}
+
+.daveys-take-content {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.95);
+  margin: 0;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .daveys-take-box {
+    padding: 20px;
+  }
+  .daveys-take-title {
+    font-size: 1.15rem;
+  }
+  .daveys-take-content {
+    font-size: 1rem;
+  }
+}
+
 .article-back-link {
   display: inline-flex;
   align-items: center;

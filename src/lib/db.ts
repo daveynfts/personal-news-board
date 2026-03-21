@@ -100,6 +100,7 @@ export interface Article {
     coverImage?: string;
     category?: string;
     authorName?: string;
+    daveysTake?: string;
     xSourceUrl?: string;
     isEditorialPick: boolean;
     isHotStory?: boolean;
@@ -120,6 +121,7 @@ export async function getAllArticles(): Promise<Article[]> {
         coverImage: getImageUrl(a.coverImage),
         category: a.category,
         authorName: a.authorName,
+        daveysTake: a.daveysTake,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isHotStory: a.isHotStory || false,
@@ -141,6 +143,7 @@ export async function getMoreArticles(): Promise<Article[]> {
         title: a.title,
         content: a.content,
         coverImage: getImageUrl(a.coverImage),
+        daveysTake: a.daveysTake,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isMore: true,
@@ -167,6 +170,7 @@ export async function getArticleById(id: string | number): Promise<Article | nul
         title: a.title,
         content: a.content,
         coverImage: getImageUrl(a.coverImage),
+        daveysTake: a.daveysTake,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isMore: a.isMore || false,
@@ -215,6 +219,8 @@ export async function getRelatedArticles(idToExclude: string | number, category?
         coverImage: getImageUrl(a.coverImage),
         category: a.category,
         authorName: a.authorName,
+        daveysTake: a.daveysTake,
+        xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isHotStory: a.isHotStory || false,
         isMore: a.isMore || false,

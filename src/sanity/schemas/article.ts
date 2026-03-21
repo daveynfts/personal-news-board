@@ -23,6 +23,14 @@ export const articleType = defineType({
     }),
     defineField({ name: 'category', title: 'Category', type: 'string', group: 'general' }),
     defineField({ name: 'authorName', title: 'Author Name', type: 'string', group: 'general' }),
+    defineField({ 
+      name: 'daveysTake', 
+      title: 'Davey\'s Take (Góc nhìn của bạn)', 
+      type: 'text',
+      rows: 5,
+      group: 'general',
+      description: '👉 RẤT QUAN TRỌNG CHO SEO: Viết suy nghĩ, phân tích, hay tóm tắt của riêng bạn để tạo "Unique Value". Google ưu tiên bài tổng hợp có góc nhìn cá nhân.'
+    }),
     defineField({
       name: 'content',
       title: 'Content',
@@ -66,6 +74,20 @@ export const articleType = defineType({
         defineField({ name: 'metaDescription', title: 'Meta Description', type: 'text', rows: 3, description: 'Nên dài từ 150-160 ký tự.' }),
         defineField({ name: 'focusKeyword', title: 'Focus Keyword', type: 'string' }),
         defineField({ name: 'openGraphImage', title: 'Open Graph Image', type: 'image', description: '💡 Tỉ lệ BẮT BUỘC: 1200x630px. Đây là ảnh sẽ hiển thị khi link được chia sẻ trên Facebook, Twitter/X, Telegram.' }),
+        
+        // Trích nguồn (SEO Curation)
+        defineField({ 
+          name: 'originalSourceName', 
+          title: 'Tên Nguồn Gốc', 
+          type: 'string', 
+          description: 'Ví dụ: CoinDesk, Vitalik Blog... (Sẽ hiển thị thành Nút "Đọc bài gốc tại CoinDesk")' 
+        }),
+        defineField({ 
+          name: 'originalSourceUrl', 
+          title: 'Link Bài Gốc (Original URL)', 
+          type: 'url',
+          description: 'BẮT BUỘC nếu là bài lấy từ nguồn khác. Website sẽ tự động đặt thẻ rel="canonical" để tránh Google phạt án Duplicate Content.' 
+        }),
         
         // Advanced SEO Fields
         defineField({ 
