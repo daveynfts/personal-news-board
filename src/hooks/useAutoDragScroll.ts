@@ -13,6 +13,15 @@ export function useAutoDragScroll<T extends HTMLElement>({
 } = {}) {
     const scrollRef = useRef<T>(null);
     const [isPaused, setIsPaused] = useState(false);
+    
+    // Use refs so the main loop never needs to be torn down and recreated
+    const isPausedRef = useRef(isPaused);
+    const speedRef = useRef(speed);
+    const directionRef = useRef(direction);
+
+    useEffect(() => { isPausedRef.current = isPaused; }, [isPaused]);
+    useEffect(() => { speedRef.current = speed; }, [speed]);
+    useEffect(() => { directionRef.current = direction; }, [direction]);
 
     useEffect(() => {
         const el = scrollRef.current;
@@ -20,7 +29,7 @@ export function useAutoDragScroll<T extends HTMLElement>({
 
         let isDown = false;
         let startX: number;
-        let scrollLeft: number;
+        let scrollLeftPos: number; // For dragging specifically
         let animationFrameId: number;
 
         const onMouseDown = (e: MouseEvent) => {
@@ -28,7 +37,7 @@ export function useAutoDragScroll<T extends HTMLElement>({
             setIsPaused(true);
             el.style.cursor = 'grabbing';
             startX = e.pageX - el.offsetLeft;
-            scrollLeft = el.scrollLeft;
+            scrollLeftPos = el.scrollLeft;
         };
 
         const onMouseLeave = () => {
@@ -49,7 +58,7 @@ export function useAutoDragScroll<T extends HTMLElement>({
             e.preventDefault();
             const x = e.pageX - el.offsetLeft;
             const walk = (x - startX) * 1.5;
-            el.scrollLeft = scrollLeft - walk;
+            el.scrollLeft = scrollLeftPos - walk;
         };
 
         el.addEventListener('mousedown', onMouseDown);
@@ -58,26 +67,34 @@ export function useAutoDragScroll<T extends HTMLElement>({
         el.addEventListener('mousemove', onMouseMove);
         el.style.cursor = 'grab';
 
-        // Using a persistent fractional accumulator prevents browsers from silently truncating scrollLeft += 0.5 into 0
+        // Set fractional scroll strictly based on the actual starting DOM state
         let fractionalScroll = el.scrollLeft;
 
-        // Infinite loop auto-scroll logic
         const loop = () => {
-            if (!isPaused && !isDown) {
-                if (direction === 'left') {
-                    fractionalScroll += speed;
+            if (!isPausedRef.current && !isDown) {
+                const spd = speedRef.current || 0.5;
+                const dir = directionRef.current || 'left';
+                
+                // If browser randomly snapped scrollLeft away from fractional (e.g. user touchpad scrolled), sync it
+                if (Math.abs(el.scrollLeft - fractionalScroll) > 2) {
+                    fractionalScroll = el.scrollLeft;
+                }
+
+                if (dir === 'left') {
+                    fractionalScroll += spd;
                     if (fractionalScroll >= el.scrollWidth / 2) {
                         fractionalScroll = 0;
                     }
                 } else {
-                    fractionalScroll -= speed;
+                    fractionalScroll -= spd;
                     if (fractionalScroll <= 0) {
                         fractionalScroll = el.scrollWidth / 2;
                     }
                 }
+                
                 el.scrollLeft = fractionalScroll;
             } else {
-                // Keep the fraction synced with reality if the user drags or pauses
+                // If paused or dragging, stay strictly synced with DOM
                 fractionalScroll = el.scrollLeft;
             }
             animationFrameId = requestAnimationFrame(loop);
@@ -92,7 +109,7 @@ export function useAutoDragScroll<T extends HTMLElement>({
             el.removeEventListener('mousemove', onMouseMove);
             cancelAnimationFrame(animationFrameId);
         };
-    }, [isPaused, speed, direction]);
+    }, []); // Empty dependency array! Only mounts once per component.
 
     return { scrollRef, setIsPaused };
 }
