@@ -38,7 +38,7 @@ export default function PostCard({ post }: { post: Post }) {
     const dateLocale = locale === 'vi' ? 'vi-VN' : undefined;
 
     return (
-        <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card-wrapper block relative group" style={{ width: '320px', flexShrink: 0 }}>
+        <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card-wrapper flex flex-col relative group" style={{ width: '320px', flexShrink: 0 }}>
             <style dangerouslySetInnerHTML={{__html: `
                 .post-card-wrapper:hover .post-card-label {
                     transform: translateY(-8px) scale(1.03);
@@ -74,7 +74,7 @@ export default function PostCard({ post }: { post: Post }) {
                 </span>
             </div>
 
-            <div className="post-card" style={{ width: '100%' }}>
+            <div className="post-card" style={{ width: '100%', flex: 1 }}>
                 <div className="post-card-media relative">
                     <Image
                         src={displayImg}
