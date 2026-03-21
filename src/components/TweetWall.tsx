@@ -17,8 +17,6 @@ interface EmbeddedTweetData {
 export default function TweetWall() {
     const [tweets, setTweets] = useState<EmbeddedTweetData[]>([]);
     const [filter, setFilter] = useState('all');
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(false);
     const { scrollRef, setIsPaused } = useAutoDragScroll<HTMLDivElement>({ speed: 0.5, direction: 'left' });
     const { t } = useTranslation();
 
@@ -32,31 +30,19 @@ export default function TweetWall() {
     const categories = ['all', ...Array.from(new Set(tweets.map(t => t.category)))];
     const filtered = filter === 'all' ? tweets : tweets.filter(tw => tw.category === filter);
 
-    // Check scroll boundaries
-    const checkScroll = useCallback(() => {
-        const el = scrollRef.current;
-        if (!el) return;
-        setCanScrollLeft(el.scrollLeft > 5);
-        setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 5);
-    }, []);
-
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el) return;
-        const timer = setTimeout(checkScroll, 500);
-        el.addEventListener('scroll', checkScroll, { passive: true });
-        window.addEventListener('resize', checkScroll);
-        return () => {
-            clearTimeout(timer);
-            el.removeEventListener('scroll', checkScroll);
-            window.removeEventListener('resize', checkScroll);
-        };
-    }, [checkScroll, filtered.length]);
-
     const scroll = (direction: 'left' | 'right') => {
         const el = scrollRef.current;
         if (!el) return;
+        
         const cardWidth = 380;
+        
+        // Handling infinite loop jumps before smooth scrolling
+        if (direction === 'left' && el.scrollLeft <= 5) {
+             el.scrollLeft += el.scrollWidth / 2;
+        } else if (direction === 'right' && el.scrollLeft >= (el.scrollWidth / 2) - 5) {
+             el.scrollLeft -= el.scrollWidth / 2;
+        }
+
         el.scrollBy({
             left: direction === 'left' ? -cardWidth : cardWidth,
             behavior: 'smooth'
@@ -120,7 +106,7 @@ export default function TweetWall() {
             >
                 {/* Left nav button */}
                 <button
-                    className={`tweet-carousel-btn tweet-carousel-btn-left ${canScrollLeft ? 'visible' : ''}`}
+                    className={`tweet-carousel-btn tweet-carousel-btn-left visible`}
                     onClick={() => scroll('left')}
                     aria-label="Scroll left"
                 >
@@ -154,7 +140,7 @@ export default function TweetWall() {
 
                 {/* Right nav button */}
                 <button
-                    className={`tweet-carousel-btn tweet-carousel-btn-right ${canScrollRight ? 'visible' : ''}`}
+                    className={`tweet-carousel-btn tweet-carousel-btn-right visible`}
                     onClick={() => scroll('right')}
                     aria-label="Scroll right"
                 >
