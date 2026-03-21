@@ -20,6 +20,18 @@ function getOgImageUrl(source: any): string {
   }
 }
 
+// Helper to Map Legacy Post Types
+function mapPostType(type: string): string {
+  if (!type) return 'Research';
+  const lower = type.trim().toLowerCase();
+  
+  if (lower === 'news' || lower === 'research') return 'Research';
+  if (lower === 'blog' || lower === 'article') return 'Article';
+  
+  // Title case fallback if it's something else
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 // --- POSTS ---
 export interface Post {
     id?: string | number;
@@ -36,7 +48,7 @@ export async function getAllPosts(): Promise<Post[]> {
     const posts = await sanityClient.fetch(query);
     return posts.map((p: any) => ({
         id: p._id,
-        type: p.type || 'Research',
+        type: mapPostType(p.type),
         title: p.title,
         url: p.url,
         imageUrl: getImageUrl(p.imageUrl),
@@ -50,7 +62,7 @@ export async function getMorePosts(): Promise<Post[]> {
     const posts = await sanityClient.fetch(query);
     return posts.map((p: any) => ({
         id: p._id,
-        type: p.type || 'Research',
+        type: mapPostType(p.type),
         title: p.title,
         url: p.url,
         imageUrl: getImageUrl(p.imageUrl),

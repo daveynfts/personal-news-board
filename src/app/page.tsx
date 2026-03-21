@@ -25,9 +25,9 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 
   // Map filter slug → human-readable label for richer title/description
   const filterLabels: Record<string, { label: string; desc: string }> = {
-    news:  { label: 'Top News',        desc: 'Breaking news and top headlines curated by DaveyNFTs.' },
-    blog:  { label: 'Blog Picks',      desc: 'Insightful blog posts and long-form reads selected by DaveyNFTs.' },
-    x:     { label: 'X Thread Picks',  desc: 'The best X (Twitter) threads and takes, curated by DaveyNFTs.' },
+    research: { label: 'Top Research', desc: 'In-depth research and analysis curated by DaveyNFTs.' },
+    article:  { label: 'Top Articles', desc: 'Insightful articles and long-form reads selected by DaveyNFTs.' },
+    x:        { label: 'X Thread Picks', desc: 'The best X (Twitter) threads and takes, curated by DaveyNFTs.' },
   };
 
   const activeFilter = filter && filter !== 'all' ? filterLabels[filter.toLowerCase()] : null;
@@ -107,7 +107,7 @@ export default async function Home({ searchParams }: PageProps) {
         
         <Suspense fallback={
           <div className="filter-container" style={{ margin: '0 auto 48px' }}>
-            {['All', 'News', 'Blog'].map(cat => (
+            {['All', 'Research', 'Article'].map(cat => (
               <span key={cat} className="filter-btn">{cat}</span>
             ))}
           </div>

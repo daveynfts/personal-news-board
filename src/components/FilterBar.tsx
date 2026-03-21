@@ -6,8 +6,8 @@ import { useTranslation } from '@/lib/LanguageContext';
 
 const categoryKeys = [
   { value: 'All', i18nKey: 'filter.all' },
-  { value: 'News', i18nKey: 'filter.news' },
-  { value: 'Blog', i18nKey: 'filter.blog' }
+  { value: 'Research', i18nKey: 'filter.news' },
+  { value: 'Article', i18nKey: 'filter.blog' }
 ];
 
 export default function FilterBar() {
