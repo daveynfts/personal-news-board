@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Tweet } from 'react-tweet';
 import { useTranslation } from '@/lib/LanguageContext';
+import { useSwipe } from '@/hooks/useSwipe';
 
 interface EmbeddedTweetData {
     id: number;
@@ -62,6 +63,13 @@ export default function TweetWall() {
         });
     };
 
+    // Swipe left/right to scroll through tweets
+    const tweetSwipeRef = useSwipe<HTMLDivElement>({
+        onSwipeLeft: () => { scroll('right'); setIsPaused(true); },
+        onSwipeRight: () => { scroll('left'); setIsPaused(true); },
+        threshold: 40,
+    });
+
     if (tweets.length === 0) return null;
 
     const categoryLabels: Record<string, string> = {
@@ -104,8 +112,11 @@ export default function TweetWall() {
 
             <div
                 className="tweet-wall-carousel-wrapper"
+                ref={tweetSwipeRef}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
+                onTouchStart={() => setIsPaused(true)}
+                onTouchEnd={() => setTimeout(() => setIsPaused(false), 3000)}
             >
                 {/* Left nav button */}
                 <button

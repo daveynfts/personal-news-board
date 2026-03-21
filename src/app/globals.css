@@ -1346,6 +1346,12 @@ a {
   animation-play-state: paused;
 }
 
+/* Touch-pause on mobile */
+.marquee-wrapper:active .left-to-right,
+.marquee-wrapper:active .right-to-left {
+  animation-play-state: paused;
+}
+
 .glass-card {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur)) saturate(180%);
