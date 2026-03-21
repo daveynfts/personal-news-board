@@ -124,7 +124,7 @@ export default async function Home({ searchParams }: PageProps) {
               <div className="marquee-wrapper" style={{ padding: '0 20px' }}>
                 <DragScrollContainer className="mb-6">
                   {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
-                    <div key={post.id} style={{ flex: '0 0 auto' }}>
+                    <div key={post.id} style={{ flex: '0 0 auto', display: 'flex' }}>
                       <PostCard post={post} />
                     </div>
                   ))}
@@ -133,7 +133,7 @@ export default async function Home({ searchParams }: PageProps) {
                 {filteredPosts.length > 1 && (
                   <DragScrollContainer>
                     {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
-                      <div key={post.id} style={{ flex: '0 0 auto' }}>
+                      <div key={post.id} style={{ flex: '0 0 auto', display: 'flex' }}>
                         <PostCard post={post} />
                       </div>
                     ))}
