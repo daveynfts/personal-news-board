@@ -3,6 +3,9 @@ import { useRef, useEffect, useState } from 'react';
 /**
  * Hook to make any overflow-x scrollable container draggable with mouse,
  * while automatically scrolling content horizontally (JS-based marquee).
+ * 
+ * Uses a lazy-attach pattern: the rAF loop runs from mount, but only begins
+ * scrolling once scrollRef.current becomes available (e.g. after async data loads).
  */
 export function useAutoDragScroll<T extends HTMLElement>({
     speed = 0.5,
@@ -13,8 +16,8 @@ export function useAutoDragScroll<T extends HTMLElement>({
 } = {}) {
     const scrollRef = useRef<T>(null);
     const [isPaused, setIsPaused] = useState(false);
-    
-    // Use refs so the main loop never needs to be torn down and recreated
+
+    // Use refs so the rAF loop reads live values without needing to teardown/recreate
     const isPausedRef = useRef(isPaused);
     const speedRef = useRef(speed);
     const directionRef = useRef(direction);
@@ -24,92 +27,112 @@ export function useAutoDragScroll<T extends HTMLElement>({
     useEffect(() => { directionRef.current = direction; }, [direction]);
 
     useEffect(() => {
-        const el = scrollRef.current;
-        if (!el) return;
-
-        let isDown = false;
-        let startX: number;
-        let scrollLeftPos: number; // For dragging specifically
         let animationFrameId: number;
+        let el: T | null = null;
+        let fractionalScroll = 0;
+        let isDown = false;
+        let startX = 0;
+        let scrollLeftPos = 0;
+        let listenersAttached = false;
 
         const onMouseDown = (e: MouseEvent) => {
             isDown = true;
+            isPausedRef.current = true;
             setIsPaused(true);
-            el.style.cursor = 'grabbing';
-            startX = e.pageX - el.offsetLeft;
-            scrollLeftPos = el.scrollLeft;
+            if (el) {
+                el.style.cursor = 'grabbing';
+                startX = e.pageX - el.offsetLeft;
+                scrollLeftPos = el.scrollLeft;
+            }
         };
 
         const onMouseLeave = () => {
             if (isDown) {
                 isDown = false;
-                el.style.cursor = 'grab';
+                if (el) el.style.cursor = 'grab';
             }
+            isPausedRef.current = false;
             setIsPaused(false);
         };
 
         const onMouseUp = () => {
             isDown = false;
-            el.style.cursor = 'grab';
+            if (el) el.style.cursor = 'grab';
         };
 
         const onMouseMove = (e: MouseEvent) => {
-            if (!isDown) return;
+            if (!isDown || !el) return;
             e.preventDefault();
             const x = e.pageX - el.offsetLeft;
             const walk = (x - startX) * 1.5;
             el.scrollLeft = scrollLeftPos - walk;
         };
 
-        el.addEventListener('mousedown', onMouseDown);
-        el.addEventListener('mouseleave', onMouseLeave);
-        el.addEventListener('mouseup', onMouseUp);
-        el.addEventListener('mousemove', onMouseMove);
-        el.style.cursor = 'grab';
+        const attachListeners = (element: T) => {
+            if (listenersAttached) return;
+            element.addEventListener('mousedown', onMouseDown);
+            element.addEventListener('mouseleave', onMouseLeave);
+            element.addEventListener('mouseup', onMouseUp);
+            element.addEventListener('mousemove', onMouseMove);
+            element.style.cursor = 'grab';
+            listenersAttached = true;
+        };
 
-        // Set fractional scroll strictly based on the actual starting DOM state
-        let fractionalScroll = el.scrollLeft;
+        const detachListeners = (element: T) => {
+            element.removeEventListener('mousedown', onMouseDown);
+            element.removeEventListener('mouseleave', onMouseLeave);
+            element.removeEventListener('mouseup', onMouseUp);
+            element.removeEventListener('mousemove', onMouseMove);
+            listenersAttached = false;
+        };
 
         const loop = () => {
-            if (!isPausedRef.current && !isDown) {
+            // Lazy-attach: keep polling for the ref until it's available
+            if (!el) {
+                el = scrollRef.current;
+                if (el) {
+                    attachListeners(el);
+                    fractionalScroll = el.scrollLeft;
+                }
+            }
+
+            if (el && !isPausedRef.current && !isDown) {
                 const spd = speedRef.current || 0.5;
                 const dir = directionRef.current || 'left';
-                
-                // If browser randomly snapped scrollLeft away from fractional (e.g. user touchpad scrolled), sync it
+
+                // If external interaction moved scrollLeft away, re-sync
                 if (Math.abs(el.scrollLeft - fractionalScroll) > 2) {
                     fractionalScroll = el.scrollLeft;
                 }
 
                 if (dir === 'left') {
                     fractionalScroll += spd;
-                    if (fractionalScroll >= el.scrollWidth / 2) {
+                    if (el.scrollWidth > 0 && fractionalScroll >= el.scrollWidth / 2) {
                         fractionalScroll = 0;
                     }
                 } else {
                     fractionalScroll -= spd;
-                    if (fractionalScroll <= 0) {
+                    if (fractionalScroll <= 0 && el.scrollWidth > 0) {
                         fractionalScroll = el.scrollWidth / 2;
                     }
                 }
-                
+
                 el.scrollLeft = fractionalScroll;
-            } else {
-                // If paused or dragging, stay strictly synced with DOM
+            } else if (el && (isPausedRef.current || isDown)) {
+                // Stay synced with physical scroll position while paused/dragging
                 fractionalScroll = el.scrollLeft;
             }
+
             animationFrameId = requestAnimationFrame(loop);
         };
 
         animationFrameId = requestAnimationFrame(loop);
 
         return () => {
-            el.removeEventListener('mousedown', onMouseDown);
-            el.removeEventListener('mouseleave', onMouseLeave);
-            el.removeEventListener('mouseup', onMouseUp);
-            el.removeEventListener('mousemove', onMouseMove);
             cancelAnimationFrame(animationFrameId);
+            if (el) detachListeners(el);
         };
-    }, []); // Empty dependency array! Only mounts once per component.
+    }, []); // Stable mount — never tears down
 
     return { scrollRef, setIsPaused };
 }
