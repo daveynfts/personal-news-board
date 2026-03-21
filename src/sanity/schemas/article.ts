@@ -50,8 +50,12 @@ export const articleType = defineType({
         { 
           type: 'object',
           name: 'twitter',
-          title: 'Twitter Embed',
-          fields: [{ name: 'url', type: 'url', title: 'Tweet URL' }]
+          title: 'Twitter Embed (Kèm Context SEO)',
+          fields: [
+            { name: 'url', type: 'url', title: 'Tweet URL', validation: Rule => Rule.required() },
+            { name: 'contextTop', type: 'text', title: 'Lời dẫn trước (Tùy chọn)', rows: 3, description: 'Ví dụ: "Nhà sáng lập này vừa có nhận định mới về..."' },
+            { name: 'contextBottom', type: 'text', title: 'Lời bình sau (Tùy chọn)', rows: 3, description: 'Ví dụ: "Góc nhìn của chúng tôi là..."' }
+          ]
         },
         {
           type: 'object',
