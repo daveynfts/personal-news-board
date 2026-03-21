@@ -72,11 +72,19 @@ export const articleType = defineType({
     }),
     defineField({ 
       name: 'coverImage', 
-      title: 'Cover Image', 
+      title: 'Cover Image (Banner 16:9)', 
       type: 'image', 
       group: 'media', 
       options: { hotspot: true },
-      description: '💡 Tỉ lệ khuyến nghị: 16:9 (chính xác 1200x675px hoặc lớn hơn). Giúp tối ưu SEO và hiển thị hoàn hảo trên các thẻ Grid.'
+      description: '💡 Tỉ lệ khuyến nghị: 16:9 (chính xác 1200x675px). Dùng làm ảnh bìa chính của bài viết.'
+    }),
+    defineField({ 
+      name: 'squareThumbnail', 
+      title: 'Square Thumbnail (Ảnh vuông 1:1)', 
+      type: 'image', 
+      group: 'media', 
+      options: { hotspot: true },
+      description: '💡 KHUYÊN DÙNG: Upload ảnh tỉ lệ 1:1 (ví dụ 400x400) để hiển thị hoàn hảo ở mục "Tin Tức Mới Nhất" dạng cuộn dọc ngang, ghép không bị cắt chữ.'
     }),
     
     defineField({ name: 'isEditorialPick', title: 'Editor\'s Choice', type: 'boolean', initialValue: false, group: 'flags' }),

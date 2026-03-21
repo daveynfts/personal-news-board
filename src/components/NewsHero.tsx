@@ -10,6 +10,7 @@ export interface SanityNewsArticle {
   title: string;
   slug?: string;
   coverImage?: string;
+  squareThumbnail?: string;
   category?: string;
   authorName?: string;
   createdAt?: string;
@@ -287,8 +288,8 @@ export default function NewsHero({
             {latestNews.length > 0 ? [...latestNews.slice(0, 4), ...latestNews.slice(0, 4), ...latestNews.slice(0, 4)].map((news, idx) => (
               <a href={`/article/${news.slug || news.id}`} key={`top-${news.id || idx}-${idx}`} className="flex w-[320px] p-3 border border-white/10 bg-black/20 backdrop-blur-sm rounded-xl group cursor-pointer hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 gap-4 glass-shine">
                 <div className="w-[85px] h-[85px] flex-shrink-0 rounded-lg bg-gray-800 overflow-hidden relative ring-1 ring-white/5">
-                  {news.coverImage ? (
-                     <img src={news.coverImage} alt={news.title} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 bg-black/40" />
+                  {news.squareThumbnail || news.coverImage ? (
+                     <img src={news.squareThumbnail || news.coverImage} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-900 to-black text-white p-2">
                          <span className="text-[10px] font-bold text-indigo-300 uppercase">Logo</span>
@@ -309,8 +310,8 @@ export default function NewsHero({
             {latestNews.length > 4 ? [...latestNews.slice(4, 8), ...latestNews.slice(4, 8), ...latestNews.slice(4, 8)].map((news, idx) => (
               <a href={`/article/${news.slug || news.id}`} key={`bot-${news.id || idx}-${idx}`} className="flex w-[320px] p-3 border border-white/10 bg-black/20 backdrop-blur-sm rounded-xl group cursor-pointer hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 gap-4 glass-shine">
                 <div className="w-[85px] h-[85px] flex-shrink-0 rounded-lg bg-gray-800 overflow-hidden relative ring-1 ring-white/5">
-                  {news.coverImage ? (
-                     <img src={news.coverImage} alt={news.title} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 bg-black/40" />
+                  {news.squareThumbnail || news.coverImage ? (
+                     <img src={news.squareThumbnail || news.coverImage} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-900 to-black text-white p-2">
                          <span className="text-[10px] font-bold text-indigo-300 uppercase">Logo</span>

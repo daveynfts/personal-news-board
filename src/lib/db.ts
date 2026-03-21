@@ -98,6 +98,7 @@ export interface Article {
     title: string;
     content: any; // Updated to accept block content array from Sanity or string
     coverImage?: string;
+    squareThumbnail?: string;
     category?: string;
     authorName?: string;
     daveysTake?: string;
@@ -119,6 +120,7 @@ export async function getAllArticles(): Promise<Article[]> {
         title: a.title,
         content: a.content,
         coverImage: getImageUrl(a.coverImage),
+        squareThumbnail: getImageUrl(a.squareThumbnail),
         category: a.category,
         authorName: a.authorName,
         daveysTake: a.daveysTake,
@@ -143,6 +145,7 @@ export async function getMoreArticles(): Promise<Article[]> {
         title: a.title,
         content: a.content,
         coverImage: getImageUrl(a.coverImage),
+        squareThumbnail: getImageUrl(a.squareThumbnail),
         daveysTake: a.daveysTake,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
@@ -170,6 +173,7 @@ export async function getArticleById(id: string | number): Promise<Article | nul
         title: a.title,
         content: a.content,
         coverImage: getImageUrl(a.coverImage),
+        squareThumbnail: getImageUrl(a.squareThumbnail),
         daveysTake: a.daveysTake,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
@@ -217,6 +221,7 @@ export async function getRelatedArticles(idToExclude: string | number, category?
         title: a.title,
         content: a.content,
         coverImage: getImageUrl(a.coverImage),
+        squareThumbnail: getImageUrl(a.squareThumbnail),
         category: a.category,
         authorName: a.authorName,
         daveysTake: a.daveysTake,
