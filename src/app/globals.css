@@ -3429,32 +3429,122 @@ a {
 
 .falling-token {
   position: absolute;
-  top: -10%;
+  top: -80px;
   pointer-events: none;
   user-select: none;
   animation-name: token-fall;
-  animation-timing-function: linear;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   animation-iteration-count: infinite;
   opacity: 0;
-  text-shadow: 0 0 15px rgba(243, 186, 47, 0.8), 0 0 5px rgba(243, 186, 47, 1);
+  filter: drop-shadow(0 4px 12px var(--token-glow, rgba(255,255,255,0.3)));
 }
 
+.falling-token.wobble {
+  animation-name: token-fall-wobble;
+}
+
+/* ── Liquid Glass Coin ── */
+.token-coin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid;
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  font-weight: 900;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.3),
+    inset 0 1px 1px rgba(255,255,255,0.3),
+    inset 0 -1px 0 rgba(0,0,0,0.15);
+}
+
+/* Inner shimmer sweep */
+.token-coin::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: coin-shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Top highlight arc */
+.token-coin::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 15%;
+  right: 15%;
+  height: 40%;
+  border-radius: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.35) 0%,
+    rgba(255,255,255,0.05) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+@keyframes coin-shimmer {
+  0%, 100% { left: -120%; opacity: 0.6; }
+  50% { left: 160%; opacity: 1; }
+}
+
+/* ── Fall Animations ── */
 @keyframes token-fall {
   0% {
-    transform: translateY(0vh) rotate(0deg);
+    transform: translateY(0vh) rotate(0deg) scale(0.6);
     opacity: 0;
   }
-
-  10% {
+  8% {
     opacity: 1;
+    transform: translateY(8vh) rotate(20deg) scale(1);
   }
-
-  80% {
-    opacity: 1;
+  85% {
+    opacity: 0.9;
   }
-
   100% {
-    transform: translateY(120vh) rotate(360deg);
+    transform: translateY(115vh) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes token-fall-wobble {
+  0% {
+    transform: translateY(0vh) translateX(0) rotate(0deg) scale(0.6);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(8vh) translateX(10px) rotate(15deg) scale(1);
+  }
+  25% {
+    transform: translateY(28vh) translateX(-15px) rotate(90deg) scale(1);
+  }
+  50% {
+    transform: translateY(55vh) translateX(12px) rotate(180deg) scale(0.95);
+  }
+  75% {
+    transform: translateY(82vh) translateX(-8px) rotate(270deg) scale(0.9);
+  }
+  100% {
+    transform: translateY(115vh) translateX(5px) rotate(360deg) scale(0.8);
     opacity: 0;
   }
 }
