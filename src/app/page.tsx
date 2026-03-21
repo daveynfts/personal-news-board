@@ -122,7 +122,7 @@ export default async function Home({ searchParams }: PageProps) {
           ) : (
             <div className="rainbow-glow-container">
               <div className="marquee-wrapper" style={{ padding: '0 20px' }}>
-                <DragScrollContainer className="mb-4">
+                <DragScrollContainer className="mb-6">
                   {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
                     <div key={post.id} style={{ flex: '0 0 auto' }}>
                       <PostCard post={post} />
