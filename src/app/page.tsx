@@ -12,7 +12,7 @@ import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 import { HeroText, SectionHeader, EmptyState } from '@/components/TranslatableText';
 import NewsHero from '@/components/NewsHero';
-import AutoDraggableMarquee from '@/components/AutoDraggableMarquee';
+import DragScrollContainer from '@/components/DragScrollContainer';
 
 export const dynamic = 'force-dynamic';
 
@@ -121,24 +121,24 @@ export default async function Home({ searchParams }: PageProps) {
             <EmptyState />
           ) : (
             <div className="rainbow-glow-container">
-              <div className="marquee-wrapper">
-                <AutoDraggableMarquee direction="left" speed={0.5} className="mb-6">
+              <div className="marquee-wrapper" style={{ padding: '0 20px' }}>
+                <DragScrollContainer className="mb-4">
                   {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
-                    <PostCard key={post.id} post={post} />
+                    <div key={post.id} style={{ flex: '0 0 auto' }}>
+                      <PostCard post={post} />
+                    </div>
                   ))}
-                  {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
-                    <PostCard key={`dup-${post.id}`} post={post} />
-                  ))}
-                </AutoDraggableMarquee>
+                </DragScrollContainer>
                 
-                <AutoDraggableMarquee direction="right" speed={0.5}>
-                  {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                  {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
-                    <PostCard key={`dup-${post.id}`} post={post} />
-                  ))}
-                </AutoDraggableMarquee>
+                {filteredPosts.length > 1 && (
+                  <DragScrollContainer>
+                    {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
+                      <div key={post.id} style={{ flex: '0 0 auto' }}>
+                        <PostCard post={post} />
+                      </div>
+                    ))}
+                  </DragScrollContainer>
+                )}
               </div>
             </div>
           )}
