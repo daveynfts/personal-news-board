@@ -61,7 +61,7 @@ export default function PostCard({ post }: { post: Post }) {
             `}} />
             
             <div 
-                className="absolute -top-[6px] left-6 z-[20] post-card-label auto-shine glass-shine transition-all"
+                className="absolute top-0 -translate-y-1/2 left-6 z-[20] post-card-label auto-shine glass-shine transition-all"
                 style={{
                     background: `linear-gradient(135deg, ${typeColor}70 0%, rgba(0,0,0,0.8) 100%)`,
                     borderColor: `${typeColor}80`,
