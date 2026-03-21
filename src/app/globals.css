@@ -8836,62 +8836,100 @@ select.form-input {
     overflow-x: hidden;
   }
 
-  /* ── Header — Compact Pill ── */
+  /* ── Header — Compact Pill, all elements in one row ── */
   .header-row {
-    top: 8px;
+    top: 6px;
     gap: 6px;
-    padding: 0 12px;
+    padding: 0 8px;
   }
 
   .app-header {
-    padding: 6px 12px;
-    margin: 8px 0;
+    padding: 5px 10px;
+    margin: 6px 0;
     max-width: 100%;
   }
 
+  /* Logo — compact */
   .logo h1 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .logo-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
   }
 
   .logo {
-    gap: 8px;
+    gap: 6px;
   }
 
-  /* Hide nav text labels, keep only icons */
+  /* Nav — icon-only, uniform circle buttons */
   .main-nav {
-    gap: 2px;
+    gap: 4px;
+    align-items: center;
   }
 
+  /* Hide ALL nav link text */
   .nav-link {
-    font-size: 0;
-    padding: 8px 10px;
+    font-size: 0 !important;
+    line-height: 0;
+    padding: 0 !important;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
   }
 
-  .nav-link .nav-special-icon {
-    margin-right: 0;
-  }
-
+  /* Special offer — same size circle as search */
   .nav-link-special {
     font-size: 0 !important;
-    padding: 8px 12px !important;
+    padding: 0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .nav-link-special .nav-special-icon {
+    font-size: 1rem;
+    margin: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .nav-link-special .nav-special-icon {
-    font-size: 1rem;
+  .nav-link-special .nav-special-icon svg {
+    width: 16px !important;
+    height: 16px !important;
   }
 
+  /* Search — same circle */
   .header-search-btn {
     width: 32px;
     height: 32px;
+  }
+
+  .header-search-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Language toggle — scale to match row height */
+  .lang-toggle-flag-track {
+    width: 60px !important;
+    height: 30px !important;
+  }
+
+  .lang-toggle-flag-track .lang-flag-icon {
+    width: 22px !important;
+    height: 22px !important;
   }
 
   /* ── Crypto Ticker ── */
@@ -9315,25 +9353,38 @@ select.form-input {
   .header-row {
     top: 4px;
     gap: 4px;
-    padding: 0 8px;
+    padding: 0 6px;
   }
 
   .app-header {
-    padding: 5px 10px;
+    padding: 4px 8px;
     margin: 4px 0;
   }
 
   .logo h1 {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .logo-icon {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
   }
 
   .logo {
-    gap: 6px;
+    gap: 5px;
+  }
+
+  /* All nav buttons — 28px circles */
+  .nav-link,
+  .nav-link-special {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .nav-link-special .nav-special-icon svg {
+    width: 14px !important;
+    height: 14px !important;
   }
 
   .header-search-btn {
@@ -9344,6 +9395,17 @@ select.form-input {
   .header-search-btn svg {
     width: 14px;
     height: 14px;
+  }
+
+  /* Language toggle — smallest */
+  .lang-toggle-flag-track {
+    width: 52px !important;
+    height: 26px !important;
+  }
+
+  .lang-toggle-flag-track .lang-flag-icon {
+    width: 20px !important;
+    height: 20px !important;
   }
 
   /* ── Hero ── */
