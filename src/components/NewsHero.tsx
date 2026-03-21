@@ -118,6 +118,38 @@ export default function NewsHero({
         animation: auto-shine-anim 4s infinite ease-in-out;
         pointer-events: none;
       }
+      /* ── Mobile Responsive ── */
+      @media (max-width: 768px) {
+        .animate-scroll-left,
+        .animate-scroll-right {
+          gap: 12px !important;
+          animation-duration: 20s;
+        }
+        .animate-scroll-left > a,
+        .animate-scroll-right > a {
+          width: 280px !important;
+          min-width: 280px !important;
+          padding: 10px !important;
+        }
+        .animate-scroll-left > a .w-\\[85px\\],
+        .animate-scroll-right > a .w-\\[85px\\] {
+          width: 70px !important;
+          height: 70px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .animate-scroll-left > a,
+        .animate-scroll-right > a {
+          width: 260px !important;
+          min-width: 260px !important;
+          padding: 8px !important;
+        }
+        .animate-scroll-left > a .w-\\[85px\\],
+        .animate-scroll-right > a .w-\\[85px\\] {
+          width: 60px !important;
+          height: 60px !important;
+        }
+      }
     `}</style>
     <div className="max-w-[1400px] mx-auto p-4 md:p-8 bg-white/5 backdrop-blur-2xl border border-white/10 font-sans text-gray-100 shadow-2xl rounded-3xl mb-12 ring-1 ring-white/5">
       {/* 1. TOP SECTION */}

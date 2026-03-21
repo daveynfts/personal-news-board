@@ -8720,4 +8720,521 @@ select.form-input {
   transform: skewX(-25deg);
   animation: auto-shine-anim 8s infinite ease-in-out;
   pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Comprehensive Mobile Optimization
+   Breakpoints: 768px (tablet), 480px (phone)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── TABLET & BELOW (≤768px) ───────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* ── Global Layout ── */
+  .app-container {
+    padding: 0 16px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  /* ── Header — Compact Pill ── */
+  .header-row {
+    top: 8px;
+    gap: 6px;
+    padding: 0 12px;
+  }
+
+  .app-header {
+    padding: 6px 12px;
+    margin: 8px 0;
+    max-width: 100%;
+  }
+
+  .logo h1 {
+    font-size: 0.95rem;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .logo {
+    gap: 8px;
+  }
+
+  /* Hide nav text labels, keep only icons */
+  .main-nav {
+    gap: 2px;
+  }
+
+  .nav-link {
+    font-size: 0;
+    padding: 8px 10px;
+  }
+
+  .nav-link .nav-special-icon {
+    margin-right: 0;
+  }
+
+  .nav-link-special {
+    font-size: 0 !important;
+    padding: 8px 12px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-link-special .nav-special-icon {
+    font-size: 1rem;
+  }
+
+  .header-search-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* ── Crypto Ticker ── */
+  .crypto-ticker {
+    font-size: 0.7rem !important;
+    height: 28px !important;
+  }
+
+  /* ── Hero Section ── */
+  .hero {
+    padding: 40px 16px;
+  }
+
+  .hero h2 {
+    font-size: 2.2rem;
+    letter-spacing: -1px;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .hero-glass-container {
+    margin-top: 32px;
+    margin-bottom: 40px;
+    border-radius: 24px;
+  }
+
+  /* ── NewsHero Component ── */
+  .max-w-\[1400px\] {
+    padding: 12px !important;
+    border-radius: 20px !important;
+  }
+
+  /* Force single column on NewsHero grid */
+  .grid.grid-cols-1.lg\:grid-cols-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .lg\:col-span-2 {
+    height: 280px !important;
+  }
+
+  .lg\:col-span-2 h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Right column article list */
+  .flex.flex-col.h-\[400px\],
+  .flex.flex-col.h-\[500px\],
+  .md\:h-\[500px\] {
+    height: 300px !important;
+  }
+
+  /* Marquee news cards */
+  .animate-scroll-left,
+  .animate-scroll-right {
+    gap: 8px !important;
+  }
+
+  .animate-scroll-left > a,
+  .animate-scroll-right > a {
+    width: 280px !important;
+    min-width: 280px !important;
+  }
+
+  /* ── Latest News Marquee Area ── */
+  .marquee-container {
+    overflow: hidden !important;
+  }
+
+  /* ── Section Titles ── */
+  .section-title {
+    font-size: 1.3rem !important;
+  }
+
+  /* ── Post Cards (Deep Dive Zone Marquee) ── */
+  .post-card {
+    width: 260px;
+  }
+
+  .post-card-body {
+    padding: 16px;
+  }
+
+  .post-title {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+  }
+
+  .marquee-content {
+    gap: 20px;
+    padding: 16px 0;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-container {
+    margin-bottom: 32px;
+  }
+
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 0.78rem;
+  }
+
+  /* ── Tweet Wall ── */
+  .tweet-wall-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Force tweets to not overflow */
+  .tweet-wall-grid > div {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Tweet embed responsive fix */
+  [data-tweet-id],
+  .react-tweet-theme {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* ── Event Calendar ── */
+  .event-grid,
+  .events-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Editorial Carousel ── */
+  .editorial-carousel-premium {
+    height: 300px !important;
+    border-radius: 20px !important;
+  }
+
+  .carousel-title {
+    font-size: 1.4rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .carousel-tag {
+    font-size: 0.65rem !important;
+  }
+
+  .carousel-content-inner {
+    padding: 20px !important;
+  }
+
+  .carousel-footer {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  /* ── Article Page ── */
+  .article-page-layout {
+    padding: 16px !important;
+  }
+
+  .article-cover {
+    height: 220px !important;
+    border-radius: 16px !important;
+  }
+
+  .article-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .article-body {
+    font-size: 0.95rem !important;
+  }
+
+  .article-body img {
+    border-radius: 12px !important;
+    margin: 20px 0 !important;
+  }
+
+  /* Related articles */
+  .related-articles-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .related-article-image {
+    height: 140px !important;
+  }
+
+  /* ── Archive Pages (articles, picks, more) ── */
+  .archive-hero {
+    padding: 24px 0 !important;
+  }
+
+  .archive-hero-title {
+    font-size: 2rem !important;
+  }
+
+  .archive-hero-subtitle {
+    font-size: 0.9rem !important;
+  }
+
+  .archive-hero-stats {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  .archive-articles-grid,
+  .picks-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .archive-articles-grid.featured-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .archive-article-card .archive-article-image {
+    height: 180px !important;
+  }
+
+  /* ── Picks Filter Tabs ── */
+  .picks-filter-tab {
+    padding: 8px 16px !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* ── News Grid (Studio) ── */
+  .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3.xl\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* ── Token Rain — Disable for performance ── */
+  .token-rain-container {
+    display: none !important;
+  }
+
+  /* ── Special Offer Page ── */
+  .so-exchange-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Floating bubble size ── */
+  .floating-bubble span {
+    font-size: 0.72rem;
+    padding: 8px 14px;
+    max-width: 260px;
+  }
+
+  /* ── Rainbow Container / Marquee ── */
+  .rainbow-glow-container {
+    margin-bottom: 48px;
+  }
+
+  .marquee-wrapper {
+    border-radius: 20px;
+  }
+
+  /* ── More page ── */
+  .more-empty-state {
+    padding: 60px 24px !important;
+  }
+
+  /* ── Container override ── */
+  .container-glass {
+    padding: 0 16px !important;
+  }
+}
+
+
+/* ── SMALL PHONE (≤480px) ─────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* ── Header — Ultra compact ── */
+  .header-row {
+    top: 4px;
+    gap: 4px;
+    padding: 0 8px;
+  }
+
+  .app-header {
+    padding: 5px 10px;
+    margin: 4px 0;
+  }
+
+  .logo h1 {
+    font-size: 0.85rem;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo {
+    gap: 6px;
+  }
+
+  .header-search-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .header-search-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ── Hero ── */
+  .hero h2 {
+    font-size: 1.8rem;
+  }
+
+  .hero p {
+    font-size: 0.9rem;
+  }
+
+  /* ── NewsHero ── */
+  .lg\:col-span-2 {
+    height: 240px !important;
+  }
+
+  .lg\:col-span-2 h2 {
+    font-size: 1.25rem !important;
+  }
+
+  .flex.flex-col.h-\[400px\],
+  .flex.flex-col.h-\[500px\],
+  .md\:h-\[500px\] {
+    height: 260px !important;
+  }
+
+  /* Smaller news cards in marquee */
+  .animate-scroll-left > a,
+  .animate-scroll-right > a {
+    width: 250px !important;
+    min-width: 250px !important;
+    padding: 8px !important;
+  }
+
+  .animate-scroll-left > a img,
+  .animate-scroll-right > a img {
+    width: 65px !important;
+    height: 65px !important;
+  }
+
+  /* ── Post Cards ── */
+  .post-card {
+    width: 240px;
+  }
+
+  .post-card-body {
+    padding: 14px;
+  }
+
+  .post-title {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .post-footer {
+    font-size: 0.78rem;
+  }
+
+  /* ── Article Page ── */
+  .article-cover {
+    height: 180px !important;
+  }
+
+  .article-title {
+    font-size: 1.3rem !important;
+  }
+
+  .article-meta {
+    font-size: 0.78rem !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-btn {
+    padding: 7px 12px;
+    font-size: 0.72rem;
+  }
+
+  /* ── Archive ── */
+  .archive-hero-title {
+    font-size: 1.6rem !important;
+  }
+
+  .archive-stat-num {
+    font-size: 1.3rem !important;
+  }
+
+  /* ── Carousel ── */
+  .editorial-carousel-premium {
+    height: 260px !important;
+  }
+
+  .carousel-title {
+    font-size: 1.15rem !important;
+  }
+
+  .carousel-nav-btn {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-size: 1.1rem !important;
+  }
+
+  /* ── Search overlay ── */
+  .search-overlay-input {
+    padding: 14px 60px 14px 44px;
+    font-size: 0.9rem;
+  }
+
+  .search-overlay-icon {
+    left: 14px;
+  }
+
+  .search-overlay-kbd {
+    padding: 3px 8px;
+    font-size: 0.55rem;
+  }
+
+  /* ── Blobs — smaller on mobile ── */
+  .blob-1 { width: 200px; height: 200px; }
+  .blob-2 { width: 250px; height: 250px; }
+  .blob-3 { width: 180px; height: 180px; }
+
+  /* ── So-blobs (Special Offer bg blobs) ── */
+  .so-blob {
+    filter: blur(60px);
+  }
 }
