@@ -38,29 +38,54 @@ export default function PostCard({ post }: { post: Post }) {
     const dateLocale = locale === 'vi' ? 'vi-VN' : undefined;
 
     return (
-        <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card">
-            <div className="post-card-media relative">
-                <div 
-                    className="absolute top-4 left-4 z-10 post-card-label auto-shine glass-shine"
-                    style={{
-                        background: `linear-gradient(135deg, ${typeColor}70 0%, rgba(0,0,0,0.8) 100%)`,
-                        borderColor: `${typeColor}80`
-                    }}
-                >
-                    <span className="align-middle inline-block mt-[1px] tracking-[0.1em] drop-shadow-md relative z-10">
-                        {isNews ? t('filter.news') : t('filter.blog')}
-                    </span>
-                </div>
-                <Image
-                    src={displayImg}
-                    alt={post.title}
-                    fill
-                    className="post-image"
-                    onError={() => setImgError(true)}
-                    unoptimized
-                />
+        <a href={post.url} target="_blank" rel="noopener noreferrer" className="post-card-wrapper block relative group" style={{ width: '320px', height: '100%', flexShrink: 0 }}>
+            <style dangerouslySetInnerHTML={{__html: `
+                .post-card-wrapper:hover .post-card-label {
+                    transform: translateY(-8px) scale(1.03);
+                }
+                .post-card-wrapper:hover .post-card {
+                    transform: translateY(-8px) scale(1.03);
+                }
+                .post-card-wrapper:hover .post-image {
+                    transform: scale(1.1);
+                }
+                .post-card-wrapper:hover .read-more {
+                    color: white;
+                }
+                .post-card-wrapper:hover .read-more svg {
+                    transform: translateX(4px);
+                }
+                .post-card-wrapper:hover .post-card::before {
+                    left: 200%;
+                }
+            `}} />
+            
+            <div 
+                className="absolute -top-[14px] left-6 z-[20] post-card-label auto-shine glass-shine transition-all"
+                style={{
+                    background: `linear-gradient(135deg, ${typeColor}70 0%, rgba(0,0,0,0.8) 100%)`,
+                    borderColor: `${typeColor}80`,
+                    transitionDuration: '0.6s',
+                    transitionTimingFunction: 'var(--spring-snappy, cubic-bezier(0.175, 0.885, 0.32, 1.275))'
+                }}
+            >
+                <span className="align-middle inline-block mt-[1px] tracking-[0.1em] drop-shadow-md relative z-10">
+                    {isNews ? t('filter.news') : t('filter.blog')}
+                </span>
             </div>
-            <div className="post-card-body">
+
+            <div className="post-card" style={{ width: '100%', height: '100%', pointerEvents: 'none' }}>
+                <div className="post-card-media relative">
+                    <Image
+                        src={displayImg}
+                        alt={post.title}
+                        fill
+                        className="post-image"
+                        onError={() => setImgError(true)}
+                        unoptimized
+                    />
+                </div>
+                <div className="post-card-body">
                 <h3 className="post-title">{post.title}</h3>
                 <div className="post-footer">
                     <span className="post-date">
@@ -77,6 +102,7 @@ export default function PostCard({ post }: { post: Post }) {
                         </svg>
                     </span>
                 </div>
+            </div>
             </div>
         </a>
     );
