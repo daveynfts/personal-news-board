@@ -206,14 +206,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 day: 'numeric'
                             })}
                         </span>
-                        {article.updatedAt && new Date(article.updatedAt).toDateString() !== new Date(article.createdAt || '').toDateString() && (
+                        {article.updatedAt && (new Date(article.updatedAt).getTime() - new Date(article.createdAt || 0).getTime() > 120000) && (
                             <>
                                 <span style={{ color: 'var(--text-muted)' }}>·</span>
-                                <span>Updated: {new Date(article.updatedAt).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })}</span>
+                                <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
+                                    Cập nhật: {new Date(article.updatedAt).toLocaleString('en-US', {
+                                        month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false
+                                    })}
+                                </span>
                             </>
                         )}
                         <span style={{ color: 'var(--text-muted)' }}>·</span>
