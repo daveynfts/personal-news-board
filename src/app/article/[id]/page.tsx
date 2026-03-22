@@ -200,7 +200,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <h1 className="article-title">{article.title}</h1>
                     <div className="article-meta">
                         <span>
-                            {new Date(article.createdAt || '').toLocaleDateString('en-US', {
+                            {new Date(article.createdAt || '').toLocaleDateString('vi-VN', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
@@ -210,7 +210,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <>
                                 <span style={{ color: 'var(--text-muted)' }}>·</span>
                                 <span style={{ fontStyle: 'italic', opacity: 0.8 }}>
-                                    Cập nhật: {new Date(article.updatedAt).toLocaleString('en-US', {
+                                    Cập nhật: {new Date(article.updatedAt).toLocaleString('vi-VN', {
                                         month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false
                                     })}
                                 </span>

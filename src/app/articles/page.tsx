@@ -55,7 +55,7 @@ export default async function ArticlesPage() {
             </div>
             <div className="archive-article-body">
                 <span className="archive-article-date">
-                    {article.createdAt ? new Date(article.createdAt).toLocaleDateString('en-US', {
+                    {article.createdAt ? new Date(article.createdAt).toLocaleDateString('vi-VN', {
                         year: 'numeric', month: 'long', day: 'numeric'
                     }) : ''}
                 </span>

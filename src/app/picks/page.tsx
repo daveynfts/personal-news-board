@@ -184,7 +184,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                     <h3 className="picks-card-title">{post.title}</h3>
                                                     <div className="picks-card-footer">
                                                         <span className="picks-card-date">
-                                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
+                                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                                                         </span>
                                                         <span className="picks-card-link">TRUY CẬP BÀI NGUỒN →</span>
                                                     </div>
@@ -230,7 +230,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                     <h3 className="picks-card-title">{post.title}</h3>
                                                     <div className="picks-card-footer">
                                                         <span className="picks-card-date">
-                                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
+                                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                                                         </span>
                                                         <span className="picks-card-link">TRUY CẬP BÀI NGUỒN →</span>
                                                     </div>
