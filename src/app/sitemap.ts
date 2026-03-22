@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/crypto-events`, lastModified: new Date().toISOString(), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/tweets`, lastModified: new Date().toISOString(), changeFrequency: 'daily', priority: 0.7 },
     { url: `${baseUrl}/more`, lastModified: new Date().toISOString(), changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${baseUrl}/special-offer`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 0.6 },
   ];
 
   // 2. Fetch all dynamic content
@@ -25,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((a) => a.seo?.isIndexable !== false)
     .map((article) => ({
       url: article.seo?.canonicalUrl || `${baseUrl}/article/${article.slug || article.id}`,
-      lastModified: new Date(article.createdAt || new Date()).toISOString(),
+      lastModified: new Date(article.updatedAt || article.createdAt || new Date()).toISOString(),
       changeFrequency: 'weekly' as const,
       priority: article.isEditorialPick ? 0.8 : 0.7,
     }));

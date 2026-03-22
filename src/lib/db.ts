@@ -107,6 +107,7 @@ export interface Article {
     isHotStory?: boolean;
     isMore?: boolean;
     createdAt?: string;
+    updatedAt?: string;
     // SEO
     seo?: any;
     slug?: string;
@@ -129,6 +130,7 @@ export async function getAllArticles(): Promise<Article[]> {
         isHotStory: a.isHotStory || false,
         isMore: a.isMore || false,
         createdAt: a.publishedAt,
+        updatedAt: a._updatedAt,
         seo: a.seo ? {
             ...a.seo,
             openGraphImage: getOgImageUrl(a.seo.openGraphImage)
@@ -151,6 +153,7 @@ export async function getMoreArticles(): Promise<Article[]> {
         isEditorialPick: a.isEditorialPick || false,
         isMore: true,
         createdAt: a.publishedAt,
+        updatedAt: a._updatedAt,
         seo: a.seo ? {
             ...a.seo,
             openGraphImage: getOgImageUrl(a.seo.openGraphImage)
@@ -179,6 +182,7 @@ export async function getArticleById(id: string | number): Promise<Article | nul
         isEditorialPick: a.isEditorialPick || false,
         isMore: a.isMore || false,
         createdAt: a.publishedAt,
+        updatedAt: a._updatedAt,
         seo: a.seo ? {
             ...a.seo,
             openGraphImage: getOgImageUrl(a.seo.openGraphImage)
@@ -230,6 +234,7 @@ export async function getRelatedArticles(idToExclude: string | number, category?
         isHotStory: a.isHotStory || false,
         isMore: a.isMore || false,
         createdAt: a.publishedAt,
+        updatedAt: a._updatedAt,
         slug: a.slug?.current
     }));
 }

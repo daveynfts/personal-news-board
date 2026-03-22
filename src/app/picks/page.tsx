@@ -75,12 +75,12 @@ export default async function PicksPage({ searchParams }: PageProps) {
                 <div className="liquid-blob blob-3" style={{ opacity: 0.15, top: '30%', right: '10%' }} />
                 <Container>
                     <div className="archive-hero-content">
-                        <Link href="/" className="more-back-btn">← Back to Home</Link>
+                        <Link href="/" className="more-back-btn">← Trở về Trang chủ</Link>
                         <div style={{ marginTop: '24px' }}>
-                            <span className="more-label"><Pin className="inline-block mr-1" size={16} /> Full Feed</span>
+                            <span className="more-label"><Pin className="inline-block mr-1" size={16} /> Toàn bộ danh sách</span>
                             <h1 className="archive-hero-title">Deep Dive Zone</h1>
                             <p className="archive-hero-subtitle">
-                                Every curated news, blog post, and X thread — the complete collection.
+                                Bảng tổng hợp tất cả tin tức, bài viết và trích dẫn X.
                             </p>
                         </div>
                         <div style={{ marginTop: '20px' }}>
@@ -89,7 +89,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                         <div className="archive-hero-stats">
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{visiblePosts.length}</span>
-                                <span className="archive-stat-label">Active Picks</span>
+                                <span className="archive-stat-label">Bài Đăng Chính</span>
                             </div>
                             {['Research', 'Article'].map(type => {
                                 const count = visiblePosts.filter(p => p.type.toLowerCase() === type.toLowerCase()).length;
@@ -108,7 +108,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                     <div className="archive-stat-sep" />
                                     <div className="archive-stat">
                                         <span className="archive-stat-num">{morePosts.length}</span>
-                                        <span className="archive-stat-label">Archived</span>
+                                        <span className="archive-stat-label">Lưu Trữ</span>
                                     </div>
                                 </>
                             )}
@@ -145,7 +145,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                             <div className="archive-section-header">
                                 <h2 className="archive-section-title">
                                     <span className="archive-section-dot" style={{ background: 'var(--accent-color)' }} />
-                                    {activeFilter === 'all' ? 'All Deep Dive' :
+                                    {activeFilter === 'all' ? 'Tất cả bài phân tích' :
                                             `${activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)}`}
                                 </h2>
                                 <span className="more-month-count">{filteredPosts.length}</span>
@@ -186,7 +186,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                         <span className="picks-card-date">
                                                             {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                                                         </span>
-                                                        <span className="picks-card-link">ACCESS SOURCE →</span>
+                                                        <span className="picks-card-link">TRUY CẬP BÀI NGUỒN →</span>
                                                     </div>
                                                 </div>
                                             </a>
@@ -202,7 +202,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'var(--text-muted)' }} />
-                                        Extended Archive
+                                        Kho Lưu Trữ Mở Rộng
                                     </h2>
                                     <span className="more-month-count">{morePosts.length}</span>
                                 </div>
@@ -232,7 +232,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                         <span className="picks-card-date">
                                                             {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                                                         </span>
-                                                        <span className="picks-card-link">ACCESS SOURCE →</span>
+                                                        <span className="picks-card-link">TRUY CẬP BÀI NGUỒN →</span>
                                                     </div>
                                                 </div>
                                             </a>

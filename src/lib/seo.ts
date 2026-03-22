@@ -46,6 +46,11 @@ export interface SeoProps {
    */
   publishedTime?: string;
 
+  /**
+   * ISO 8601 timestamp of last modified date — for SEO update signals.
+   */
+  modifiedTime?: string;
+
   /** Author display name. Defaults to SITE_META.AUTHOR_NAME. */
   authorName?: string;
 
@@ -76,6 +81,7 @@ export function buildMetadata(props: SeoProps = {}): Metadata {
     ogImage = SITE_META.DEFAULT_OG_IMAGE,
     type = 'website',
     publishedTime,
+    modifiedTime,
     authorName = SITE_META.AUTHOR_NAME,
     keywords = [],
     allowIndexing = true,
@@ -123,6 +129,7 @@ export function buildMetadata(props: SeoProps = {}): Metadata {
       ...(type === 'article' && publishedTime
         ? {
             publishedTime,
+            modifiedTime,
             authors: [SITE_META.AUTHOR_URL],
           }
         : {}),
@@ -138,6 +145,13 @@ export function buildMetadata(props: SeoProps = {}): Metadata {
       images: [ogImage],
     },
 
+    // ── Icons (Force Google to scrape new logo) ───────────────────────────
+    icons: {
+      icon: '/logo.png',
+      shortcut: '/logo.png',
+      apple: '/logo.png',
+    },
+
     // ── Misc ──────────────────────────────────────────────────────────────
     metadataBase: new URL(SITE_META.SITE_URL),
   };
@@ -151,6 +165,7 @@ export interface ArticleJsonLdProps {
   url: string;
   imageUrl?: string;
   publishedTime: string;
+  modifiedTime?: string;
   authorName?: string;
 }
 
@@ -165,6 +180,7 @@ export function buildArticleJsonLd(props: ArticleJsonLdProps): object {
     url,
     imageUrl = SITE_META.DEFAULT_OG_IMAGE,
     publishedTime,
+    modifiedTime,
     authorName = SITE_META.AUTHOR_NAME,
   } = props;
 
@@ -176,7 +192,7 @@ export function buildArticleJsonLd(props: ArticleJsonLdProps): object {
     url,
     image: [imageUrl],
     datePublished: publishedTime,
-    dateModified: publishedTime,
+    dateModified: modifiedTime || publishedTime,
     author: {
       '@type': 'Person',
       name: authorName,

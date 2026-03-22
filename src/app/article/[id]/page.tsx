@@ -72,6 +72,9 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         publishedTime: article.createdAt
             ? new Date(article.createdAt).toISOString()
             : new Date().toISOString(),
+        modifiedTime: article.updatedAt
+            ? new Date(article.updatedAt).toISOString()
+            : undefined,
         authorName: SITE_META.AUTHOR_NAME,
         keywords: [
             article.seo?.focusKeyword || '',
@@ -139,12 +142,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         publishedTime: article.createdAt
             ? new Date(article.createdAt).toISOString()
             : new Date().toISOString(),
+        modifiedTime: article.updatedAt
+            ? new Date(article.updatedAt).toISOString()
+            : undefined,
         authorName: SITE_META.AUTHOR_NAME,
     });
 
     const breadcrumbJsonLd = buildBreadcrumbJsonLd([
-        { name: 'Home', url: SITE_META.SITE_URL },
-        { name: 'Articles', url: `${SITE_META.SITE_URL}/` },
+        { name: 'Trang Chủ', url: SITE_META.SITE_URL },
+        { name: 'Bài Viết', url: `${SITE_META.SITE_URL}/` },
         { name: seoTitle, url: customCanonical },
     ]);
 
@@ -167,7 +173,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="m15 18-6-6 6-6" />
                     </svg>
-                    Back to Feed
+                    Trở về danh sách
                 </Link>
 
                 {/* Hero / Cover Image */}
@@ -189,7 +195,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {/* Article Header */}
                 <header className="article-header">
                     <span className="article-editorial-badge">
-                        {article.isEditorialPick ? '★ Editorial Pick' : 'Feature Article'}
+                        {article.isEditorialPick ? '★ Bài Viết Tuyển Chọn' : 'Bài Viết Nổi Bật'}
                     </span>
                     <h1 className="article-title">{article.title}</h1>
                     <div className="article-meta">
@@ -200,8 +206,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 day: 'numeric'
                             })}
                         </span>
+                        {article.updatedAt && new Date(article.updatedAt).toDateString() !== new Date(article.createdAt || '').toDateString() && (
+                            <>
+                                <span style={{ color: 'var(--text-muted)' }}>·</span>
+                                <span>Updated: {new Date(article.updatedAt).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })}</span>
+                            </>
+                        )}
                         <span style={{ color: 'var(--text-muted)' }}>·</span>
-                        <span style={{ color: 'var(--text-muted)' }}>By {SITE_META.AUTHOR_NAME}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>Bởi {SITE_META.AUTHOR_NAME}</span>
                         {article.xSourceUrl && (
                             <a
                                 href={article.xSourceUrl}
@@ -212,7 +228,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
                                 </svg>
-                                View on X
+                                Xem trên X
                             </a>
                         )}
                     </div>
@@ -226,7 +242,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     {article.daveysTake && (
                         <div className="daveys-take-box" style={{ marginTop: '60px' }}>
                             <h3 className="daveys-take-title">
-                                <span className="daveys-take-text">DaveyNFTs' Take</span>
+                                <span className="daveys-take-text">Góc Nhìn Của DaveyNFTs</span>
                             </h3>
                             <p className="daveys-take-content">{article.daveysTake}</p>
                         </div>
@@ -241,9 +257,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                         </svg>
                         <div>
-                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>Original Source</p>
+                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>Nguồn Bài Viết</p>
                             <a href={article.seo.originalSourceUrl} target="_blank" rel="noopener nofollow" style={{ color: 'var(--accent-color)' }}>
-                                {article.seo?.originalSourceName ? `Read the full article at ${article.seo.originalSourceName}` : 'Read the full original article'} →
+                                {article.seo?.originalSourceName ? `Đọc bài gốc tại ${article.seo.originalSourceName}` : 'Đọc toàn bộ bài gốc'} →
                             </a>
                         </div>
                     </div>
@@ -255,7 +271,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
                         </svg>
                         <div>
-                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>X Source</p>
+                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>Nguồn X (Twitter)</p>
                             <a href={article.xSourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-color)', wordBreak: 'break-all' }}>
                                 {article.xSourceUrl}
                             </a>

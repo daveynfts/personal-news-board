@@ -50,7 +50,7 @@ export default async function ArticlesPage() {
                     <div className="archive-article-image-placeholder">✍️</div>
                 )}
                 {article.isEditorialPick && (
-                    <span className="archive-article-pick-badge">★ Editorial Pick</span>
+                    <span className="archive-article-pick-badge">★ Tuyển Chọn</span>
                 )}
             </div>
             <div className="archive-article-body">
@@ -66,7 +66,7 @@ export default async function ArticlesPage() {
                     </p>
                 )}
                 <div className="archive-article-footer">
-                    <span className="archive-article-read">Read Article →</span>
+                    <span className="archive-article-read">Đọc Bài Viết →</span>
                     {article.xSourceUrl && (
                         <span className="archive-article-x">𝕏 Source</span>
                     )}
@@ -98,12 +98,12 @@ export default async function ArticlesPage() {
                 <div className="liquid-blob blob-2" style={{ opacity: 0.15, bottom: '-20%', right: '0%' }} />
                 <Container>
                     <div className="archive-hero-content">
-                        <Link href="/" className="more-back-btn">← Back to Home</Link>
+                        <Link href="/" className="more-back-btn">← Trở về Trang chủ</Link>
                         <div style={{ marginTop: '24px' }}>
-                            <span className="more-label">✍️ Full Archive</span>
-                            <h1 className="archive-hero-title">Editorial & Features</h1>
+                            <span className="more-label">✍️ Toàn Bộ Bài Viết</span>
+                            <h1 className="archive-hero-title">Bài Viết & Chuyên Đề</h1>
                             <p className="archive-hero-subtitle">
-                                In-depth articles, editorial picks, and long-form reads on crypto and web3.
+                                Tổng hợp bài viết phân tích, báo cáo chuyên sâu và nhận định về thị trường Web3.
                             </p>
                         </div>
                         <div style={{ marginTop: '20px' }}>
@@ -112,19 +112,19 @@ export default async function ArticlesPage() {
                         <div className="archive-hero-stats">
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{editorialPicks.length}</span>
-                                <span className="archive-stat-label">Editorial Picks</span>
+                                <span className="archive-stat-label">Tuyển Chọn</span>
                             </div>
                             <div className="archive-stat-sep" />
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{features.length}</span>
-                                <span className="archive-stat-label">Features</span>
+                                <span className="archive-stat-label">Nổi Bật</span>
                             </div>
                             {moreArticles.length > 0 && (
                                 <>
                                     <div className="archive-stat-sep" />
                                     <div className="archive-stat">
                                         <span className="archive-stat-num">{moreArticles.length}</span>
-                                        <span className="archive-stat-label">Archived</span>
+                                        <span className="archive-stat-label">Đã Lưu Trữ</span>
                                     </div>
                                 </>
                             )}
@@ -149,7 +149,7 @@ export default async function ArticlesPage() {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'var(--blog-color)' }} />
-                                        ★ Editorial Picks
+                                        ★ Bài Viết Tuyển Chọn
                                     </h2>
                                     <span className="more-month-count">{editorialPicks.length}</span>
                                 </div>
@@ -167,7 +167,7 @@ export default async function ArticlesPage() {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'rgba(255,255,255,0.4)' }} />
-                                        Latest Features
+                                        Bài Viết Mới Nhất
                                     </h2>
                                     <span className="more-month-count">{features.length}</span>
                                 </div>
@@ -185,7 +185,7 @@ export default async function ArticlesPage() {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'var(--text-muted)' }} />
-                                        Extended Archive
+                                        Kho Lưu Trữ Mở Rộng
                                     </h2>
                                     <span className="more-month-count">{moreArticles.length}</span>
                                 </div>
