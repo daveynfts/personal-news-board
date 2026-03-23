@@ -186,7 +186,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             style={{ objectFit: 'cover' }}
                             priority
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1100px"
-                            unoptimized
                         />
                         <div className="article-cover-overlay" />
                     </div>
@@ -359,7 +358,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                             style={{ objectFit: 'cover' }}
                                             sizes="(max-width: 768px) 100vw, 300px"
                                             loading="lazy"
-                                            unoptimized
                                         />
                                     </div>
                                     <div className="related-article-content">

@@ -54,7 +54,7 @@ export default async function EventsPage() {
             <div className={`archive-event-card ${isPast ? 'past' : ''}`}>
                 {event.imageUrl && (
                     <div className="archive-event-image">
-                        <Image src={event.imageUrl} alt={event.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                        <Image src={event.imageUrl} alt={event.title} fill style={{ objectFit: 'cover' }} />
                         {isPast && <div className="archive-event-past-overlay"><span>Ended</span></div>}
                     </div>
                 )}

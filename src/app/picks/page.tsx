@@ -171,7 +171,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                 className="picks-card"
                                             >
                                                 <div className="picks-card-image">
-                                                    <Image src={imgSrc} alt={post.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                                                    <Image src={imgSrc} alt={post.title} fill style={{ objectFit: 'cover' }} />
                                                     <div className="picks-card-overlay" />
                                                     <span
                                                         className="picks-card-type"
@@ -220,7 +220,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                 style={{ opacity: 0.7 }}
                                             >
                                                 <div className="picks-card-image">
-                                                    <Image src={imgSrc} alt={post.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                                                    <Image src={imgSrc} alt={post.title} fill style={{ objectFit: 'cover' }} />
                                                     <div className="picks-card-overlay" />
                                                     <span className="picks-card-type" style={{ background: typeColor(post.type), color: typeTextColor(post.type) }}>
                                                         {post.type}

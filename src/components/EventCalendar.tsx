@@ -114,7 +114,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     <div key={featuredEvent.id} className="featured-event-card trans-up" ref={eventSwipeRef}>
                         <div className="event-image">
                             {featuredEvent.imageUrl ? (
-                                <Image src={featuredEvent.imageUrl} alt={featuredEvent.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                                <Image src={featuredEvent.imageUrl} alt={featuredEvent.title} fill style={{ objectFit: 'cover' }} />
                             ) : (
                                 <div className="event-image-placeholder">
                                     <Calendar size={32} className="opacity-50" />
@@ -219,7 +219,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                                 </div>
                                                 {(event.timelineImageUrl || event.imageUrl) && (
                                                     <div className="timeline-event-thumb" style={{ position: 'relative', overflow: 'hidden' }}>
-                                                        <Image src={event.timelineImageUrl || event.imageUrl!} alt={event.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                                                        <Image src={event.timelineImageUrl || event.imageUrl!} alt={event.title} fill style={{ objectFit: 'cover' }} />
                                                     </div>
                                                 )}
                                             </div>

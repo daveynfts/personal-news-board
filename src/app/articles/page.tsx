@@ -45,7 +45,7 @@ export default async function ArticlesPage() {
         >
             <div className="archive-article-image">
                 {article.coverImage && article.coverImage.startsWith('http') ? (
-                    <Image src={article.coverImage} alt={article.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                    <Image src={article.coverImage} alt={article.title} fill style={{ objectFit: 'cover' }} />
                 ) : (
                     <div className="archive-article-image-placeholder">✍️</div>
                 )}

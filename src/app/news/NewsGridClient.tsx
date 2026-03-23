@@ -67,7 +67,6 @@ export default function NewsGridClient({ items }: { items: NewsItem[] }) {
                   alt={news.title} 
                   fill 
                   style={{ objectFit: 'cover' }} 
-                  unoptimized 
                   className="group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />

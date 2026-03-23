@@ -180,7 +180,6 @@ export default async function MorePage() {
                                                         alt={item.title}
                                                         fill
                                                         style={{ objectFit: 'cover' }}
-                                                        unoptimized
                                                     />
                                                     <div className="more-card-image-overlay" />
                                                 </div>

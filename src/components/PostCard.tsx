@@ -47,7 +47,6 @@ export default function PostCard({ post }: { post: Post }) {
                     fill
                     className="dd-card-img"
                     onError={() => setImgError(true)}
-                    unoptimized
                 />
                 <div className="dd-card-cover-overlay" />
             </div>

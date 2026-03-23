@@ -203,7 +203,7 @@ export default function Header() {
                 <div className="logo-icon">
                   <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
                     {settingsLoaded && avatarUrl ? (
-                      <Image src={avatarUrl} alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} unoptimized />
+                      <Image src={avatarUrl} alt="Board Logo" fill style={{ objectFit: 'cover', borderRadius: 'inherit' }} />
                     ) : (
                       <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: 'inherit' }} />
                     )}

@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${beVietnam.variable}`} suppressHydrationWarning>
+    <html lang="vi" className={`${inter.variable} ${beVietnam.variable}`} suppressHydrationWarning>
       <head>
         {/* PWA Manifest */}
         <link rel="manifest" href="/manifest.json" />
