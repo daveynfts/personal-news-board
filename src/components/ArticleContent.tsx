@@ -4,6 +4,14 @@ import ReactMarkdown from 'react-markdown';
 import { Tweet } from 'react-tweet';
 import { PortableText } from '@portabletext/react';
 import { urlForImage } from '@/sanity/lib/image';
+import { slugify } from '@/lib/stringUtils';
+
+const flattenText = (children: any): string => {
+   if (typeof children === 'string') return children;
+   if (Array.isArray(children)) return children.map(flattenText).join('');
+   if (children && children.props && children.props.children) return flattenText(children.props.children);
+   return String(children || '');
+};
 
 const TWEET_URL_REGEX = /^https?:\/\/(?:www\.)?(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)\S*$/;
 
@@ -44,6 +52,16 @@ function parseMarkdownContent(raw: string): ContentBlock[] {
 }
 
 const customPortableTextComponents = {
+  block: {
+    h2: ({ children, value }: any) => {
+      const text = value.children?.map((c: any) => c.text).join('') || '';
+      return <h2 id={slugify(text)} className="article-heading-h2">{children}</h2>;
+    },
+    h3: ({ children, value }: any) => {
+      const text = value.children?.map((c: any) => c.text).join('') || '';
+      return <h3 id={slugify(text)} className="article-heading-h3">{children}</h3>;
+    },
+  },
   types: {
     twitter: ({ value }: any) => {
       const match = value.url?.match(TWEET_URL_REGEX);
@@ -151,7 +169,14 @@ export default function ArticleContent({ content }: Props) {
                     }
                     return (
                         <div key={i}>
-                            <ReactMarkdown>{block.content}</ReactMarkdown>
+                            <ReactMarkdown
+                                components={{
+                                    h2: ({ node, children, ...props }: any) => <h2 id={slugify(flattenText(children))} className="article-heading-h2" {...props}>{children}</h2>,
+                                    h3: ({ node, children, ...props }: any) => <h3 id={slugify(flattenText(children))} className="article-heading-h3" {...props}>{children}</h3>,
+                                }}
+                            >
+                                {block.content}
+                            </ReactMarkdown>
                         </div>
                     );
                 })}

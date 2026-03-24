@@ -6,6 +6,9 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { buildMetadata, buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/seo';
 import { buildCanonicalUrl, SITE_META } from '@/lib/siteMeta';
+import ReadingProgressBar from '@/components/ReadingProgressBar';
+import TableOfContents from '@/components/TableOfContents';
+import { extractHeadings } from '@/lib/stringUtils';
 
 interface ArticlePageProps {
     params: Promise<{ id: string }>;
@@ -127,7 +130,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         return '';
     }
 
-    const plainDescription = extractPlainText(article.content).slice(0, 155);
+    const plainText = extractPlainText(article.content);
+    const plainDescription = plainText.slice(0, 155);
+    const readingTime = Math.max(1, Math.ceil((plainText.split(/\s+/).length || 1) / 200));
+    const headings = extractHeadings(article.content);
 
     const seoTitle = article.seo?.metaTitle || article.title;
     const seoDescription = article.seo?.metaDescription || plainDescription || `Read the full article: ${article.title}`;
@@ -166,6 +172,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
             />
+            
+            <ReadingProgressBar />
 
             <div className="article-page-layout">
                 {/* Back navigation */}
@@ -217,6 +225,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         )}
                         <span style={{ color: 'var(--text-muted)' }}>·</span>
                         <span style={{ color: 'var(--text-muted)' }}>Bởi {SITE_META.AUTHOR_NAME}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>·</span>
+                        <span style={{ color: 'var(--accent-color, #0A84FF)', fontWeight: 600 }}>{readingTime} phút đọc</span>
                         {article.xSourceUrl && (
                             <a
                                 href={article.xSourceUrl}
@@ -233,20 +243,31 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     </div>
                 </header>
 
-                {/* Article Body */}
-                <article className="article-body">
-                    <ArticleContent content={article.content} />
-
-                    {/* Davey's Take / Key Takeaway (Unique Value for SEO) */}
-                    {article.daveysTake && (
-                        <div className="daveys-take-box" style={{ marginTop: '60px' }}>
-                            <h3 className="daveys-take-title">
-                                <span className="daveys-take-text">Góc Nhìn Của DaveyNFTs</span>
-                            </h3>
-                            <p className="daveys-take-content">{article.daveysTake}</p>
-                        </div>
+                {/* Content Layout Wrapper */}
+                <div className={`article-content-wrapper ${headings.length > 0 ? 'has-toc' : ''}`}>
+                    
+                    {/* Sidebar TOC */}
+                    {headings.length > 0 && (
+                        <aside className="article-sidebar">
+                            <TableOfContents headings={headings} />
+                        </aside>
                     )}
-                </article>
+
+                    {/* Article Body */}
+                    <article className="article-body">
+                        <ArticleContent content={article.content} />
+
+                        {/* Davey's Take / Key Takeaway (Unique Value for SEO) */}
+                        {article.daveysTake && (
+                            <div className="daveys-take-box" style={{ marginTop: '60px' }}>
+                                <h3 className="daveys-take-title">
+                                    <span className="daveys-take-text">Góc Nhìn Của DaveyNFTs</span>
+                                </h3>
+                                <p className="daveys-take-content">{article.daveysTake}</p>
+                            </div>
+                        )}
+                    </article>
+                </div>
 
                 {/* Footer attribution */}
                 {article.seo?.originalSourceUrl && (
@@ -280,6 +301,26 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Related Articles Styles */}
                 <style dangerouslySetInnerHTML={{ __html: `
+                    .article-content-wrapper {
+                        display: block;
+                        margin-top: 40px;
+                    }
+                    .article-content-wrapper.has-toc {
+                        display: grid;
+                        grid-template-columns: 280px 1fr;
+                        gap: 40px;
+                        align-items: start;
+                    }
+                    
+                    @media (max-width: 1024px) {
+                        .article-content-wrapper.has-toc {
+                            grid-template-columns: 1fr;
+                        }
+                        .article-sidebar {
+                            display: none;
+                        }
+                    }
+
                     .related-articles-section {
                         margin-top: 60px;
                         padding-top: 40px;
