@@ -71,16 +71,20 @@ export default function TableOfContents({ headings }: Props) {
             </div>
             <style dangerouslySetInnerHTML={{ __html: `
                 .toc-container {
-                    position: sticky;
-                    top: 100px;
-                    background: rgba(255, 255, 255, 0.02);
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                    border-radius: 16px;
-                    padding: 24px;
-                    backdrop-filter: blur(20px);
-                    -webkit-backdrop-filter: blur(20px);
-                    max-height: calc(100vh - 120px);
+                    position: fixed;
+                    top: 120px;
+                    left: max(20px, calc(50vw - 640px)); /* Sát mép trái hoặc căn theo layout bài width 800px */
+                    width: 250px;
+                    background: transparent;
+                    border: none;
+                    border-left: 2px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 0;
+                    padding: 0 0 0 20px;
+                    backdrop-filter: none;
+                    -webkit-backdrop-filter: none;
+                    max-height: calc(100vh - 160px);
                     overflow-y: auto;
+                    z-index: 50;
                 }
                 
                 /* Custom scrollbar for TOC */

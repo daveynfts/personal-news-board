@@ -243,31 +243,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     </div>
                 </header>
 
-                {/* Content Layout Wrapper */}
-                <div className={`article-content-wrapper ${headings.length > 0 ? 'has-toc' : ''}`}>
-                    
-                    {/* Sidebar TOC */}
-                    {headings.length > 0 && (
-                        <aside className="article-sidebar">
-                            <TableOfContents headings={headings} />
-                        </aside>
+                {/* Sidebar TOC */}
+                {headings.length > 0 && (
+                    <aside className="article-sidebar">
+                        <TableOfContents headings={headings} />
+                    </aside>
+                )}
+
+                {/* Article Body */}
+                <article className="article-body">
+                    <ArticleContent content={article.content} />
+
+                    {/* Davey's Take / Key Takeaway (Unique Value for SEO) */}
+                    {article.daveysTake && (
+                        <div className="daveys-take-box" style={{ marginTop: '60px' }}>
+                            <h3 className="daveys-take-title">
+                                <span className="daveys-take-text">Góc Nhìn Của DaveyNFTs</span>
+                            </h3>
+                            <p className="daveys-take-content">{article.daveysTake}</p>
+                        </div>
                     )}
-
-                    {/* Article Body */}
-                    <article className="article-body">
-                        <ArticleContent content={article.content} />
-
-                        {/* Davey's Take / Key Takeaway (Unique Value for SEO) */}
-                        {article.daveysTake && (
-                            <div className="daveys-take-box" style={{ marginTop: '60px' }}>
-                                <h3 className="daveys-take-title">
-                                    <span className="daveys-take-text">Góc Nhìn Của DaveyNFTs</span>
-                                </h3>
-                                <p className="daveys-take-content">{article.daveysTake}</p>
-                            </div>
-                        )}
-                    </article>
-                </div>
+                </article>
 
                 {/* Footer attribution */}
                 {article.seo?.originalSourceUrl && (
@@ -301,21 +297,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Related Articles Styles */}
                 <style dangerouslySetInnerHTML={{ __html: `
-                    .article-content-wrapper {
-                        display: block;
-                        margin-top: 40px;
-                    }
-                    .article-content-wrapper.has-toc {
-                        display: grid;
-                        grid-template-columns: 280px 1fr;
-                        gap: 40px;
-                        align-items: start;
-                    }
-                    
-                    @media (max-width: 1024px) {
-                        .article-content-wrapper.has-toc {
-                            grid-template-columns: 1fr;
-                        }
+                    @media (max-width: 1400px) {
                         .article-sidebar {
                             display: none;
                         }
