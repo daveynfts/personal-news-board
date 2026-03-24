@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { TweetPreview } from '../components/TweetPreview'
 
 export const embeddedTweetType = defineType({
   name: 'embeddedTweet',
@@ -10,25 +11,14 @@ export const embeddedTweetType = defineType({
     defineField({ name: 'category', title: 'Category', type: 'string', initialValue: 'general' }),
     defineField({ name: 'sortOrder', title: 'Sort Order', type: 'number', initialValue: 0 }),
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ 
-      name: 'previewImage', 
-      title: 'Ảnh Preview (Studio)', 
-      type: 'image', 
-      description: 'Upload nhanh ảnh chụp Tweet để dễ nhận diện bài nào cũ/mới trong danh sách.' 
-    }),
   ],
   preview: {
     select: { 
-      title: 'label', 
-      subtitle: 'tweetId',
-      media: 'previewImage'
-    },
-    prepare({ title, subtitle, media }) {
-      return {
-        title: title || 'Chưa nhập Label',
-        subtitle: subtitle ? `Tweet ID: ${subtitle}` : 'Trống',
-        media: media
-      }
+      tweetId: 'tweetId',
+      label: 'label'
     }
   },
+  components: {
+    preview: TweetPreview as any
+  }
 })
