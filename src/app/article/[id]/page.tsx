@@ -8,6 +8,7 @@ import { buildMetadata, buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/
 import { buildCanonicalUrl, SITE_META } from '@/lib/siteMeta';
 import { extractPlainText } from '@/lib/stringUtils';
 import ReadingProgressBar from '@/components/ReadingProgressBar';
+import { Tr } from '@/components/TranslatableText';
 
 interface ArticlePageProps {
     params: Promise<{ id: string }>;
@@ -123,11 +124,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             <div className="article-page-layout">
                 {/* Back navigation */}
-                <Link href="/" className="article-back-link">
+                <Link href="/articles" className="article-back-link">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="m15 18-6-6 6-6" />
                     </svg>
-                    Trở về danh sách
+                    <Tr i18nKey="btn.backToFeed" />
                 </Link>
 
                 {/* Hero / Cover Image */}
@@ -148,7 +149,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {/* Article Header */}
                 <header className="article-header">
                     <span className="article-editorial-badge">
-                        {article.isEditorialPick ? '★ Bài Viết Tuyển Chọn' : 'Bài Viết Nổi Bật'}
+                        {article.isEditorialPick ? <Tr i18nKey="archive.starEditorialPicks" /> : <Tr i18nKey="article.featureArticle" />}
                     </span>
                     <h1 className="article-title">{article.title}</h1>
                     <div className="article-meta">
@@ -172,7 +173,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <span style={{ color: 'var(--text-muted)' }}>·</span>
                         <span style={{ color: 'var(--text-muted)' }}>Bởi {SITE_META.AUTHOR_NAME}</span>
                         <span style={{ color: 'var(--text-muted)' }}>·</span>
-                        <span style={{ color: 'var(--accent-color, #0A84FF)', fontWeight: 600 }}>{readingTime} phút đọc</span>
+                        <span style={{ color: 'var(--accent-color, #0A84FF)', fontWeight: 600 }}>{readingTime} <Tr i18nKey="article.readTime" /></span>
                         {article.xSourceUrl && (
                             <a
                                 href={article.xSourceUrl}
@@ -183,7 +184,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
                                 </svg>
-                                Xem trên X
+                                <Tr i18nKey="article.viewOnX" />
                             </a>
                         )}
                     </div>
@@ -197,7 +198,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     {article.daveysTake && (
                         <div className="daveys-take-box" style={{ marginTop: '60px' }}>
                             <h3 className="daveys-take-title">
-                                <span className="daveys-take-text">Góc Nhìn Của DaveyNFTs</span>
+                                <span className="daveys-take-text"><Tr i18nKey="article.opinionTitle" /></span>
                             </h3>
                             <p className="daveys-take-content">{article.daveysTake}</p>
                         </div>
@@ -212,9 +213,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                         </svg>
                         <div>
-                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>Nguồn Bài Viết</p>
+                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}><Tr i18nKey="article.sourceTitle" /></p>
                             <a href={article.seo.originalSourceUrl} target="_blank" rel="noopener nofollow" style={{ color: 'var(--accent-color)' }}>
-                                {article.seo?.originalSourceName ? `Đọc bài gốc tại ${article.seo.originalSourceName}` : 'Đọc toàn bộ bài gốc'} →
+                                {article.seo?.originalSourceName ? <><Tr i18nKey="article.readSourceAt" /> {article.seo.originalSourceName}</> : <Tr i18nKey="article.readFullSource" />} →
                             </a>
                         </div>
                     </div>
@@ -226,7 +227,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
                         </svg>
                         <div>
-                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}>Nguồn X (Twitter)</p>
+                            <p style={{ margin: 0, fontWeight: 700, color: '#fff' }}><Tr i18nKey="article.xSourceTitle" /></p>
                             <a href={article.xSourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-color)', wordBreak: 'break-all' }}>
                                 {article.xSourceUrl}
                             </a>
@@ -302,7 +303,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {/* Related Articles Section */}
                 {relatedArticles && relatedArticles.length > 0 && (
                     <div className="related-articles-section">
-                        <h2 className="related-articles-title">Tin cùng chuyên mục</h2>
+                        <h2 className="related-articles-title"><Tr i18nKey="article.relatedCategory" /></h2>
                         <div className="related-articles-grid">
                             {relatedArticles.map((rel) => (
                                 <Link href={`/article/${rel.slug || rel.id}`} key={rel.id} className="related-article-card">
@@ -317,7 +318,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                         />
                                     </div>
                                     <div className="related-article-content">
-                                        <span className="related-article-category">{rel.category || 'Tin tức'}</span>
+                                        <span className="related-article-category">{rel.category || <Tr i18nKey="article.relatedNews" />}</span>
                                         <h3 className="related-article-heading">{rel.title}</h3>
                                     </div>
                                 </Link>
@@ -328,8 +329,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Back to feed CTA */}
                 <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                    <Link href="/" className="submit-btn" style={{ display: 'inline-block', padding: '14px 40px', textDecoration: 'none', background: 'rgba(255,255,255,0.05)', color: '#fff' }}>
-                        ← Xem tất cả bài viết
+                    <Link href="/articles" className="submit-btn" style={{ display: 'inline-block', padding: '14px 40px', textDecoration: 'none', background: 'rgba(255,255,255,0.05)', color: '#fff' }}>
+                        &larr; <Tr i18nKey="btn.viewAllArticles" />
                     </Link>
                 </div>
             </div>

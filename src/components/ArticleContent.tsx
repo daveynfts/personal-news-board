@@ -6,6 +6,7 @@ import { Tweet } from 'react-tweet';
 import { PortableText } from '@portabletext/react';
 import { urlForImage } from '@/sanity/lib/image';
 import { slugify } from '@/lib/stringUtils';
+import { useTranslation } from '@/lib/LanguageContext';
 
 const flattenText = (children: any): string => {
    if (typeof children === 'string') return children;
@@ -91,6 +92,7 @@ const customPortableTextComponents = {
       );
     },
     image: ({ value }: any) => {
+       const { t } = useTranslation();
        if (!value || !value.asset) return null;
        const url = urlForImage(value)?.url();
        if (!url) return null;
@@ -111,9 +113,9 @@ const customPortableTextComponents = {
                            <span className="attribution-text">
                                {value.attributionUrl ? (
                                    <a href={value.attributionUrl} target="_blank" rel="noopener nofollow">
-                                       Nguồn: {value.attribution}
+                                       {t('carousel.source')}: {value.attribution}
                                    </a>
-                               ) : `Nguồn: ${value.attribution}`}
+                               ) : `${t('carousel.source')}: ${value.attribution}`}
                            </span>
                        )}
                    </figcaption>

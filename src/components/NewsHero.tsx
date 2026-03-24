@@ -275,7 +275,7 @@ export default function NewsHero({
            </div>
            
            <Link href="/news" className="text-sm font-medium text-gray-300 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10 flex items-center gap-2 relative overflow-hidden group shadow-md hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-             <span className="relative z-10">Xem tất cả News</span>
+             <span className="relative z-10">{t('btn.viewAllArticles')}</span>
              <span className="relative z-10 group-hover:translate-x-1 transition-transform" aria-hidden="true">&rarr;</span>
              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_ease-out_infinite]" />
            </Link>

@@ -7,6 +7,7 @@ import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 import { Pin, Newspaper, Edit3, MessageCircle, Search } from 'lucide-react';
+import { Tr } from '@/components/TranslatableText';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,12 +76,12 @@ export default async function PicksPage({ searchParams }: PageProps) {
                 <div className="liquid-blob blob-3" style={{ opacity: 0.15, top: '30%', right: '10%' }} />
                 <Container>
                     <div className="archive-hero-content">
-                        <Link href="/" className="more-back-btn">← Trở về Trang chủ</Link>
+                        <Link href="/" className="more-back-btn"><Tr i18nKey="btn.backToHome" /></Link>
                         <div style={{ marginTop: '24px' }}>
-                            <span className="more-label"><Pin className="inline-block mr-1" size={16} /> Toàn bộ danh sách</span>
-                            <h1 className="archive-hero-title">Deep Dive Zone</h1>
+                            <span className="more-label"><Pin className="inline-block mr-1" size={16} /> <Tr i18nKey="archive.picksLabel" /></span>
+                            <h1 className="archive-hero-title"><Tr i18nKey="archive.picksTitle" /></h1>
                             <p className="archive-hero-subtitle">
-                                Bảng tổng hợp tất cả tin tức, bài viết và trích dẫn X.
+                                <Tr i18nKey="archive.picksSubtitle" />
                             </p>
                         </div>
                         <div style={{ marginTop: '20px' }}>
@@ -89,7 +90,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                         <div className="archive-hero-stats">
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{visiblePosts.length}</span>
-                                <span className="archive-stat-label">Bài Đăng Chính</span>
+                                <span className="archive-stat-label"><Tr i18nKey="archive.activePicksStat" /></span>
                             </div>
                             {['Research', 'Article'].map(type => {
                                 const count = visiblePosts.filter(p => p.type.toLowerCase() === type.toLowerCase()).length;
@@ -98,7 +99,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                         <div className="archive-stat-sep" />
                                         <div className="archive-stat">
                                             <span className="archive-stat-num">{count}</span>
-                                            <span className="archive-stat-label">{type}</span>
+                                            <span className="archive-stat-label"><Tr i18nKey={`filter.${type.toLowerCase()}`} /></span>
                                         </div>
                                     </div>
                                 ) : null;
@@ -108,7 +109,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                     <div className="archive-stat-sep" />
                                     <div className="archive-stat">
                                         <span className="archive-stat-num">{morePosts.length}</span>
-                                        <span className="archive-stat-label">Lưu Trữ</span>
+                                        <span className="archive-stat-label"><Tr i18nKey="archive.archived" /></span>
                                     </div>
                                 </>
                             )}
@@ -145,8 +146,8 @@ export default async function PicksPage({ searchParams }: PageProps) {
                             <div className="archive-section-header">
                                 <h2 className="archive-section-title">
                                     <span className="archive-section-dot" style={{ background: 'var(--accent-color)' }} />
-                                    {activeFilter === 'all' ? 'Tất cả bài phân tích' :
-                                            `${activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)}`}
+                                    {activeFilter === 'all' ? <Tr i18nKey="archive.allPicks" /> :
+                                            <Tr i18nKey={`filter.${activeFilter}`} />}
                                 </h2>
                                 <span className="more-month-count">{filteredPosts.length}</span>
                             </div>
@@ -154,8 +155,8 @@ export default async function PicksPage({ searchParams }: PageProps) {
                             {filteredPosts.length === 0 ? (
                                 <div className="more-empty-state" style={{ padding: '80px 40px' }}>
                                     <div className="more-empty-icon"><Search size={48} className="opacity-50" /></div>
-                                    <h2 style={{ fontSize: '1.5rem' }}>No {activeFilter} posts</h2>
-                                    <p>Try a different filter or add posts from the admin panel.</p>
+                                    <h2 style={{ fontSize: '1.5rem' }}><Tr i18nKey="archive.noPosts" vars={{ filter: activeFilter }} /></h2>
+                                    <p><Tr i18nKey="archive.tryFilter" /></p>
                                 </div>
                             ) : (
                                 <div className="picks-grid">
@@ -186,7 +187,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                         <span className="picks-card-date">
                                                             {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                                                         </span>
-                                                        <span className="picks-card-link">TRUY CẬP BÀI NGUỒN →</span>
+                                                        <span className="picks-card-link"><Tr i18nKey="btn.accessSource" /> &rarr;</span>
                                                     </div>
                                                 </div>
                                             </a>
@@ -202,7 +203,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'var(--text-muted)' }} />
-                                        Kho Lưu Trữ Mở Rộng
+                                        <Tr i18nKey="archive.extendedArchive" />
                                     </h2>
                                     <span className="more-month-count">{morePosts.length}</span>
                                 </div>
@@ -232,7 +233,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                                         <span className="picks-card-date">
                                                             {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                                                         </span>
-                                                        <span className="picks-card-link">TRUY CẬP BÀI NGUỒN →</span>
+                                                        <span className="picks-card-link"><Tr i18nKey="btn.accessSource" /> &rarr;</span>
                                                     </div>
                                                 </div>
                                             </a>

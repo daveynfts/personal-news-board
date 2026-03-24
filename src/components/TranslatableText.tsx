@@ -50,3 +50,9 @@ export function EmptyState() {
     </div>
   );
 }
+
+/** Inline translatable text for Server Components */
+export function Tr({ i18nKey, vars }: { i18nKey: string; vars?: Record<string, string> }) {
+  const { t } = useTranslation();
+  return <>{t(i18nKey, vars)}</>;
+}

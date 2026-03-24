@@ -75,6 +75,7 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Post Card ─────────────────────────────────────────────────────────
     'post.syncing': 'Syncing...',
+    'post.justNow': 'Just now',
 
     // ── Tweet Wall ────────────────────────────────────────────────────────
     'tweet.curatedInsights': 'Curated insights from the crypto community',
@@ -126,11 +127,17 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.blogLabel': 'Blog',
     'archive.xLabel': 'X Thread',
 
-    // ── Article Detail ────────────────────────────────────────────────────
     'article.editorialPick': '★ Editorial Pick',
     'article.featureArticle': 'Feature Article',
     'article.viewOnX': 'View on X',
     'article.xSourceTitle': 'X Source',
+    'article.readTime': 'min read',
+    'article.opinionTitle': 'DaveyNFTs\' Opinion',
+    'article.sourceTitle': 'Article Source',
+    'article.readSourceAt': 'Read original at',
+    'article.readFullSource': 'Read full original article',
+    'article.relatedCategory': 'Related by Category',
+    'article.relatedNews': 'Related News',
 
     // ── Empty States ──────────────────────────────────────────────────────
     'empty.noPosts': 'No posts found for this category.',
@@ -262,6 +269,7 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // ── Post Card ─────────────────────────────────────────────────────────
     'post.syncing': 'Đang đồng bộ...',
+    'post.justNow': 'Mới nhất',
 
     // ── Tweet Wall ────────────────────────────────────────────────────────
     'tweet.curatedInsights': 'Thông tin chọn lọc từ cộng đồng crypto',
@@ -313,11 +321,17 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.blogLabel': '✍️ Blog',
     'archive.xLabel': '𝕏 X Thread',
 
-    // ── Article Detail ────────────────────────────────────────────────────
     'article.editorialPick': '★ Biên Tập Chọn Lọc',
     'article.featureArticle': 'Bài Viết Tiêu Điểm',
     'article.viewOnX': 'Xem trên X',
     'article.xSourceTitle': 'Nguồn X',
+    'article.readTime': 'phút đọc',
+    'article.opinionTitle': 'Góc Nhìn Của DaveyNFTs',
+    'article.sourceTitle': 'Nguồn Bài Viết',
+    'article.readSourceAt': 'Đọc bài gốc tại',
+    'article.readFullSource': 'Đọc toàn bộ bài gốc',
+    'article.relatedCategory': 'Tin cùng chuyên mục',
+    'article.relatedNews': 'Tin tức',
 
     // ── Empty States ──────────────────────────────────────────────────────
     'empty.noPosts': 'Không tìm thấy bài viết cho danh mục này.',

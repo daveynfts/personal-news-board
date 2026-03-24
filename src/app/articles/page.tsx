@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import { buildMetadata, buildItemListJsonLd } from '@/lib/seo';
 import { SITE_META } from '@/lib/siteMeta';
 import { extractPlainText } from '@/lib/stringUtils';
+import { Tr } from '@/components/TranslatableText';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,7 +52,7 @@ export default async function ArticlesPage() {
                     <div className="archive-article-image-placeholder">✍️</div>
                 )}
                 {article.isEditorialPick && (
-                    <span className="archive-article-pick-badge">★ Tuyển Chọn</span>
+                    <span className="archive-article-pick-badge">★ <Tr i18nKey="archive.editorialPicksStat" /></span>
                 )}
             </div>
             <div className="archive-article-body">
@@ -67,9 +68,9 @@ export default async function ArticlesPage() {
                     </p>
                 )}
                 <div className="archive-article-footer">
-                    <span className="archive-article-read">Đọc Bài Viết →</span>
+                    <span className="archive-article-read"><Tr i18nKey="archive.readArticle" /></span>
                     {article.xSourceUrl && (
-                        <span className="archive-article-x">𝕏 Source</span>
+                        <span className="archive-article-x"><Tr i18nKey="archive.xSource" /></span>
                     )}
                 </div>
             </div>
@@ -99,12 +100,12 @@ export default async function ArticlesPage() {
                 <div className="liquid-blob blob-2" style={{ opacity: 0.15, bottom: '-20%', right: '0%' }} />
                 <Container>
                     <div className="archive-hero-content">
-                        <Link href="/" className="more-back-btn">← Trở về Trang chủ</Link>
+                        <Link href="/" className="more-back-btn"><Tr i18nKey="btn.backToHome" /></Link>
                         <div style={{ marginTop: '24px' }}>
-                            <span className="more-label">✍️ Toàn Bộ Bài Viết</span>
-                            <h1 className="archive-hero-title">Bài Viết & Chuyên Đề</h1>
+                            <span className="more-label"><Tr i18nKey="archive.fullArchive" /></span>
+                            <h1 className="archive-hero-title"><Tr i18nKey="archive.editorialAndFeatures" /></h1>
                             <p className="archive-hero-subtitle">
-                                Tổng hợp bài viết phân tích, báo cáo chuyên sâu và nhận định về thị trường Web3.
+                                <Tr i18nKey="archive.articlesSubtitle" />
                             </p>
                         </div>
                         <div style={{ marginTop: '20px' }}>
@@ -113,19 +114,19 @@ export default async function ArticlesPage() {
                         <div className="archive-hero-stats">
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{editorialPicks.length}</span>
-                                <span className="archive-stat-label">Tuyển Chọn</span>
+                                <span className="archive-stat-label"><Tr i18nKey="archive.editorialPicksStat" /></span>
                             </div>
                             <div className="archive-stat-sep" />
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{features.length}</span>
-                                <span className="archive-stat-label">Nổi Bật</span>
+                                <span className="archive-stat-label"><Tr i18nKey="archive.features" /></span>
                             </div>
                             {moreArticles.length > 0 && (
                                 <>
                                     <div className="archive-stat-sep" />
                                     <div className="archive-stat">
                                         <span className="archive-stat-num">{moreArticles.length}</span>
-                                        <span className="archive-stat-label">Đã Lưu Trữ</span>
+                                        <span className="archive-stat-label"><Tr i18nKey="archive.archived" /></span>
                                     </div>
                                 </>
                             )}
@@ -150,7 +151,7 @@ export default async function ArticlesPage() {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'var(--blog-color)' }} />
-                                        ★ Bài Viết Tuyển Chọn
+                                        <Tr i18nKey="archive.starEditorialPicks" />
                                     </h2>
                                     <span className="more-month-count">{editorialPicks.length}</span>
                                 </div>
@@ -168,7 +169,7 @@ export default async function ArticlesPage() {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'rgba(255,255,255,0.4)' }} />
-                                        Bài Viết Mới Nhất
+                                        <Tr i18nKey="section.latestFeatures" />
                                     </h2>
                                     <span className="more-month-count">{features.length}</span>
                                 </div>
@@ -186,7 +187,7 @@ export default async function ArticlesPage() {
                                 <div className="archive-section-header">
                                     <h2 className="archive-section-title">
                                         <span className="archive-section-dot" style={{ background: 'var(--text-muted)' }} />
-                                        Kho Lưu Trữ Mở Rộng
+                                        <Tr i18nKey="archive.extendedArchive" />
                                     </h2>
                                     <span className="more-month-count">{moreArticles.length}</span>
                                 </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Newspaper, ChevronDown } from 'lucide-react';
+import { useTranslation } from '@/lib/LanguageContext';
 
 interface NewsItem {
   id?: number | string;
@@ -17,6 +18,7 @@ interface NewsItem {
 }
 
 export default function NewsGridClient({ items }: { items: NewsItem[] }) {
+  const { t, locale } = useTranslation();
   const [visibleCount, setVisibleCount] = useState(12);
   const [activeTab, setActiveTab] = useState<'Research' | 'Article'>('Research');
 
@@ -80,7 +82,7 @@ export default function NewsGridClient({ items }: { items: NewsItem[] }) {
                     {news.type}
                   </span>
                   <span className="text-xs text-gray-500 font-medium">
-                    {news.createdAt ? new Date(news.createdAt).toLocaleDateString('vi-VN') : 'Mới nhất'}
+                    {news.createdAt ? new Date(news.createdAt).toLocaleDateString(locale === 'vi' ? 'vi-VN' : undefined) : t('post.justNow')}
                   </span>
                 </div>
                 <h3 className="text-gray-200 font-medium text-lg leading-[1.4] group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] transition-all line-clamp-3">
@@ -98,7 +100,7 @@ export default function NewsGridClient({ items }: { items: NewsItem[] }) {
             onClick={loadMore}
             className="flex items-center gap-2 px-8 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:-translate-y-1 group"
           >
-            Tải thêm ({filteredItems.length - visibleCount})
+            {t('newshero.waitForMore')} ({filteredItems.length - visibleCount})
             <ChevronDown size={18} className="text-gray-400 group-hover:text-white transition-colors" />
           </button>
         </div>
@@ -107,7 +109,7 @@ export default function NewsGridClient({ items }: { items: NewsItem[] }) {
       {filteredItems.length === 0 && (
         <div className="text-center py-24 bg-black/20 rounded-3xl border border-white/10 mt-8">
           <Newspaper size={48} className="mx-auto text-gray-600 mb-4 opacity-50" />
-          <h3 className="text-xl text-gray-400 font-medium tracking-wide">Chưa có bài viết nào</h3>
+          <h3 className="text-xl text-gray-400 font-medium tracking-wide">{t('archive.noArticles')}</h3>
         </div>
       )}
     </div>
