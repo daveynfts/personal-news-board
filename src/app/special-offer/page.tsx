@@ -144,7 +144,6 @@ export default function SpecialOfferPage() {
             {/* Left Column */}
             <div className="so-hero-left">
               <div className="so-hero-badge flex items-center">
-                <span className="so-badge-pulse" />
                 <span className="flex items-center">{t('so.exclusivePartnerDeals')}</span>
               </div>
               <div className="so-hero-title-glass-card">
@@ -220,7 +219,7 @@ export default function SpecialOfferPage() {
               <div className="so-slider-label-row">
                 <span className="so-slider-label">{t('so.calc.monthlyVolume')}</span>
                 <span className="so-slider-value" style={{
-                  textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(168,85,247,${0.3 + intensity * 0.4})` : 'none',
+                  textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(234,179,8,${0.3 + intensity * 0.4})` : 'none',
                 }}>{formatCurrency(volume)}</span>
               </div>
               <div className="so-slider-track-wrapper">
@@ -234,7 +233,7 @@ export default function SpecialOfferPage() {
                   onChange={(e) => setVolume(Number(e.target.value))}
                   className="so-range-slider"
                   style={{
-                    background: `linear-gradient(to right, #6366f1 0%, #a855f7 ${sliderPercent}%, rgba(255,255,255,0.08) ${sliderPercent}%)`,
+                    background: `linear-gradient(to right, #fef08a 0%, #eab308 ${sliderPercent}%, rgba(255,255,255,0.08) ${sliderPercent}%)`,
                   }}
                 />
                 <div className="so-slider-markers">
@@ -265,7 +264,7 @@ export default function SpecialOfferPage() {
               className="so-savings-highlight"
               style={{
                 boxShadow: intensity > 0.5
-                  ? `0 0 ${20 + intensity * 40}px rgba(168,85,247,${intensity * 0.25}), inset 0 0 ${intensity * 30}px rgba(52,211,153,${intensity * 0.08})`
+                  ? `0 0 ${20 + intensity * 40}px rgba(234,179,8,${intensity * 0.35}), inset 0 0 ${intensity * 30}px rgba(251,191,36,${intensity * 0.15})`
                   : 'none',
               }}
             >
@@ -288,7 +287,7 @@ export default function SpecialOfferPage() {
                 <div>
                   <div className="so-savings-label">{t('so.calc.youSave')}</div>
                   <div className="so-savings-amount" style={{
-                    textShadow: `0 0 ${8 + intensity * 24}px rgba(52,211,153,${0.2 + intensity * 0.5})`,
+                    textShadow: `0 0 ${8 + intensity * 24}px rgba(234,179,8,${0.2 + intensity * 0.5})`,
                   }}>
                     {formatCurrencyDecimal(animatedSavings)}
                     <span className="so-savings-period">{t('so.calc.perMonth')}</span>
