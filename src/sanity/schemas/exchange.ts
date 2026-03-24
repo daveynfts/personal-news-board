@@ -28,7 +28,14 @@ export const exchangeType = defineType({
     defineField({ name: 'badgeColor', title: 'Badge Color (Hex)', type: 'string', initialValue: '#f0b90b', group: 'styles' }),
     defineField({ name: 'gradient', title: 'Gradient CSS', type: 'string', group: 'styles' }),
     defineField({ name: 'glowColor', title: 'Glow Color (Hex)', type: 'string', group: 'styles' }),
-    defineField({ name: 'logo', title: 'Logo (Emoji/URL)', type: 'string', initialValue: '🟡', group: 'styles', description: 'Ảnh đại diện. Khuyến nghị ảnh vuông (1:1), kích thước nhỏ.' }),
+    defineField({ 
+      name: 'logo', 
+      title: 'Upload Logo (1:1)', 
+      type: 'image', 
+      options: { hotspot: true }, 
+      group: 'styles', 
+      description: 'Tải lên ảnh đại diện vuông (1:1), đã hỗ trợ định dạng PNG/JPG/WebP trong suốt.' 
+    }),
     defineField({ name: 'link', title: 'Ref Link', type: 'url', group: 'styles' }),
     
     defineField({ name: 'sortOrder', title: 'Sort Order', type: 'number', initialValue: 0, group: 'details' }),
