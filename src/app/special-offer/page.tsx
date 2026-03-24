@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Interactive3DCoin from '@/components/Interactive3DCoin';
 import Container from '@/components/Container';
 import { useTranslation } from '@/lib/LanguageContext';
 
@@ -274,13 +275,7 @@ export default function SpecialOfferPage() {
                   transform: `scale(${1 + intensity * 0.3})`,
                   transition: 'transform 0.4s',
                 }}>
-                  <Image 
-                    src="/custom-3d-bitcoin.png" 
-                    alt="Premium 3D Bitcoin" 
-                    width={80} 
-                    height={80}
-                    className="so-3d-bitcoin-img"
-                  />
+                  <Interactive3DCoin />
                 </div>
                 <div>
                   <div className="so-savings-label">{t('so.calc.youSave')}</div>
