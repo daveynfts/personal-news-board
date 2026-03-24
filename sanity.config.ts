@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { projectId, dataset } from './src/sanity/env'
 import { schemaTypes } from './src/sanity/schemas'
+import { colorInput } from '@sanity/color-input'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createManagedList = (S: any, typeTitle: string, typeName: string, activeFilter: string, hiddenFilter: string) => {
@@ -47,6 +48,7 @@ export default defineConfig({
   },
   
   plugins: [
+    colorInput(),
     structureTool({
       structure: (S) => {
         // Danh sách các schema đã được custom thư mục

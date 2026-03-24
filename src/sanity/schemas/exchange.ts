@@ -27,7 +27,13 @@ export const exchangeType = defineType({
     }),    
     defineField({ name: 'badgeColor', title: 'Badge Color (Hex)', type: 'string', initialValue: '#f0b90b', group: 'styles' }),
     defineField({ name: 'gradient', title: 'Gradient CSS', type: 'string', group: 'styles' }),
-    defineField({ name: 'glowColor', title: 'Glow Color (Hex)', type: 'string', group: 'styles' }),
+    defineField({ 
+      name: 'glowColor', 
+      title: 'Glow Color (Color Picker)', 
+      type: 'color', 
+      group: 'styles',
+      description: 'Bảng màu Glow (Chọn mã màu RGB/HEX tuỳ ý).' 
+    }),
     defineField({ 
       name: 'logo', 
       title: 'Upload Logo (1:1)', 
