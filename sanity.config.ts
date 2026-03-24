@@ -30,8 +30,37 @@ export default defineConfig({
               ),
             S.divider(),
             ...S.documentTypeListItems().filter(
-              (listItem) => !['siteSettings'].includes(listItem.getId() as string)
-            )
+              (listItem) => !['siteSettings', 'embeddedTweet'].includes(listItem.getId() as string)
+            ),
+            S.divider(),
+            S.listItem()
+              .title('X Picks (Quản lý)')
+              .child(
+                S.list()
+                  .title('Quản lý Tweet Wall')
+                  .items([
+                    S.listItem()
+                      .title('🟢 Đang Hiển Thị (Trang chủ)')
+                      .child(
+                        S.documentList()
+                          .title('Active Tweets')
+                          .schemaType('embeddedTweet')
+                          .filter('_type == "embeddedTweet" && isVisible == true')
+                      ),
+                    S.listItem()
+                      .title('🔴 Đã Ẩn (Kho lưu trữ)')
+                      .child(
+                        S.documentList()
+                          .title('Hidden Tweets')
+                          .schemaType('embeddedTweet')
+                          .filter('_type == "embeddedTweet" && isVisible != true')
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('Tất cả X Picks')
+                      .child(S.documentTypeList('embeddedTweet'))
+                  ])
+              )
           ])
     }),
   ],
