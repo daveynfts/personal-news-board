@@ -274,15 +274,13 @@ export default function SpecialOfferPage() {
                   transform: `scale(${1 + intensity * 0.3})`,
                   transition: 'transform 0.4s',
                 }}>
-                  <div className="so-3d-coin">
-                    <div className="so-3d-coin-layer" />
-                    <div className="so-3d-coin-layer" />
-                    <div className="so-3d-coin-layer" />
-                    <div className="so-3d-coin-layer" />
-                    <div className="so-3d-coin-layer" />
-                    <div className="so-3d-coin-face so-3d-coin-front">₿</div>
-                    <div className="so-3d-coin-face so-3d-coin-back">₿</div>
-                  </div>
+                  <Image 
+                    src="/custom-3d-bitcoin.png" 
+                    alt="Premium 3D Bitcoin" 
+                    width={80} 
+                    height={80}
+                    className="so-3d-bitcoin-img"
+                  />
                 </div>
                 <div>
                   <div className="so-savings-label">{t('so.calc.youSave')}</div>
