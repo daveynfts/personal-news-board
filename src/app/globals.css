@@ -6411,9 +6411,9 @@ select.form-input {
   animation: so-float 20s infinite alternate ease-in-out;
 }
 
-.so-blob-1 { width: 500px; height: 500px; background: #60a5fa; top: -10%; left: -5%; }
-.so-blob-2 { width: 600px; height: 600px; background: #d8b4fe; bottom: -15%; right: -10%; animation-delay: -7s; }
-.so-blob-3 { width: 400px; height: 400px; background: #fdba74; top: 50%; left: 30%; animation-delay: -14s; }
+.so-blob-1 { width: 500px; height: 500px; background: #fde047; top: -10%; left: -5%; }
+.so-blob-2 { width: 600px; height: 600px; background: #fbbf24; bottom: -15%; right: -10%; animation-delay: -7s; }
+.so-blob-3 { width: 400px; height: 400px; background: #d97706; top: 50%; left: 30%; animation-delay: -14s; }
 
 @keyframes so-float {
   0% { transform: translate(0, 0) scale(1); }
@@ -6573,7 +6573,7 @@ select.form-input {
 }
 
 .so-hero-highlight {
-  background: linear-gradient(135deg, #d8b4fe, #60a5fa);
+  background: linear-gradient(135deg, #fde047, #fbbf24);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -6588,7 +6588,7 @@ select.form-input {
   left: 0;
   top: 0;
   filter: blur(12px);
-  background: linear-gradient(135deg, #d8b4fe, #60a5fa);
+  background: linear-gradient(135deg, #fde047, #fbbf24);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -6913,9 +6913,9 @@ select.form-input {
   height: 120%;
   background: radial-gradient(
     ellipse at center,
-    rgba(168,85,247, calc(var(--intensity, 0) * 0.08)) 0%,
-    rgba(99,102,241, calc(var(--intensity, 0) * 0.05)) 30%,
-    rgba(52,211,153, calc(var(--intensity, 0) * 0.03)) 60%,
+    rgba(251, 191, 36, calc(var(--intensity, 0) * 0.08)) 0%,
+    rgba(253, 224, 71, calc(var(--intensity, 0) * 0.05)) 30%,
+    rgba(217, 119, 6, calc(var(--intensity, 0) * 0.03)) 60%,
     transparent 80%
   );
   pointer-events: none;
@@ -6941,8 +6941,8 @@ select.form-input {
 .so-calc-particle {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168,85,247,0.8), rgba(99,102,241,0.4));
-  box-shadow: 0 0 6px rgba(168,85,247,0.5);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8), rgba(253, 224, 71, 0.4));
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
   animation: so-particle-float linear infinite;
 }
 
@@ -6963,10 +6963,10 @@ select.form-input {
   z-index: 0;
   opacity: calc(var(--intensity, 0) * 0.8);
   background: linear-gradient(135deg,
-    rgba(168,85,247, calc(var(--intensity, 0) * 0.3)),
-    rgba(99,102,241, calc(var(--intensity, 0) * 0.2)),
-    rgba(52,211,153, calc(var(--intensity, 0) * 0.15)),
-    rgba(168,85,247, calc(var(--intensity, 0) * 0.3))
+    rgba(251, 191, 36, calc(var(--intensity, 0) * 0.3)),
+    rgba(253, 224, 71, calc(var(--intensity, 0) * 0.2)),
+    rgba(217, 119, 6, calc(var(--intensity, 0) * 0.15)),
+    rgba(251, 191, 36, calc(var(--intensity, 0) * 0.3))
   ) border-box;
   -webkit-mask:
     linear-gradient(#fff 0 0) padding-box,
@@ -6991,7 +6991,7 @@ select.form-input {
   transform: translateX(-50%);
   width: 400px;
   height: 300px;
-  background: radial-gradient(ellipse, rgba(99,102,241, calc(0.1 + var(--intensity, 0) * 0.15)), transparent 70%);
+  background: radial-gradient(ellipse, rgba(251, 191, 36, calc(0.1 + var(--intensity, 0) * 0.15)), transparent 70%);
   pointer-events: none;
   z-index: 0;
   transition: opacity 0.4s;
@@ -7063,16 +7063,16 @@ select.form-input {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #a855f7, #6366f1);
+  background: linear-gradient(135deg, #fde047, #fbbf24);
   border: 3px solid #fff;
-  box-shadow: 0 2px 10px rgba(99,102,241,0.4), 0 0 20px rgba(168,85,247,0.3);
+  box-shadow: 0 2px 10px rgba(251, 191, 36, 0.4), 0 0 20px rgba(253, 224, 71, 0.3);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .so-range-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 2px 16px rgba(99,102,241,0.5), 0 0 30px rgba(168,85,247,0.4);
+  box-shadow: 0 2px 16px rgba(251, 191, 36, 0.5), 0 0 30px rgba(253, 224, 71, 0.4);
 }
 
 .so-range-slider::-webkit-slider-thumb:active {
@@ -7083,9 +7083,9 @@ select.form-input {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #a855f7, #6366f1);
+  background: linear-gradient(135deg, #fde047, #fbbf24);
   border: 3px solid #fff;
-  box-shadow: 0 2px 10px rgba(99,102,241,0.4);
+  box-shadow: 0 2px 10px rgba(251, 191, 36, 0.4);
   cursor: pointer;
 }
 
@@ -7312,7 +7312,7 @@ select.form-input {
 .so-gradient-text-animated {
   background: linear-gradient(
     135deg,
-    #a855f7 0%, #6366f1 25%, #ec4899 50%, #a855f7 75%, #6366f1 100%
+    #fbbf24 0%, #fde047 25%, #d97706 50%, #fbbf24 75%, #fde047 100%
   );
   background-size: 300% 300%;
   -webkit-background-clip: text;
