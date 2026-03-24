@@ -24,8 +24,6 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
         return () => clearInterval(interval);
     }, [articles.length]);
 
-    if (!articles || articles.length === 0) return null;
-
     const handlePrevious = () => {
         setCurrentIndex((prev) => (prev === 0 ? articles.length - 1 : prev - 1));
     };
@@ -34,15 +32,17 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
         setCurrentIndex((prev) => (prev + 1) % articles.length);
     };
 
-    const currentArticle = articles[currentIndex];
-    const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
-
     // Swipe left/right to navigate carousel
     const swipeRef = useSwipe<HTMLDivElement>({
         onSwipeLeft: handleNext,
         onSwipeRight: handlePrevious,
         threshold: 40,
     });
+
+    if (!articles || articles.length === 0) return null;
+
+    const currentArticle = articles[currentIndex];
+    const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
     return (
         <div className="editorial-carousel-container">

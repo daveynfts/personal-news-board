@@ -44,6 +44,16 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         return () => clearInterval(interval);
     }, [featuredEventsList.length]);
 
+    const handleNextFeatured = () => setCurrentFeaturedIndex(prev => (prev + 1) % featuredEventsList.length);
+    const handlePrevFeatured = () => setCurrentFeaturedIndex(prev => (prev - 1 + featuredEventsList.length) % featuredEventsList.length);
+    
+    // Swipe left/right on featured event card
+    const eventSwipeRef = useSwipe<HTMLDivElement>({
+        onSwipeLeft: handleNextFeatured,
+        onSwipeRight: handlePrevFeatured,
+        threshold: 40,
+    });
+
     if (events.length === 0) {
         return (
             <div className="event-hero-empty">
@@ -55,17 +65,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         );
     }
 
-    const handleNextFeatured = () => setCurrentFeaturedIndex(prev => (prev + 1) % featuredEventsList.length);
-    const handlePrevFeatured = () => setCurrentFeaturedIndex(prev => (prev - 1 + featuredEventsList.length) % featuredEventsList.length);
-    
     const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
-
-    // Swipe left/right on featured event card
-    const eventSwipeRef = useSwipe<HTMLDivElement>({
-        onSwipeLeft: handleNextFeatured,
-        onSwipeRight: handlePrevFeatured,
-        threshold: 40,
-    });
 
     // Group events for timeline
     const groupedEvents = displayEvents.reduce((acc, event) => {

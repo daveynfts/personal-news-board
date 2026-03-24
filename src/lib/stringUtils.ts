@@ -27,7 +27,7 @@ export interface TocHeading {
     level: number;
 }
 
-export function extractHeadings(content: any): TocHeading[] {
+export function extractHeadings(content: unknown): TocHeading[] {
     const headings: TocHeading[] = [];
     if (!content) return headings;
 
@@ -42,7 +42,7 @@ export function extractHeadings(content: any): TocHeading[] {
     } else if (Array.isArray(content)) {
         content.forEach(block => {
             if (block._type === 'block' && (block.style === 'h2' || block.style === 'h3') && block.children?.length > 0) {
-                const text = block.children.map((c: any) => c.text).join('').trim();
+                const text = block.children.map((c: { text?: string }) => c.text || '').join('').trim();
                 if (text) {
                     const level = parseInt((block.style as string).replace('h', ''), 10);
                     headings.push({ id: slugify(text), text, level });
@@ -51,4 +51,29 @@ export function extractHeadings(content: any): TocHeading[] {
         });
     }
     return headings;
+}
+
+export function extractPlainText(content: unknown): string {
+    if (!content) return '';
+    if (typeof content === 'string') {
+        return content
+            .replace(/!\[.*?\]\(.*?\)/g, '')
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .replace(/#{1,6}\s+/g, '')
+            .replace(/[*_`~>]/g, '')
+            .replace(/\n+/g, ' ')
+            .trim();
+    }
+    if (Array.isArray(content)) {
+        return content
+            .map(block => {
+                if (block._type !== 'block' || !block.children) {
+                    return '';
+                }
+                return block.children.map((child: { text?: string }) => child.text || '').join('');
+            })
+            .join(' ')
+            .trim();
+    }
+    return '';
 }

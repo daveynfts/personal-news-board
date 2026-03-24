@@ -1,0 +1,187 @@
+﻿
+> personal-news-board@0.1.0 lint
+> eslint
+
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\postcss.config.mjs
+  1:1  warning  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\sanity.config.ts
+  6:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\check-draft.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\parse-lint.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\remove-unoptimized.js
+  1:18  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\seed-all.ts
+  63:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\test-upload.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:1   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\test-upload.ts
+   5:1   error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+  34:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\scripts\test-upload2.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:1   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\app\api\site-settings\route.ts
+  8:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\app\news\NewsGridClient.tsx
+  4:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\app\news\page.tsx
+   5:10  warning  'Newspaper' is defined but never used                            @typescript-eslint/no-unused-vars
+  84:24  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\app\page.tsx
+   4:8   warning  'EditorialCarousel' is defined but never used          @typescript-eslint/no-unused-vars
+   9:8   warning  'Link' is defined but never used                       @typescript-eslint/no-unused-vars
+  13:10  warning  'HeroText' is defined but never used                   @typescript-eslint/no-unused-vars
+  62:9   warning  'standardArticles' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\app\picks\page.tsx
+   9:33  warning  'MessageCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  62:28  warning  'type' is defined but never used           @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\app\special-offer\page.tsx
+  8:85   warning  'Check' is defined but never used      @typescript-eslint/no-unused-vars
+  8:92   warning  'Circle' is defined but never used     @typescript-eslint/no-unused-vars
+  8:100  warning  'Timer' is defined but never used      @typescript-eslint/no-unused-vars
+  8:115  warning  'CircleDot' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\ArticleContent.tsx
+  100:16  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  175:44  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  176:44  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\CryptoTicker.tsx
+  88:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\EditorialCarousel.tsx
+  41:22  error  React Hook "useSwipe" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\EventCalendar.tsx
+   5:39  warning  'useCallback' is defined but never used                                                                                                                                                     @typescript-eslint/no-unused-vars
+  64:27  error    React Hook "useSwipe" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\Header.tsx
+  40:9  warning  'hoverTimerRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\NewsHero.tsx
+  174:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  292:22  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  314:22  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\PostCard.tsx
+  24:23  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\PostCard.tsx:24:23
+  22 |     const [imgError, setImgError] = useState(false);
+  23 |
+> 24 |     useEffect(() => { setImgError(false); }, [post.imageUrl]);
+     |                       ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  25 |
+  26 |     const hasValidImage = !imgError && isValidImageUrl(post.imageUrl);
+  27 |     const displayImg = hasValidImage ? post.imageUrl! : FALLBACK_IMAGE;  react-hooks/set-state-in-effect
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\TokenRain.tsx
+  69:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\TokenRain.tsx:69:9
+  67 |     useEffect(() => {
+  68 |         const mq = window.matchMedia('(max-width: 768px)');
+> 69 |         setIsMobile(mq.matches);
+     |         ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  70 |         const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+  71 |         mq.addEventListener('change', handler);
+  72 |         return () => mq.removeEventListener('change', handler);  react-hooks/set-state-in-effect
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\components\TweetWall.tsx
+  3:31  warning  'useRef' is defined but never used       @typescript-eslint/no-unused-vars
+  3:39  warning  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\hooks\useDragScroll.ts
+  66:8  warning  React Hook useEffect has a missing dependency: 'scrollRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\lib\LanguageContext.tsx
+  26:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\lib\LanguageContext.tsx:26:7
+  24 |     const stored = localStorage.getItem('daveynfts-locale') as Locale | null;
+  25 |     if (stored && (stored === 'en' || stored === 'vi')) {
+> 26 |       setLocaleState(stored);
+     |       ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  27 |     }
+  28 |     setMounted(true);
+  29 |   }, []);  react-hooks/set-state-in-effect
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\lib\db.ts
+  10:12  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  19:12  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\sanity\components\TweetIcon.tsx
+  23:12  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\sanity\components\TweetPreview.tsx
+  15:39  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-explicit-any
+  22:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\sanity\components\TweetPreview.tsx:22:5
+  20 |     if (!tweetId) return;
+  21 |     
+> 22 |     setLoading(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  23 |     fetch(`/api/tweet/${tweetId}`)
+  24 |       .then(res => res.json())
+  25 |       .then(data => {  react-hooks/set-state-in-effect
+  49:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @next/next/no-img-element
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\src\sanity\schemas\embeddedTweet.ts
+  21:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\caokh\.gemini\antigravity\scratch\personal-news-board\test_posts.js
+  1:25  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+✖ 57 problems (26 errors, 31 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

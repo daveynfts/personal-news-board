@@ -3,6 +3,7 @@ import { structureTool } from 'sanity/structure'
 import { projectId, dataset } from './src/sanity/env'
 import { schemaTypes } from './src/sanity/schemas'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createManagedList = (S: any, typeTitle: string, typeName: string, activeFilter: string, hiddenFilter: string) => {
   return S.listItem()
     .title(`${typeTitle} (Quản lý)`)

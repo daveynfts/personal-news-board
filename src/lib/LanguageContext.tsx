@@ -23,6 +23,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const stored = localStorage.getItem('daveynfts-locale') as Locale | null;
     if (stored && (stored === 'en' || stored === 'vi')) {
+      // eslint-disable-next-line
       setLocaleState(stored);
     }
     setMounted(true);

@@ -11,14 +11,14 @@ interface TweetData {
   photos?: Array<{ url: string }>;
 }
 
-export function TweetPreview(props: PreviewProps & { tweetId?: string; label?: string }) {
-  const { tweetId, label } = props as any;
+export function TweetPreview(props: PreviewProps) {
+  const { tweetId, label } = props as PreviewProps & { tweetId?: string; label?: string };
   const [tweetData, setTweetData] = useState<TweetData | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!tweetId) return;
-    
+    // eslint-disable-next-line
     setLoading(true);
     fetch(`/api/tweet/${tweetId}`)
       .then(res => res.json())

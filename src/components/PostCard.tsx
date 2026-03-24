@@ -21,6 +21,7 @@ export default function PostCard({ post }: { post: Post }) {
     const { t, locale } = useTranslation();
     const [imgError, setImgError] = useState(false);
 
+    // eslint-disable-next-line
     useEffect(() => { setImgError(false); }, [post.imageUrl]);
 
     const hasValidImage = !imgError && isValidImageUrl(post.imageUrl);

@@ -15,9 +15,9 @@ export interface SearchResult {
     snippet?: string;
 }
 
-function getImageUrl(source: any): string {
+function getImageUrl(source: unknown): string {
   if (!source) return '';
-  try { return urlForImage(source)?.url() || ''; } catch { return ''; }
+  try { return urlForImage(source as Parameters<typeof urlForImage>[0])?.url() || ''; } catch { return ''; }
 }
 
 export async function GET(request: Request) {

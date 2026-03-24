@@ -7,6 +7,7 @@ import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata, buildItemListJsonLd } from '@/lib/seo';
 import { SITE_META } from '@/lib/siteMeta';
+import { extractPlainText } from '@/lib/stringUtils';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,9 +61,9 @@ export default async function ArticlesPage() {
                     }) : ''}
                 </span>
                 <h3 className="archive-article-title">{article.title}</h3>
-                {featured && article.content && (
+                {featured && !!article.content && (
                     <p className="archive-article-excerpt">
-                        {article.content.replace(/[#*`>_\[\]]/g, '').slice(0, 160)}...
+                        {extractPlainText(article.content).slice(0, 160)}...
                     </p>
                 )}
                 <div className="archive-article-footer">

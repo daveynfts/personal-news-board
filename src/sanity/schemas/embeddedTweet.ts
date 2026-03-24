@@ -18,8 +18,8 @@ export const embeddedTweetType = defineType({
       tweetId: 'tweetId',
       label: 'label'
     },
-    prepare(selection: Record<string, any>) {
-      const { tweetId, label } = selection;
+    prepare(selection: Record<string, unknown>) {
+      const { tweetId, label } = selection as { tweetId: string; label?: string };
       return {
         // Fallback title prevents Sanity from displaying "Untitled"
         title: label || (tweetId ? `Tweet: ${tweetId}` : 'Chưa có Label'),

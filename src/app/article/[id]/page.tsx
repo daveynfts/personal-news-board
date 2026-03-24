@@ -6,6 +6,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { buildMetadata, buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/seo';
 import { buildCanonicalUrl, SITE_META } from '@/lib/siteMeta';
+import { extractPlainText } from '@/lib/stringUtils';
 import ReadingProgressBar from '@/components/ReadingProgressBar';
 
 interface ArticlePageProps {
@@ -29,31 +30,6 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         });
     }
 
-  function extractPlainText(content: any): string {
-      if (!content) return '';
-      if (typeof content === 'string') {
-          return content
-              .replace(/!\[.*?\]\(.*?\)/g, '')   // remove markdown images
-              .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // replace links with text
-              .replace(/#{1,6}\s+/g, '')          // remove heading markers
-              .replace(/[*_`~>]/g, '')            // remove emphasis/code chars
-              .replace(/\n+/g, ' ')              // collapse newlines
-              .trim();
-      }
-      if (Array.isArray(content)) {
-          return content
-              .map(block => {
-                  if (block._type !== 'block' || !block.children) {
-                      return '';
-                  }
-                  return block.children.map((child: any) => child.text).join('');
-              })
-              .join(' ')
-              .trim();
-      }
-      return '';
-  }
-
   const plainDescription = extractPlainText(article.content).slice(0, 155);
 
   const seoTitle = article.seo?.metaTitle || article.title;
@@ -62,7 +38,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
   const allowIndexing = article.seo?.isIndexable !== false;
   // Use original source URL as priority for Canonical Tag (prevents duplicate content)
-  const customCanonical = article.seo?.originalSourceUrl || article.seo?.canonicalUrl || `/article/${article.slug || article.id}`;
+  const customCanonical = article.seo?.originalSourceUrl || article.seo?.canonicalUrl || buildCanonicalUrl(`/article/${article.slug || article.id}`);
 
   return buildMetadata({
         title: seoTitle,
@@ -99,34 +75,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
     const relatedArticles = await getRelatedArticles(article.id as string, article.category, 3);
 
-    const customCanonical = article.seo?.originalSourceUrl || article.seo?.canonicalUrl 
-        ? (article.seo?.originalSourceUrl || article.seo?.canonicalUrl)
-        : buildCanonicalUrl(`/article/${article.slug || article.id}`);
-
-    function extractPlainText(content: any): string {
-        if (!content) return '';
-        if (typeof content === 'string') {
-            return content
-                .replace(/!\[.*?\]\(.*?\)/g, '')
-                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-                .replace(/#{1,6}\s+/g, '')
-                .replace(/[*_`~>]/g, '')
-                .replace(/\n+/g, ' ')
-                .trim();
-        }
-        if (Array.isArray(content)) {
-            return content
-                .map(block => {
-                    if (block._type !== 'block' || !block.children) {
-                        return '';
-                    }
-                    return block.children.map((child: any) => child.text).join('');
-                })
-                .join(' ')
-                .trim();
-        }
-        return '';
-    }
+    const customCanonical = article.seo?.originalSourceUrl || article.seo?.canonicalUrl || buildCanonicalUrl(`/article/${article.slug || article.id}`);
 
     const plainText = extractPlainText(article.content);
     const plainDescription = plainText.slice(0, 155);

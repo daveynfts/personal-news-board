@@ -1,20 +1,21 @@
 import { sanityClient } from '@/sanity/lib/client';
 import { urlForImage, urlForOgImage } from '@/sanity/lib/image';
+import type { PortableTextBlock } from 'next-sanity';
 
 // Helper to Safely Generate Image URL
-function getImageUrl(source: any): string {
+function getImageUrl(source: unknown): string {
   if (!source) return '';
   try {
-    return urlForImage(source)?.url() || '';
+    return urlForImage(source as Parameters<typeof urlForImage>[0])?.url() || '';
   } catch (e) {
     return '';
   }
 }
 
-function getOgImageUrl(source: any): string {
+function getOgImageUrl(source: unknown): string {
   if (!source) return '';
   try {
-    return urlForOgImage(source)?.url() || '';
+    return urlForOgImage(source as Parameters<typeof urlForOgImage>[0])?.url() || '';
   } catch (e) {
     return '';
   }
@@ -28,7 +29,6 @@ function mapPostType(type: string): string {
   if (lower === 'news' || lower === 'research') return 'Research';
   if (lower === 'blog' || lower === 'article') return 'Article';
   
-  // Title case fallback if it's something else
   return lower.charAt(0).toUpperCase() + lower.slice(1);
 }
 
@@ -43,10 +43,20 @@ export interface Post {
     createdAt?: string;
 }
 
+interface RawPost {
+    _id: string;
+    type: string;
+    title: string;
+    url: string;
+    imageUrl?: unknown;
+    isMore?: boolean;
+    publishedAt?: string;
+}
+
 export async function getAllPosts(): Promise<Post[]> {
     const query = `*[_type == "post"] | order(publishedAt desc)`;
-    const posts = await sanityClient.fetch(query);
-    return posts.map((p: any) => ({
+    const posts = await sanityClient.fetch<RawPost[]>(query);
+    return posts.map(p => ({
         id: p._id,
         type: mapPostType(p.type),
         title: p.title,
@@ -59,8 +69,8 @@ export async function getAllPosts(): Promise<Post[]> {
 
 export async function getMorePosts(): Promise<Post[]> {
     const query = `*[_type == "post" && isMore == true] | order(publishedAt desc)`;
-    const posts = await sanityClient.fetch(query);
-    return posts.map((p: any) => ({
+    const posts = await sanityClient.fetch<RawPost[]>(query);
+    return posts.map(p => ({
         id: p._id,
         type: mapPostType(p.type),
         title: p.title,
@@ -96,7 +106,7 @@ export async function deletePost(id: string): Promise<boolean> {
 export interface Article {
     id?: string | number;
     title: string;
-    content: any; // Updated to accept block content array from Sanity or string
+    content: PortableTextBlock[] | string | unknown; 
     coverImage?: string;
     squareThumbnail?: string;
     category?: string;
@@ -108,15 +118,51 @@ export interface Article {
     isMore?: boolean;
     createdAt?: string;
     updatedAt?: string;
-    // SEO
-    seo?: any;
+    seo?: { 
+        metaTitle?: string; 
+        metaDescription?: string; 
+        openGraphImage?: string; 
+        originalSourceUrl?: string;
+        canonicalUrl?: string;
+        originalSourceName?: string;
+        focusKeyword?: string;
+        isIndexable?: boolean;
+    };
     slug?: string;
+}
+
+interface RawArticle {
+    _id: string;
+    title: string;
+    content: unknown;
+    coverImage?: unknown;
+    squareThumbnail?: unknown;
+    category?: string;
+    authorName?: string;
+    daveysTake?: string;
+    xSourceUrl?: string;
+    isEditorialPick?: boolean;
+    isHotStory?: boolean;
+    isMore?: boolean;
+    publishedAt?: string;
+    _updatedAt?: string;
+    seo?: { 
+        metaTitle?: string; 
+        metaDescription?: string; 
+        openGraphImage?: unknown; 
+        originalSourceUrl?: string;
+        canonicalUrl?: string;
+        originalSourceName?: string;
+        focusKeyword?: string;
+        isIndexable?: boolean;
+    };
+    slug?: { current: string };
 }
 
 export async function getAllArticles(): Promise<Article[]> {
     const query = `*[_type == "article"] | order(publishedAt desc)`;
-    const articles = await sanityClient.fetch(query);
-    return articles.map((a: any) => ({
+    const articles = await sanityClient.fetch<RawArticle[]>(query);
+    return articles.map(a => ({
         id: a._id,
         title: a.title,
         content: a.content,
@@ -141,8 +187,8 @@ export async function getAllArticles(): Promise<Article[]> {
 
 export async function getMoreArticles(): Promise<Article[]> {
     const query = `*[_type == "article" && isMore == true] | order(publishedAt desc)`;
-    const articles = await sanityClient.fetch(query);
-    return articles.map((a: any) => ({
+    const articles = await sanityClient.fetch<RawArticle[]>(query);
+    return articles.map(a => ({
         id: a._id,
         title: a.title,
         content: a.content,
@@ -166,10 +212,9 @@ export async function toggleArticleMore(id: string, isMore: boolean): Promise<bo
     try { await sanityClient.patch(id).set({ isMore }).commit(); return true; } catch { return false; }
 }
 
-// Accept both numeric string (old sqlite) or sanity strict id for fallback
 export async function getArticleById(id: string | number): Promise<Article | null> {
     const query = `*[_type == "article" && (_id == $id || slug.current == $id)] [0]`;
-    const a = await sanityClient.fetch(query, { id: String(id) });
+    const a = await sanityClient.fetch<RawArticle | null>(query, { id: String(id) });
     if (!a) return null;
     return {
         id: a._id,
@@ -201,7 +246,7 @@ export async function createArticle(article: Omit<Article, 'id' | 'createdAt'>):
 }
 
 export async function updateArticle(id: string, article: Partial<Article>): Promise<boolean> {
-    try { await sanityClient.patch(id).set(article as any).commit(); return true; } catch { return false; }
+    try { await sanityClient.patch(id).set(article as Record<string, unknown>).commit(); return true; } catch { return false; }
 }
 
 export async function getRelatedArticles(idToExclude: string | number, category?: string, limit: number = 3): Promise<Article[]> {
@@ -209,18 +254,18 @@ export async function getRelatedArticles(idToExclude: string | number, category?
     if (category) filter += ` && category == $category`;
 
     const query = `*[${filter}] | order(publishedAt desc) [0...${limit}]`;
-    let articles = await sanityClient.fetch(query, { id: String(idToExclude), category: category || '' });
+    let articles = await sanityClient.fetch<RawArticle[]>(query, { id: String(idToExclude), category: category || '' });
 
     // Fallback if not enough articles in the same category
     if (category && articles.length < limit) {
         const remaining = limit - articles.length;
-        const exclusionIds = [String(idToExclude), ...articles.map((a: any) => a._id)];
+        const exclusionIds = [String(idToExclude), ...articles.map(a => a._id)];
         const genericQuery = `*[_type == "article" && !(_id in $exclusionIds)] | order(publishedAt desc) [0...${remaining}]`;
-        const moreArticles = await sanityClient.fetch(genericQuery, { exclusionIds });
+        const moreArticles = await sanityClient.fetch<RawArticle[]>(genericQuery, { exclusionIds });
         articles = [...articles, ...moreArticles];
     }
 
-    return articles.map((a: any) => ({
+    return articles.map(a => ({
         id: a._id,
         title: a.title,
         content: a.content,
@@ -258,10 +303,23 @@ export interface CalendarEvent {
     createdAt?: string;
 }
 
+interface RawEvent {
+    _id: string;
+    title: string;
+    description?: string;
+    date: string;
+    location?: string;
+    link?: string;
+    imageUrl?: unknown;
+    timelineImageUrl?: unknown;
+    isMore?: boolean;
+    _createdAt?: string;
+}
+
 export async function getAllEvents(): Promise<CalendarEvent[]> {
     const query = `*[_type == "event"] | order(date asc)`;
-    const events = await sanityClient.fetch(query);
-    return events.map((e: any) => ({
+    const events = await sanityClient.fetch<RawEvent[]>(query);
+    return events.map(e => ({
         id: e._id,
         title: e.title,
         description: e.description,
@@ -277,8 +335,8 @@ export async function getAllEvents(): Promise<CalendarEvent[]> {
 
 export async function getMoreEvents(): Promise<CalendarEvent[]> {
     const query = `*[_type == "event" && isMore == true] | order(_createdAt desc)`;
-    const events = await sanityClient.fetch(query);
-    return events.map((e: any) => ({
+    const events = await sanityClient.fetch<RawEvent[]>(query);
+    return events.map(e => ({
         id: e._id,
         title: e.title,
         description: e.description,
@@ -302,7 +360,7 @@ export async function createEvent(event: Omit<CalendarEvent, 'id' | 'createdAt'>
 }
 
 export async function updateEvent(id: string, event: Partial<CalendarEvent>): Promise<boolean> {
-    try { await sanityClient.patch(id).set(event as any).commit(); return true; } catch { return false; }
+    try { await sanityClient.patch(id).set(event as Record<string, unknown>).commit(); return true; } catch { return false; }
 }
 
 export async function deleteEvent(id: string): Promise<boolean> {
@@ -320,17 +378,33 @@ export interface Exchange {
     gradient: string;
     glowColor: string;
     logo: string;
-    features: string | any[]; 
+    features: string | unknown[]; 
     link: string;
     sortOrder: number;
     isVisible: boolean;
     createdAt?: string;
 }
 
+interface RawExchange {
+    _id: string;
+    name: string;
+    badge: string;
+    badgeColor: string;
+    bonus: string;
+    gradient: string;
+    glowColor: string;
+    logo: string;
+    features?: unknown[];
+    link: string;
+    sortOrder: number;
+    isVisible: boolean;
+    _createdAt?: string;
+}
+
 export async function getAllExchanges(): Promise<Exchange[]> {
     const query = `*[_type == "exchange"] | order(sortOrder asc, _createdAt asc)`;
-    const exchanges = await sanityClient.fetch(query);
-    return exchanges.map((ex: any) => ({
+    const exchanges = await sanityClient.fetch<RawExchange[]>(query);
+    return exchanges.map(ex => ({
         ...ex,
         id: ex._id,
         features: JSON.stringify(ex.features || []), // Mock old string format if ui parses it
@@ -340,8 +414,8 @@ export async function getAllExchanges(): Promise<Exchange[]> {
 
 export async function getVisibleExchanges(): Promise<Exchange[]> {
     const query = `*[_type == "exchange" && isVisible == true] | order(sortOrder asc, _createdAt asc)`;
-    const exchanges = await sanityClient.fetch(query);
-    return exchanges.map((ex: any) => ({
+    const exchanges = await sanityClient.fetch<RawExchange[]>(query);
+    return exchanges.map(ex => ({
         ...ex,
         id: ex._id,
         features: JSON.stringify(ex.features || []),
@@ -355,7 +429,7 @@ export async function createExchange(ex: Omit<Exchange, 'id' | 'createdAt'>): Pr
 }
 
 export async function updateExchange(id: string, ex: Partial<Exchange>): Promise<boolean> {
-    try { await sanityClient.patch(id).set(ex as any).commit(); return true; } catch { return false; }
+    try { await sanityClient.patch(id).set(ex as Record<string, unknown>).commit(); return true; } catch { return false; }
 }
 
 export async function deleteExchange(id: string): Promise<boolean> {
@@ -376,19 +450,40 @@ export interface CryptoEvent {
     status: string;
     endDate: string;
     totalRewards: string;
-    stakingAssets: string | any[];
+    stakingAssets: string | unknown[];
     apr: string;
-    tags: string | any[];
+    tags: string | unknown[];
     ctaLink: string;
     sortOrder: number;
     isVisible: boolean;
     createdAt?: string;
 }
 
+interface RawCryptoEvent {
+    _id: string;
+    platform: string;
+    platformIcon: string;
+    platformColor: string;
+    eventType: string;
+    tokenSymbol: string;
+    tokenName: string;
+    description: string;
+    status: string;
+    endDate: string;
+    totalRewards: string;
+    stakingAssets?: unknown[];
+    apr: string;
+    tags?: unknown[];
+    ctaLink: string;
+    sortOrder: number;
+    isVisible: boolean;
+    _createdAt?: string;
+}
+
 export async function getAllCryptoEvents(): Promise<CryptoEvent[]> {
     const query = `*[_type == "cryptoEvent"] | order(sortOrder asc, _createdAt desc)`;
-    const events = await sanityClient.fetch(query);
-    return events.map((ev: any) => ({
+    const events = await sanityClient.fetch<RawCryptoEvent[]>(query);
+    return events.map(ev => ({
         ...ev,
         id: ev._id,
         stakingAssets: JSON.stringify(ev.stakingAssets || []),
@@ -399,8 +494,8 @@ export async function getAllCryptoEvents(): Promise<CryptoEvent[]> {
 
 export async function getVisibleCryptoEvents(): Promise<CryptoEvent[]> {
     const query = `*[_type == "cryptoEvent" && isVisible == true] | order(sortOrder asc, _createdAt desc)`;
-    const events = await sanityClient.fetch(query);
-    return events.map((ev: any) => ({
+    const events = await sanityClient.fetch<RawCryptoEvent[]>(query);
+    return events.map(ev => ({
         ...ev,
         id: ev._id,
         stakingAssets: JSON.stringify(ev.stakingAssets || []),
@@ -415,7 +510,7 @@ export async function createCryptoEvent(ev: Omit<CryptoEvent, 'id' | 'createdAt'
 }
 
 export async function updateCryptoEvent(id: string, ev: Partial<CryptoEvent>): Promise<boolean> {
-    try { await sanityClient.patch(id).set(ev as any).commit(); return true; } catch { return false; }
+    try { await sanityClient.patch(id).set(ev as Record<string, unknown>).commit(); return true; } catch { return false; }
 }
 
 export async function deleteCryptoEvent(id: string): Promise<boolean> {
@@ -433,12 +528,22 @@ export interface EmbeddedTweet {
     createdAt?: string;
 }
 
+interface RawEmbeddedTweet {
+    _id: string;
+    tweetId: string;
+    label?: string;
+    category?: string;
+    sortOrder?: number;
+    isVisible?: boolean;
+    _createdAt?: string;
+}
+
 export async function getEmbeddedTweets(allIncludingHidden = false): Promise<EmbeddedTweet[]> {
     const query = allIncludingHidden 
         ? `*[_type == "embeddedTweet"] | order(sortOrder asc, _createdAt desc)`
         : `*[_type == "embeddedTweet" && (isVisible == true || !defined(isVisible))] | order(sortOrder asc, _createdAt desc)`;
-    const tweets = await sanityClient.fetch(query);
-    return tweets.map((t: any) => ({
+    const tweets = await sanityClient.fetch<RawEmbeddedTweet[]>(query);
+    return tweets.map(t => ({
         id: t._id,
         tweetId: t.tweetId,
         label: t.label || '',
@@ -455,7 +560,7 @@ export async function createEmbeddedTweet(tweet: Omit<EmbeddedTweet, 'id' | 'cre
 }
 
 export async function updateEmbeddedTweet(id: string, tweet: Partial<EmbeddedTweet>): Promise<boolean> {
-    try { await sanityClient.patch(id).set(tweet as any).commit(); return true; } catch { return false; }
+    try { await sanityClient.patch(id).set(tweet as Record<string, unknown>).commit(); return true; } catch { return false; }
 }
 
 export async function deleteEmbeddedTweet(id: string): Promise<boolean> {
@@ -465,7 +570,7 @@ export async function deleteEmbeddedTweet(id: string): Promise<boolean> {
 // ── Site Settings ──
 export async function getSiteSetting(key: string): Promise<string> {
     const query = `*[_type == "siteSettings"][0]`;
-    const settings = await sanityClient.fetch(query);
+    const settings = await sanityClient.fetch<Record<string, string>>(query);
     return settings ? settings[key] || '' : '';
 }
 
@@ -477,10 +582,12 @@ export async function setSiteSetting(key: string, value: string): Promise<void> 
     }
 }
 
-export async function getAllSiteSettings(): Promise<Record<string, string>> {
+export async function getAllSiteSettings(): Promise<Record<string, unknown>> {
      const query = `*[_type == "siteSettings"][0]`;
-     const settings = await sanityClient.fetch(query);
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     const settings = await sanityClient.fetch<any>(query);
      if (!settings) return {};
+     
      // eslint-disable-next-line @typescript-eslint/no-unused-vars
      const { _id, _type, _rev, _updatedAt, _createdAt, avatar, ...rest } = settings;
      return {

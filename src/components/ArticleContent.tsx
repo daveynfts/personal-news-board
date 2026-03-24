@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import ReactMarkdown from 'react-markdown';
 import { Tweet } from 'react-tweet';
@@ -16,7 +17,7 @@ const flattenText = (children: any): string => {
 const TWEET_URL_REGEX = /^https?:\/\/(?:www\.)?(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)\S*$/;
 
 interface Props {
-    content: string | any[];
+    content: unknown;
 }
 
 interface ContentBlock {
