@@ -7,8 +7,6 @@ import type { Metadata } from 'next';
 import { buildMetadata, buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/seo';
 import { buildCanonicalUrl, SITE_META } from '@/lib/siteMeta';
 import ReadingProgressBar from '@/components/ReadingProgressBar';
-import TableOfContents from '@/components/TableOfContents';
-import { extractHeadings } from '@/lib/stringUtils';
 
 interface ArticlePageProps {
     params: Promise<{ id: string }>;
@@ -133,7 +131,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const plainText = extractPlainText(article.content);
     const plainDescription = plainText.slice(0, 155);
     const readingTime = Math.max(1, Math.ceil((plainText.split(/\s+/).length || 1) / 200));
-    const headings = extractHeadings(article.content);
 
     const seoTitle = article.seo?.metaTitle || article.title;
     const seoDescription = article.seo?.metaDescription || plainDescription || `Read the full article: ${article.title}`;
@@ -243,13 +240,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     </div>
                 </header>
 
-                {/* Sidebar TOC */}
-                {headings.length > 0 && (
-                    <aside className="article-sidebar">
-                        <TableOfContents headings={headings} />
-                    </aside>
-                )}
-
                 {/* Article Body */}
                 <article className="article-body">
                     <ArticleContent content={article.content} />
@@ -297,12 +287,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Related Articles Styles */}
                 <style dangerouslySetInnerHTML={{ __html: `
-                    @media (max-width: 1400px) {
-                        .article-sidebar {
-                            display: none;
-                        }
-                    }
-
                     .related-articles-section {
                         margin-top: 60px;
                         padding-top: 40px;
