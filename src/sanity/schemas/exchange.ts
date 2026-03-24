@@ -12,8 +12,19 @@ export const exchangeType = defineType({
     defineField({ name: 'name', title: 'Name', type: 'string', validation: Rule => Rule.required(), group: 'details' }),
     defineField({ name: 'badge', title: 'Badge Text', type: 'string', group: 'details' }),
     defineField({ name: 'bonus', title: 'Bonus Details', type: 'string', group: 'details', description: 'Ví dụ: "Lên tới 20% phí giao dịch"' }),
-    defineField({ name: 'features', title: 'Features (List)', type: 'array', of: [{ type: 'string' }], group: 'details' }),
-    
+    defineField({ 
+      name: 'features', 
+      title: 'Features (List)', 
+      type: 'array', 
+      of: [
+        {
+          type: 'object',
+          fields: [{ name: 'text', title: 'Feature Item', type: 'string' }],
+          preview: { select: { title: 'text' } }
+        }
+      ], 
+      group: 'details' 
+    }),    
     defineField({ name: 'badgeColor', title: 'Badge Color (Hex)', type: 'string', initialValue: '#f0b90b', group: 'styles' }),
     defineField({ name: 'gradient', title: 'Gradient CSS', type: 'string', group: 'styles' }),
     defineField({ name: 'glowColor', title: 'Glow Color (Hex)', type: 'string', group: 'styles' }),
