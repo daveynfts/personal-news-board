@@ -6907,30 +6907,9 @@ select.form-input {
   100% { background-position: 0% 0%; }
 }
 
-/* Aurora glow — builds from center */
+/* Aurora glow — builds from center (Removed per user request to clean up 'flash') */
 .so-calc-aurora {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(251, 191, 36, calc(var(--intensity, 0) * 0.08)) 0%,
-    rgba(253, 224, 71, calc(var(--intensity, 0) * 0.05)) 30%,
-    rgba(217, 119, 6, calc(var(--intensity, 0) * 0.03)) 60%,
-    transparent 80%
-  );
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(40px);
-  animation: so-aurora-pulse 4s ease-in-out infinite;
-}
-
-@keyframes so-aurora-pulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  display: none;
 }
 
 /* Floating particles container */
@@ -6989,16 +6968,7 @@ select.form-input {
 }
 
 .so-calc-inner-glow {
-  position: absolute;
-  top: -50%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 300px;
-  background: radial-gradient(ellipse, rgba(251, 191, 36, calc(0.1 + var(--intensity, 0) * 0.15)), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.4s;
+  display: none; /* Removed to reduce messiness */
 }
 
 .so-calc-header {
