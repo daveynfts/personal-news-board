@@ -6411,9 +6411,13 @@ select.form-input {
   animation: so-float 20s infinite alternate ease-in-out;
 }
 
-.so-blob-1 { width: 500px; height: 500px; background: #fde047; top: -10%; left: -5%; }
-.so-blob-2 { width: 600px; height: 600px; background: #fbbf24; bottom: -15%; right: -10%; animation-delay: -7s; }
-.so-blob-3 { width: 400px; height: 400px; background: #d97706; top: 50%; left: 30%; animation-delay: -14s; }
+.so-blob-1 { width: 500px; height: 500px; background: #60a5fa; top: -10%; left: -5%; }
+.so-blob-2 { width: 600px; height: 600px; background: #d8b4fe; bottom: -15%; right: -10%; animation-delay: -7s; }
+.so-blob-3 { width: 400px; height: 400px; background: #fdba74; top: 50%; left: 30%; animation-delay: -14s; }
+
+.so-offer-blob-1 { width: 500px; height: 500px; background: #fde047; top: -10%; left: -5%; }
+.so-offer-blob-2 { width: 600px; height: 600px; background: #fbbf24; bottom: -15%; right: -10%; animation-delay: -7s; }
+.so-offer-blob-3 { width: 400px; height: 400px; background: #d97706; top: 50%; left: 30%; animation-delay: -14s; }
 
 @keyframes so-float {
   0% { transform: translate(0, 0) scale(1); }

@@ -123,9 +123,9 @@ export default function SpecialOfferPage() {
     <div className="so-page">
       {/* Animated background blobs */}
       <div className="so-bg-effects">
-        <div className="so-blob so-blob-1" />
-        <div className="so-blob so-blob-2" />
-        <div className="so-blob so-blob-3" />
+        <div className="so-blob so-offer-blob-1" />
+        <div className="so-blob so-offer-blob-2" />
+        <div className="so-blob so-offer-blob-3" />
       </div>
 
       {/* Hero Section - Split Layout */}
