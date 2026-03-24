@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Interactive3DCoin from '@/components/Interactive3DCoin';
 import Container from '@/components/Container';
 import { useTranslation } from '@/lib/LanguageContext';
 
@@ -270,26 +269,40 @@ export default function SpecialOfferPage() {
               }}
             >
               <div className="so-savings-highlight-glow" />
-              <div className="so-savings-content">
-                <div className="so-3d-coin-wrap" style={{
-                  transform: `scale(${1 + intensity * 0.3})`,
-                  transition: 'transform 0.4s',
-                }}>
-                  <Interactive3DCoin />
-                </div>
-                <div>
-                  <div className="so-savings-label">{t('so.calc.youSave')}</div>
-                  <div className="so-savings-amount" style={{
-                    textShadow: `0 0 ${8 + intensity * 24}px rgba(234,179,8,${0.2 + intensity * 0.5})`,
+              <div className="so-savings-highlight-content" style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '24px' }}>
+                  {/* Premium 3D Coin Asset - AI Generated */}
+                  <div className="so-premium-coin-container" style={{
+                    transform: `scale(${1 + intensity * 0.2})`,
+                    transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                    flexShrink: 0
                   }}>
-                    {formatCurrencyDecimal(animatedSavings)}
-                    <span className="so-savings-period">{t('so.calc.perMonth')}</span>
+                    <Image 
+                      src="/premium-bitcoin.png" 
+                      alt="Premium Bitcoin" 
+                      width={110} 
+                      height={110}
+                      className="so-premium-coin-img"
+                    />
                   </div>
-                  <div className="so-savings-yearly">
-                    {t('so.calc.thats')}<strong>{formatCurrency(savings * 12)}</strong>{t('so.calc.perYear')}
+                  
+                  {/* Savings Text Content */}
+                  <div style={{ flex: 1 }}>
+                    <div className="so-savings-label" style={{ fontSize: '0.75rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px', fontWeight: 700 }}>
+                      {t('so.calc.youSave')}
+                    </div>
+                    <div className="so-savings-amount" style={{
+                      fontSize: '2.8rem', fontWeight: '900', letterSpacing: '-1px', color: '#fff',
+                      textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(251,191,36,${0.3 + intensity * 0.4})` : 'none',
+                      display: 'flex', alignItems: 'baseline', gap: '8px', lineHeight: 1
+                    }}>
+                      {formatCurrencyDecimal(animatedSavings)}
+                      <span className="so-savings-period" style={{ fontSize: '1.25rem', color: '#9ca3af', fontWeight: '500' }}>{t('so.calc.perMonth')}</span>
+                    </div>
+                    <div className="so-savings-yearly" style={{ fontSize: '0.95rem', color: '#6b7280', marginTop: '10px' }}>
+                      {t('so.calc.thats')} <strong style={{ color: '#fbbf24', textShadow: '0 0 10px rgba(251,191,36,0.3)' }}>{formatCurrency(savings * 12)}</strong> {t('so.calc.perYear')}
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
 
             <a href="#exchanges" className="so-cta-primary flex items-center justify-center">

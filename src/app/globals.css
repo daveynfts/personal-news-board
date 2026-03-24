@@ -7203,6 +7203,59 @@ select.form-input {
   color: var(--text-primary);
 }
 
+/* ── HYPER PREMIUM VIP CALCULATOR OVERRIDES ── */
+.so-premium-coin-container {
+  width: 110px;
+  height: 110px;
+  position: relative;
+  z-index: 2;
+  border-radius: 50%;
+  box-shadow: 
+    0 20px 40px rgba(0,0,0,0.5),
+    inset 0 0 30px rgba(251, 191, 36, 0.2);
+  background: radial-gradient(circle, rgba(251,191,36,0.1) 0%, transparent 70%);
+}
+
+.so-premium-coin-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 25px rgba(251, 191, 36, 0.5)) contrast(1.15) brightness(1.1);
+  animation: so-premium-float 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes so-premium-float {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+  50% { transform: translateY(-12px) scale(1.05) rotate(2deg); filter: drop-shadow(0 25px 35px rgba(251, 191, 36, 0.7)) contrast(1.2) brightness(1.2); }
+}
+
+.so-calculator-card {
+  background: rgba(18, 18, 18, 0.75) !important;
+  backdrop-filter: blur(50px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 
+    0 40px 80px rgba(0,0,0,0.8),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 0 60px rgba(251, 191, 36, 0.02) !important;
+}
+
+.so-savings-highlight {
+  position: relative;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(18, 18, 18, 0.6) 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.25) !important;
+  border-radius: 20px !important;
+  padding: 30px 40px !important;
+  box-shadow: inset 0 2px 20px rgba(251, 191, 36, 0.05) !important;
+  overflow: hidden;
+}
+
+.so-calc-header h2 {
+  font-size: 1.8rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.5px;
+  color: #fff !important;
+}
+
 /* ── INTERACTIVE 3D GLASS COIN ── */
 .so-interactive-coin-container {
   perspective: 800px;
