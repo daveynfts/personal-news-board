@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
 import { useTranslation } from '@/lib/LanguageContext';
-import { Flame, ShieldCheck, Zap, Infinity as InfinityIcon, Gift, Sparkles, Trophy, Check, Circle, Timer, Rocket, CircleDot } from 'lucide-react';
 
 interface ExchangeData {
   name: string;
@@ -28,15 +27,15 @@ interface RadarPreview {
 }
 
 const defaultExchanges: ExchangeData[] = [
-  { name: 'Binance', badge: 'Best for P2P', badgeColor: '#f0b90b', bonus: 'Up to $600 Bonus', gradient: 'linear-gradient(135deg, #f0b90b 0%, #d4a20a 50%, #b8890a 100%)', glowColor: 'rgba(240, 185, 11, 0.3)', logo: '🟡', features: ['Lowest spot fees', '350+ cryptos', '#1 by volume'], link: '#' },
-  { name: 'Bybit', badge: 'Lowest Futures Fees', badgeColor: '#f7a600', bonus: 'Up to $500 Bonus', gradient: 'linear-gradient(135deg, #f7a600 0%, #ff6b00 50%, #e85d00 100%)', glowColor: 'rgba(247, 166, 0, 0.3)', logo: '🟠', features: ['Copy trading', 'Leveraged tokens', 'Fast execution'], link: '#' },
-  { name: 'OKX', badge: 'Best for DeFi', badgeColor: '#00d4aa', bonus: 'Up to $500 Bonus', gradient: 'linear-gradient(135deg, #00d4aa 0%, #00b894 50%, #009d80 100%)', glowColor: 'rgba(0, 212, 170, 0.3)', logo: '🟢', features: ['Web3 wallet', 'DEX aggregator', 'Earn up to 20% APY'], link: '#' },
+  { name: 'Binance', badge: 'Best for P2P', badgeColor: '#f0b90b', bonus: 'Up to $600 Bonus', gradient: 'linear-gradient(135deg, #f0b90b 0%, #d4a20a 50%, #b8890a 100%)', glowColor: 'rgba(240, 185, 11, 0.3)', logo: '', features: ['Lowest spot fees', '350+ cryptos', '#1 by volume'], link: '#' },
+  { name: 'Bybit', badge: 'Lowest Futures Fees', badgeColor: '#f7a600', bonus: 'Up to $500 Bonus', gradient: 'linear-gradient(135deg, #f7a600 0%, #ff6b00 50%, #e85d00 100%)', glowColor: 'rgba(247, 166, 0, 0.3)', logo: '', features: ['Copy trading', 'Leveraged tokens', 'Fast execution'], link: '#' },
+  { name: 'OKX', badge: 'Best for DeFi', badgeColor: '#00d4aa', bonus: 'Up to $500 Bonus', gradient: 'linear-gradient(135deg, #00d4aa 0%, #00b894 50%, #009d80 100%)', glowColor: 'rgba(0, 212, 170, 0.3)', logo: '', features: ['Web3 wallet', 'DEX aggregator', 'Earn up to 20% APY'], link: '#' },
 ];
 
 const defaultRadarPreviews: RadarPreview[] = [
-  { status: 'live', statusLabel: '🔴 LIVE', name: 'Binance Launchpool', token: '$KERNEL', apr: 'Est. APR: ~45%' },
-  { status: 'upcoming', statusLabel: '⏳ UPCOMING', name: 'Binance Megadrop', token: '$SOLV', apr: 'Snapshot in 3 days' },
-  { status: 'hot', statusLabel: '🔥 HOT', name: 'Bybit Launchpool', token: '$INIT', apr: 'Est. APR: ~32%' },
+  { status: 'live', statusLabel: 'LIVE', name: 'Binance Launchpool', token: '$KERNEL', apr: 'Est. APR: ~45%' },
+  { status: 'upcoming', statusLabel: 'UPCOMING', name: 'Binance Megadrop', token: '$SOLV', apr: 'Snapshot in 3 days' },
+  { status: 'hot', statusLabel: 'HOT', name: 'Bybit Launchpool', token: '$INIT', apr: 'Est. APR: ~32%' },
 ];
 
 export default function SpecialOfferPage() {
@@ -64,10 +63,10 @@ export default function SpecialOfferPage() {
       const res = await fetch('/api/crypto-events');
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        const statusMap: Record<string, string> = { live: '🔴 LIVE', upcoming: '⏳ UPCOMING', ended: '✅ ENDED' };
+        const statusMap: Record<string, string> = { live: 'LIVE', upcoming: 'UPCOMING', ended: 'ENDED' };
         setRadarPreviews(data.slice(0, 3).map((ev: { status: string; platform: string; eventType: string; tokenSymbol: string; apr: string }) => ({
           status: ev.status === 'live' ? 'live' : ev.status === 'upcoming' ? 'upcoming' : 'hot',
-          statusLabel: statusMap[ev.status] || '🔥 HOT',
+          statusLabel: statusMap[ev.status] || 'HOT',
           name: `${ev.platform} ${ev.eventType}`,
           token: `$${ev.tokenSymbol}`,
           apr: ev.apr ? `Est. APR: ${ev.apr}` : '',
@@ -133,7 +132,12 @@ export default function SpecialOfferPage() {
       <section className="so-hero" style={{ paddingBottom: '80px' }}>
         <Container>
           <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%', marginBottom: '40px' }}>
-            <Link href="/" className="more-back-btn">{t('btn.backToHome')}</Link>
+            <Link href="/" className="article-back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                {t('btn.backToHome')}
+            </Link>
           </div>
           
           <div className="so-hero-split-layout">
@@ -141,7 +145,7 @@ export default function SpecialOfferPage() {
             <div className="so-hero-left">
               <div className="so-hero-badge flex items-center">
                 <span className="so-badge-pulse" />
-                <span className="flex items-center"><Flame size={16} className="text-orange-500 mr-1.5" /> {t('so.exclusivePartnerDeals')}</span>
+                <span className="flex items-center">{t('so.exclusivePartnerDeals')}</span>
               </div>
               <div className="so-hero-title-glass-card">
                 <h1 className="so-hero-title">
@@ -154,13 +158,13 @@ export default function SpecialOfferPage() {
               
               <div className="so-trust-inline">
                 <div className="so-trust-badge flex items-center">
-                  <ShieldCheck size={16} className="text-emerald-400 mr-1.5" /> {t('so.trust.verified')}
+                  {t('so.trust.verified')}
                 </div>
                 <div className="so-trust-badge flex items-center">
-                  <Zap size={16} className="text-yellow-400 mr-1.5" /> {t('so.trust.instant')}
+                  {t('so.trust.instant')}
                 </div>
                 <div className="so-trust-badge flex items-center">
-                  <InfinityIcon size={16} className="text-blue-400 mr-1.5" /> {t('so.trust.lifetime')}
+                  {t('so.trust.lifetime')}
                 </div>
               </div>
             </div>
@@ -250,7 +254,7 @@ export default function SpecialOfferPage() {
               </div>
               <div className="so-calc-divider" />
               <div className="so-calc-result-item so-calc-result-savings">
-                <span className="so-calc-result-label flex items-center"><Gift size={16} className="text-purple-400 mr-1.5" /> {t('so.calc.vipDiscount')}</span>
+                <span className="so-calc-result-label flex items-center">{t('so.calc.vipDiscount')}</span>
                 <span className="so-calc-result-value so-savings-value">
                   − {formatCurrencyDecimal(standardFee * 0.2)}
                 </span>
@@ -297,7 +301,6 @@ export default function SpecialOfferPage() {
             </div>
 
             <a href="#exchanges" className="so-cta-primary flex items-center justify-center">
-              <Sparkles size={16} className="text-yellow-200 mr-2" />
               {t('so.calc.claimDiscount')}
               <span className="so-cta-arrow ml-2">→</span>
             </a>
@@ -318,7 +321,6 @@ export default function SpecialOfferPage() {
           </div>
 
           <div className="so-section-label flex items-center">
-            <Trophy size={18} className="text-yellow-400 mr-2" />
             <span>{t('so.exchange.title')}</span>
           </div>
           <h2 className="so-exchanges-title">
@@ -346,14 +348,13 @@ export default function SpecialOfferPage() {
                       <Image src={ex.logo} alt={ex.name} fill style={{ objectFit: 'contain' }} />
                     </div>
                   ) : (
-                    <span className="so-exchange-logo">{ex.logo || '🟡'}</span>
+                    <span className="so-exchange-logo"></span>
                   )}
                   <h3 className="so-exchange-name">{ex.name}</h3>
                 </div>
 
                 {/* Bonus */}
                 <div className="so-exchange-bonus flex items-center">
-                  <Gift size={16} className="text-pink-400 mr-1.5" />
                   <span className="so-bonus-text">{ex.bonus}</span>
                 </div>
 
@@ -389,13 +390,13 @@ export default function SpecialOfferPage() {
           {/* Trust badges */}
           <div className="so-trust-section">
             <div className="so-trust-badge flex items-center">
-              <ShieldCheck size={16} className="text-emerald-400 mr-1.5" /> {t('so.trust.verified')}
+              {t('so.trust.verified')}
             </div>
             <div className="so-trust-badge flex items-center">
-              <Zap size={16} className="text-yellow-400 mr-1.5" /> {t('so.trust.instant')}
+              {t('so.trust.instant')}
             </div>
             <div className="so-trust-badge flex items-center">
-              <InfinityIcon size={16} className="text-blue-400 mr-1.5" /> {t('so.trust.lifetime')}
+              {t('so.trust.lifetime')}
             </div>
           </div>
         </Container>
@@ -435,7 +436,7 @@ export default function SpecialOfferPage() {
               {radarPreviews.map((rp, i) => (
                 <div key={i} className="so-radar-preview-card">
                   <div className={`so-radar-preview-status ${rp.status}`}>
-                    {rp.status === 'live' ? `🔴 ${t('so.badge.live')}` : rp.status === 'upcoming' ? `⏳ ${t('so.badge.upcoming')}` : `🔥 ${t('so.badge.hot')}`}
+                    {rp.status === 'live' ? t('so.badge.live') : rp.status === 'upcoming' ? t('so.badge.upcoming') : t('so.badge.hot')}
                   </div>
                   <div className="so-radar-preview-name">{rp.name}</div>
                   <div className="so-radar-preview-token">{rp.token}</div>
@@ -445,7 +446,6 @@ export default function SpecialOfferPage() {
             </div>
 
             <Link href="/crypto-events" className="so-radar-cta flex items-center justify-center">
-              <Rocket size={16} className="text-blue-400 mr-2" />
               {t('so.radar.viewTracker')}
               <span className="so-cta-arrow ml-2">→</span>
             </Link>
