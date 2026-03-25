@@ -215,9 +215,10 @@ export default function Header() {
               </Link>
             </div>
             <nav className="main-nav">
-              <Link href="/special-offer" className="nav-link nav-link-special">
-                <span className="nav-special-icon"><Sparkles size={16} /></span>
-                {t('nav.specialOffer')}
+              <Link href="/special-offer" className="nav-link nav-link-special" title={t('nav.specialOffer')}>
+                <span className="nav-special-icon">
+                  <Sparkles size={18} style={{ color: '#facc15', filter: 'drop-shadow(0 0 8px rgba(250,204,21,0.8))' }} />
+                </span>
               </Link>
               <button
                 className="header-search-btn"

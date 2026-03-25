@@ -1,4 +1,4 @@
-import { getAllPosts, getAllArticles } from '@/lib/db';
+import { getAllArticles } from '@/lib/db';
 import Container from '@/components/Container';
 import NewsGridClient from './NewsGridClient';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
     return buildMetadata({
-        title: "DaveyNFTs' Studio — Research & Articles",
+        title: "All Articles — Research & Articles",
         description: 'All research posts and articles curated by DaveyNFTs — your daily dose of crypto, web3, and blockchain insights.',
         canonicalPath: '/news',
         type: 'website',
@@ -21,32 +21,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function NewsArchivePage() {
-  const allPosts = await getAllPosts();
   const allArticles = await getAllArticles();
   
-  const formattedNews = allPosts
-    .filter(p => p.type.toLowerCase() === 'news' || p.type.toLowerCase() === 'research')
-    .map(p => ({
-      id: p.id,
-      title: p.title,
-      url: p.url,
-      imageUrl: p.imageUrl,
-      createdAt: p.createdAt,
-      type: 'Research',
-      isMore: p.isMore
-    }));
-
   const formattedArticles = allArticles.map(a => ({
     id: a.id,
     title: a.title,
     slug: a.slug,
     imageUrl: a.coverImage,
     createdAt: a.createdAt,
-    type: 'Article',
+    type: 'Article', url: `/article/${a.slug || a.id}`,
     isMore: a.isMore
   }));
 
-  const combinedItems = [...formattedNews, ...formattedArticles].sort((a, b) => {
+  const combinedItems = [...formattedArticles].sort((a, b) => {
     const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
     const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
     return timeB - timeA;
@@ -59,7 +46,7 @@ export default async function NewsArchivePage() {
         ? `${SITE_META.SITE_URL}/article/${item.slug}`
         : ('url' in item && item.url ? item.url as string : `${SITE_META.SITE_URL}/article/${item.id}`),
     })),
-    "DaveyNFTs' Studio"
+    "All Articles"
   );
 
   return (
@@ -81,7 +68,7 @@ export default async function NewsArchivePage() {
 
           <div className="archive-hero-content text-center max-w-3xl mx-auto pt-6 pb-8">
             <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
-              DaveyNFTs' Studio
+              All Articles
             </h1>
           </div>
         </Container>

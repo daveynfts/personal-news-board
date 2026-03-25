@@ -1,0 +1,246 @@
+/* ══════════════════════════════════════════════
+   TWEET WALL — Premium Embedded Tweets Section
+   ══════════════════════════════════════════════ */
+
+.tweetWallSection {
+  padding: 60px 0 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.tweetWallHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 36px;
+  padding: 0 16px;
+}
+
+.tweetWallTitle {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.tweetWallX {
+  font-size: 1.6rem;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.tweetWallDesc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+.tweetWallFilters {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  padding: 0 16px;
+}
+
+.tweetWallCarouselWrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient edge masks for smooth fade effect */
+.tweetWallCarouselWrapper::before,
+.tweetWallCarouselWrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.tweetWallCarouselWrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-primary, #0a0a0a) 0%, transparent 100%);
+}
+
+.tweetWallCarouselWrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-primary, #0a0a0a) 0%, transparent 100%);
+}
+
+.tweetWallGrid {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 0 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tweetWallGrid::-webkit-scrollbar {
+  display: none;
+}
+
+.tweetWallCard {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top-color: rgba(255,255,255,0.15);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              background 0.4s ease,
+              border-color 0.4s ease;
+  box-shadow: 0 8px 24px -6px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+  flex: 0 0 380px;
+  min-width: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Liquid Light Sweep — slides across on hover */
+.tweetWallCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Iridescent border glow */
+.tweetWallCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(29,155,240,0.4) 0%, transparent 40%, transparent 60%, rgba(29,155,240,0.15) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.tweetWallCard:hover {
+  transform: translateY(-4px) scale(1.015);
+  background: linear-gradient(135deg, rgba(29,155,240,0.06) 0%, rgba(255,255,255,0.04) 100%);
+  border-color: rgba(29,155,240,0.3);
+  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6),
+              0 0 40px -8px rgba(29,155,240,0.15),
+              inset 0 1px 1px rgba(255,255,255,0.3);
+}
+
+.tweetWallCard:hover::before {
+  left: 200%;
+}
+
+.tweetWallCard:hover::after {
+  opacity: 1;
+}
+
+.tweetWallLabel {
+  display: inline-block;
+  align-self: flex-start;
+  margin: 10px 12px 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.92);
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  position: relative;
+  z-index: 3;
+  background: linear-gradient(135deg, rgba(29,155,240,0.18) 0%, rgba(29,155,240,0.08) 50%, rgba(100,180,255,0.12) 100%);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(29,155,240,0.3);
+  border-top-color: rgba(180,220,255,0.5);
+  border-bottom-color: rgba(29,155,240,0.1);
+  box-shadow: 0 2px 12px rgba(29,155,240,0.15), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.tweetWallLabel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  animation: label-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes label-shimmer {
+  0%, 100% { left: -120%; opacity: 0.7; }
+  50% { left: 180%; opacity: 1; }
+}
+
+.tweetWallCarouselWrapper :global([data-theme="dark"] .react-tweet-theme) {
+  --tweet-bg-color: transparent !important;
+  --tweet-border: rgba(255,255,255,0.06) !important;
+}
+
+.tweetWallCard > div {
+  margin: 0 !important;
+}
+
+.tweetWallCard > div > div {
+  border: none !important;
+  background: transparent !important;
+}
+
+@media (max-width: 768px) {
+  .tweetWallCard {
+    flex: 0 0 320px;
+    min-width: 320px;
+  }
+  .tweetWallTitle { font-size: 1.6rem; }
+  
+  .tweetWallCarouselWrapper::before,
+  .tweetWallCarouselWrapper::after {
+    width: 30px;
+  }
+  .tweetWallGrid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .tweetWallGrid > div {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+}

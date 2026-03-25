@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/LanguageContext';
 import { useSwipe } from '@/hooks/useSwipe';
+import styles from './NewsHero.module.css';
 
 export interface SanityNewsArticle {
   id?: string | number;
@@ -64,102 +65,7 @@ export default function NewsHero({
 
   return (
     <>
-    <style>{`
-      @keyframes scroll-left {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-33.333%); }
-      }
-      @keyframes scroll-right {
-        0% { transform: translateX(-33.333%); }
-        100% { transform: translateX(0); }
-      }
-      .animate-scroll-left {
-        display: flex;
-        width: max-content;
-        animation: scroll-left 30s linear infinite;
-      }
-      .animate-scroll-right {
-        display: flex;
-        width: max-content;
-        animation: scroll-right 30s linear infinite;
-      }
-      .marquee-container:hover .animate-scroll-left,
-      .marquee-container:hover .animate-scroll-right {
-        animation-play-state: paused;
-      }
-      .glass-shine {
-        position: relative;
-        overflow: hidden;
-      }
-      .glass-shine::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -150%;
-        width: 150%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transform: skewX(-25deg);
-        transition: left 0.7s ease;
-        pointer-events: none;
-      }
-      .glass-shine:hover::after {
-        left: 200%;
-      }
-      @keyframes auto-shine-anim {
-        0% { left: -150%; }
-        20% { left: 200%; }
-        100% { left: 200%; }
-      }
-      .auto-shine {
-        position: relative;
-        overflow: hidden;
-      }
-      .auto-shine::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -150%;
-        width: 150%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-        transform: skewX(-25deg);
-        animation: auto-shine-anim 4s infinite ease-in-out;
-        pointer-events: none;
-      }
-      /* ── Mobile Responsive ── */
-      @media (max-width: 768px) {
-        .animate-scroll-left,
-        .animate-scroll-right {
-          gap: 12px !important;
-          animation-duration: 20s;
-        }
-        .animate-scroll-left > a,
-        .animate-scroll-right > a {
-          width: 280px !important;
-          min-width: 280px !important;
-          padding: 10px !important;
-        }
-        .animate-scroll-left > a .w-\\[85px\\],
-        .animate-scroll-right > a .w-\\[85px\\] {
-          width: 70px !important;
-          height: 70px !important;
-        }
-      }
-      @media (max-width: 480px) {
-        .animate-scroll-left > a,
-        .animate-scroll-right > a {
-          width: 260px !important;
-          min-width: 260px !important;
-          padding: 8px !important;
-        }
-        .animate-scroll-left > a .w-\\[85px\\],
-        .animate-scroll-right > a .w-\\[85px\\] {
-          width: 60px !important;
-          height: 60px !important;
-        }
-      }
-    `}</style>
+    
     <div className="max-w-[1400px] mx-auto p-4 md:p-8 bg-white/5 backdrop-blur-2xl border border-white/10 font-sans text-gray-100 shadow-2xl rounded-3xl mb-12 ring-1 ring-white/5">
       {/* 1. TOP SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
@@ -230,14 +136,14 @@ export default function NewsHero({
           <div className="flex mb-6 relative bg-black/20 p-1.5 rounded-xl border border-white/10">
             <button 
               onClick={() => handleTabChange('editor')}
-              className={`flex-1 py-3 px-2 font-bold text-[15px] transition-all duration-300 rounded-lg relative overflow-hidden glass-shine ${activeTab === 'editor' ? 'bg-white/10 border border-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5'} flex justify-center items-center gap-2`}
+              className={`flex-1 py-3 px-2 font-bold text-[15px] transition-all duration-300 rounded-lg relative overflow-hidden ${styles.glassShine} ${activeTab === 'editor' ? 'bg-white/10 border border-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5'} flex justify-center items-center gap-2`}
             >
               <svg className="w-4 h-4 opacity-80 relative z-10" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" /></svg>
               <span className="relative z-10">{t('newshero.editorsChoice')}</span>
             </button>
             <button 
               onClick={() => handleTabChange('hot')}
-              className={`flex-1 py-3 px-2 font-bold text-[15px] transition-all duration-300 rounded-lg relative overflow-hidden glass-shine ${activeTab === 'hot' ? 'bg-white/10 border border-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5'} flex justify-center items-center gap-2`}
+              className={`flex-1 py-3 px-2 font-bold text-[15px] transition-all duration-300 rounded-lg relative overflow-hidden ${styles.glassShine} ${activeTab === 'hot' ? 'bg-white/10 border border-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5'} flex justify-center items-center gap-2`}
             >
               <svg className="w-4 h-4 opacity-80 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
               <span className="relative z-10">{t('newshero.hotStories')}</span>
@@ -268,7 +174,7 @@ export default function NewsHero({
       {/* 2. BOTTOM SECTION: Latest News (2 Marquees) */}
       <div className="pt-8 border-t border-white/10 overflow-hidden">
         <div className="flex justify-between items-center pb-6 mb-2">
-           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-lg auto-shine cursor-pointer hover:bg-white/10 transition-colors duration-300 glass-shine">
+           <div className={`${styles.glassShine} inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-lg ${styles.autoShine} cursor-pointer hover:bg-white/10 transition-colors duration-300 `}>
              <h3 className="text-lg md:text-[20px] font-bold text-white tracking-wide relative z-10 m-0 leading-none">
                {t('newshero.latestNews')}
              </h3>
@@ -281,12 +187,12 @@ export default function NewsHero({
            </Link>
         </div>
         
-        <div className="flex flex-col gap-4 marquee-container relative mask-edges" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
+        <div className={`${styles.marqueeContainer} flex flex-col gap-4  relative mask-edges`} style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
           
           {/* Top Row: Moves Left to Right */}
-          <div className="animate-scroll-right gap-5 pr-5">
+          <div className={`${styles.animateScrollRight}  gap-5 pr-5`}>
             {latestNews.length > 0 ? [...latestNews.slice(0, 4), ...latestNews.slice(0, 4), ...latestNews.slice(0, 4)].map((news, idx) => (
-              <a href={`/article/${news.slug || news.id}`} key={`top-${news.id || idx}-${idx}`} className="flex w-[320px] p-3 border border-white/10 bg-black/20 backdrop-blur-sm rounded-xl group cursor-pointer hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 gap-4 glass-shine">
+              <a href={`/article/${news.slug || news.id}`} key={`top-${news.id || idx}-${idx}`} className={`${styles.glassShine} flex w-[320px] p-3 border border-white/10 bg-black/20 backdrop-blur-sm rounded-xl group cursor-pointer hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 gap-4 `}>
                 <div className="w-[85px] h-[85px] flex-shrink-0 rounded-lg bg-gray-800 overflow-hidden relative ring-1 ring-white/5">
                   {news.squareThumbnail || news.coverImage ? (
                      <img src={news.squareThumbnail || news.coverImage} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -306,9 +212,9 @@ export default function NewsHero({
           </div>
 
           {/* Bottom Row: Moves Right to Left */}
-          <div className="animate-scroll-left gap-5 pr-5">
+          <div className={`${styles.animateScrollLeft}  gap-5 pr-5`}>
             {latestNews.length > 4 ? [...latestNews.slice(4, 8), ...latestNews.slice(4, 8), ...latestNews.slice(4, 8)].map((news, idx) => (
-              <a href={`/article/${news.slug || news.id}`} key={`bot-${news.id || idx}-${idx}`} className="flex w-[320px] p-3 border border-white/10 bg-black/20 backdrop-blur-sm rounded-xl group cursor-pointer hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 gap-4 glass-shine">
+              <a href={`/article/${news.slug || news.id}`} key={`bot-${news.id || idx}-${idx}`} className={`${styles.glassShine} flex w-[320px] p-3 border border-white/10 bg-black/20 backdrop-blur-sm rounded-xl group cursor-pointer hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-300 gap-4 `}>
                 <div className="w-[85px] h-[85px] flex-shrink-0 rounded-lg bg-gray-800 overflow-hidden relative ring-1 ring-white/5">
                   {news.squareThumbnail || news.coverImage ? (
                      <img src={news.squareThumbnail || news.coverImage} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />

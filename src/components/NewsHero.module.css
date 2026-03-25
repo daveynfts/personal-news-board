@@ -1,0 +1,108 @@
+/* src/components/NewsHero.module.css */
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+@keyframes scroll-right {
+  0% { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
+}
+
+.animateScrollLeft {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 30s linear infinite;
+}
+
+.animateScrollRight {
+  display: flex;
+  width: max-content;
+  animation: scroll-right 30s linear infinite;
+}
+
+.marqueeContainer:hover .animateScrollLeft,
+.marqueeContainer:hover .animateScrollRight {
+  animation-play-state: paused;
+}
+
+.glassShine {
+  position: relative;
+  overflow: hidden;
+}
+
+.glassShine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.7s ease;
+  pointer-events: none;
+}
+
+.glassShine:hover::after {
+  left: 200%;
+}
+
+@keyframes auto-shine-anim {
+  0% { left: -150%; }
+  20% { left: 200%; }
+  100% { left: 200%; }
+}
+
+.autoShine {
+  position: relative;
+  overflow: hidden;
+}
+
+.autoShine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-25deg);
+  animation: auto-shine-anim 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .animateScrollLeft,
+  .animateScrollRight {
+    gap: 12px !important;
+    animation-duration: 20s;
+  }
+  .animateScrollLeft > a,
+  .animateScrollRight > a {
+    width: 280px !important;
+    min-width: 280px !important;
+    padding: 10px !important;
+  }
+  .animateScrollLeft > a > div:first-child,
+  .animateScrollRight > a > div:first-child {
+    width: 70px !important;
+    height: 70px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .animateScrollLeft > a,
+  .animateScrollRight > a {
+    width: 260px !important;
+    min-width: 260px !important;
+    padding: 8px !important;
+  }
+  .animateScrollLeft > a > div:first-child,
+  .animateScrollRight > a > div:first-child {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}

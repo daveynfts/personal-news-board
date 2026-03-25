@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/Container';
+import PostCard from '@/components/PostCard';
 import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
@@ -76,17 +77,25 @@ export default async function PicksPage({ searchParams }: PageProps) {
                 <div className="liquid-blob blob-3" style={{ opacity: 0.15, top: '30%', right: '10%' }} />
                 <Container>
                     <div className="archive-hero-content">
-                        <Link href="/" className="more-back-btn"><Tr i18nKey="btn.backToHome" /></Link>
-                        <div style={{ marginTop: '24px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+                            <Link href="/" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.05)', padding: '6px 16px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer' }}>
+                                &larr; <Tr i18nKey="btn.backToHome" />
+                            </Link>
+                            <div style={{ flex: '1', display: 'flex', justifyContent: 'center' }}>
+                                <div style={{ width: '100%', maxWidth: '400px' }}>
+                                    <SearchBar scope="posts" placeholder="Search picks..." compact />
+                                </div>
+                            </div>
+                            <div style={{ width: '100px', display: 'flex', position: 'relative' }} className="hidden-mobile"></div>
+                        </div>
+                        <div>
                             <span className="more-label"><Pin className="inline-block mr-1" size={16} /> <Tr i18nKey="archive.picksLabel" /></span>
                             <h1 className="archive-hero-title"><Tr i18nKey="archive.picksTitle" /></h1>
                             <p className="archive-hero-subtitle">
                                 <Tr i18nKey="archive.picksSubtitle" />
                             </p>
                         </div>
-                        <div style={{ marginTop: '20px' }}>
-                            <SearchBar scope="posts" placeholder="Search picks..." compact />
-                        </div>
+                        
                         <div className="archive-hero-stats">
                             <div className="archive-stat">
                                 <span className="archive-stat-num">{visiblePosts.length}</span>
@@ -160,39 +169,9 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                 </div>
                             ) : (
                                 <div className="picks-grid">
-                                    {filteredPosts.map(post => {
-                                        const hasValidImg = isValidImageUrl(post.imageUrl);
-                                        const imgSrc = hasValidImg ? post.imageUrl! : FALLBACK_IMAGE;
-                                        return (
-                                            <a
-                                                key={post.id}
-                                                href={post.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="picks-card"
-                                            >
-                                                <div className="picks-card-image">
-                                                    <Image src={imgSrc} alt={post.title} fill style={{ objectFit: 'cover' }} />
-                                                    <div className="picks-card-overlay" />
-                                                    <span
-                                                        className="picks-card-type"
-                                                        style={{ background: typeColor(post.type), color: typeTextColor(post.type) }}
-                                                    >
-                                                        {post.type}
-                                                    </span>
-                                                </div>
-                                                <div className="picks-card-body">
-                                                    <h3 className="picks-card-title">{post.title}</h3>
-                                                    <div className="picks-card-footer">
-                                                        <span className="picks-card-date">
-                                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
-                                                        </span>
-                                                        <span className="picks-card-link"><Tr i18nKey="btn.accessSource" /> &rarr;</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        );
-                                    })}
+                                    {filteredPosts.map(post => (
+                                        <PostCard key={post.id} post={post} />
+                                    ))}
                                 </div>
                             )}
                         </section>
@@ -208,37 +187,9 @@ export default async function PicksPage({ searchParams }: PageProps) {
                                     <span className="more-month-count">{morePosts.length}</span>
                                 </div>
                                 <div className="picks-grid">
-                                    {morePosts.map(post => {
-                                        const hasValidImg = isValidImageUrl(post.imageUrl);
-                                        const imgSrc = hasValidImg ? post.imageUrl! : FALLBACK_IMAGE;
-                                        return (
-                                            <a
-                                                key={post.id}
-                                                href={post.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="picks-card"
-                                                style={{ opacity: 0.7 }}
-                                            >
-                                                <div className="picks-card-image">
-                                                    <Image src={imgSrc} alt={post.title} fill style={{ objectFit: 'cover' }} />
-                                                    <div className="picks-card-overlay" />
-                                                    <span className="picks-card-type" style={{ background: typeColor(post.type), color: typeTextColor(post.type) }}>
-                                                        {post.type}
-                                                    </span>
-                                                </div>
-                                                <div className="picks-card-body">
-                                                    <h3 className="picks-card-title">{post.title}</h3>
-                                                    <div className="picks-card-footer">
-                                                        <span className="picks-card-date">
-                                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
-                                                        </span>
-                                                        <span className="picks-card-link"><Tr i18nKey="btn.accessSource" /> &rarr;</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        );
-                                    })}
+                                    {morePosts.map(post => (
+                                        <div key={post.id} style={{ opacity: 0.7 }}><PostCard post={post} /></div>
+                                    ))}
                                 </div>
                             </section>
                         )}

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import styles from './EditorialCarousel.module.css';
 import { useState, useEffect } from 'react';
 import type { Post } from '@/lib/db';
 import { useTranslation } from '@/lib/LanguageContext';
@@ -33,35 +34,35 @@ export default function PostCard({ post }: { post: Post }) {
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="dd-card"
+            className={`${styles['dd-card']}`}
         >
             {/* Floating Label Badge */}
-            <span className={`dd-card-badge ${isResearch ? 'dd-badge-research' : 'dd-badge-article'}`}>
+            <span className={`${styles['dd-card-badge']} ${isResearch ? 'dd-badge-research' : 'dd-badge-article'}`}>
                 {isResearch ? t('filter.news') : t('filter.blog')}
             </span>
 
             {/* Cover Image */}
-            <div className="dd-card-cover">
+            <div className={`${styles['dd-card-cover']}`}>
                 <Image
                     src={displayImg}
                     alt={post.title}
                     fill
-                    className="dd-card-img"
+                    className={`${styles['dd-card-img']}`}
                     onError={() => setImgError(true)}
                 />
-                <div className="dd-card-cover-overlay" />
+                <div className={`${styles['dd-card-cover-overlay']}`} />
             </div>
 
             {/* Content */}
-            <div className="dd-card-content">
-                <h3 className="dd-card-title">{post.title}</h3>
-                <div className="dd-card-footer">
-                    <time className="dd-card-date">
+            <div className={`${styles['dd-card-content']}`}>
+                <h3 className={`${styles['dd-card-title']}`}>{post.title}</h3>
+                <div className={`${styles['dd-card-footer']}`}>
+                    <time className={`${styles['dd-card-date']}`}>
                         {post.createdAt ? new Date(post.createdAt).toLocaleDateString(dateLocale, {
                             month: 'short', day: 'numeric', year: 'numeric'
                         }) : t('post.syncing')}
                     </time>
-                    <span className="dd-card-cta">
+                    <span className={`${styles['dd-card-cta']}`}>
                         {t('btn.accessSource')}
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14m-7-7 7 7-7 7" />

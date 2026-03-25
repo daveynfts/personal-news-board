@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Article } from '@/lib/db';
+import styles from './EditorialCarousel.module.css';
 import Container from './Container';
 import { useTranslation } from '@/lib/LanguageContext';
 import { useSwipe } from '@/hooks/useSwipe';
@@ -45,19 +46,19 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
     const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
     return (
-        <div className="editorial-carousel-container">
+        <div className={`${styles['editorial-carousel-container']}`}>
             <Container>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                     <h2 className="section-title" style={{ marginBottom: 0 }}>{t('section.editorialPicks')}</h2>
                     <Link href="/articles" className="archive-view-all-btn">{t('btn.viewAllArticles')}</Link>
                 </div>
 
-                <div className="editorial-carousel-premium" ref={swipeRef}>
+                <div className={`${styles['editorial-carousel-premium']}`} ref={swipeRef}>
                     {/* Background Image - crossfade style */}
                     {articles.map((article, idx) => (
                         <div
                             key={article.id}
-                            className="carousel-bg-layer"
+                            className={`${styles['carousel-bg-layer']}`}
                             style={{
                                 position: 'absolute',
                                 inset: 0,
@@ -72,28 +73,28 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                     ))}
 
                     {/* Dark overlay for text readability */}
-                    <div className="carousel-overlay" />
+                    <div className={`${styles['carousel-overlay']}`} />
 
                     {/* Content overlay */}
-                    <div className="carousel-slide-content">
-                        <div className="carousel-content-inner">
-                            <span className="carousel-tag">
+                    <div className={`${styles['carousel-slide-content']}`}>
+                        <div className={`${styles['carousel-content-inner']}`}>
+                            <span className={`${styles['carousel-tag']}`}>
                                 {t('carousel.featuredArticle')}
                             </span>
 
                             <Link href={`/article/${currentArticle.id}`} style={{ textDecoration: 'none' }}>
-                                <h3 className="carousel-title">
+                                <h3 className={`${styles['carousel-title']}`}>
                                     {currentArticle.title}
                                 </h3>
                             </Link>
 
-                            <div className="carousel-footer">
-                                <div className="carousel-meta">
-                                    <span className="carousel-date">
+                            <div className={`${styles['carousel-footer']}`}>
+                                <div className={`${styles['carousel-meta']}`}>
+                                    <span className={`${styles['carousel-date']}`}>
                                         {new Date(currentArticle.createdAt || '').toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
                                     </span>
                                     {currentArticle.xSourceUrl && (
-                                        <a href={currentArticle.xSourceUrl} target="_blank" rel="noopener noreferrer" className="carousel-x-link">
+                                        <a href={currentArticle.xSourceUrl} target="_blank" rel="noopener noreferrer" className={`${styles['carousel-x-link']}`}>
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.007 4.15H5.059z" />
                                             </svg>
@@ -101,7 +102,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                                         </a>
                                     )}
                                 </div>
-                                <Link href={`/article/${currentArticle.id}`} className="carousel-read-btn">
+                                <Link href={`/article/${currentArticle.id}`} className={`${styles['carousel-read-btn']}`}>
                                     {t('btn.readArticle')} <span style={{ fontSize: '1.1rem' }}>→</span>
                                 </Link>
                             </div>
@@ -109,16 +110,16 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
 
                         {/* Indicators inline with content */}
                         {articles.length > 1 && (
-                            <div className="carousel-indicators">
+                            <div className={`${styles['carousel-indicators']}`}>
                                 {articles.map((_, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => setCurrentIndex(idx)}
-                                        className={`carousel-dot ${idx === currentIndex ? 'active' : ''}`}
+                                        className={`${styles['carousel-dot']} ${idx === currentIndex ? styles.active : ''}`}
                                         aria-label={`Go to slide ${idx + 1}`}
                                     />
                                 ))}
-                                <span className="carousel-counter">
+                                <span className={`${styles['carousel-counter']}`}>
                                     {currentIndex + 1} / {articles.length}
                                 </span>
                             </div>
@@ -128,10 +129,10 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
                     {/* Nav arrows */}
                     {articles.length > 1 && (
                         <>
-                            <button onClick={handlePrevious} className="carousel-nav-btn prev" aria-label="Previous Article">
+                            <button onClick={handlePrevious} className={`${styles['carousel-nav-btn']} prev`} aria-label="Previous Article">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                             </button>
-                            <button onClick={handleNext} className="carousel-nav-btn next" aria-label="Next Article">
+                            <button onClick={handleNext} className={`${styles['carousel-nav-btn']} next`} aria-label="Next Article">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                             </button>
                         </>

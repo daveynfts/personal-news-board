@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import styles from './EventCalendar.module.css';
 import { CalendarEvent } from '@/lib/db';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -56,8 +57,8 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     if (events.length === 0) {
         return (
-            <div className="event-hero-empty">
-                <div className="event-hero-content">
+            <div className={`${styles['event-hero-empty']}`}>
+                <div className={`${styles['event-hero-content']}`}>
                     <h1>{t('hero.title')}</h1>
                     <p>{t('hero.noEvents')}</p>
                 </div>
@@ -91,7 +92,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     return (
         <section
-            className="event-calendar-section"
+            className={`${styles['event-calendar-section']}`}
             ref={sectionRef}
         >
 
@@ -108,59 +109,59 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                 </Link>
             </div>
 
-            <div className="event-calendar-grid">
+            <div className={`${styles['event-calendar-grid']}`}>
                 {/* Left: Featured */}
                 {featuredEvent && (
-                    <div key={featuredEvent.id} className="featured-event-card trans-up" ref={eventSwipeRef}>
-                        <div className="event-image">
+                    <div key={featuredEvent.id} className={`${styles['featured-event-card']} trans-up`} ref={eventSwipeRef}>
+                        <div className={`${styles['event-image']}`}>
                             {featuredEvent.imageUrl ? (
                                 <Image src={featuredEvent.imageUrl} alt={featuredEvent.title} fill style={{ objectFit: 'cover' }} />
                             ) : (
-                                <div className="event-image-placeholder">
+                                <div className={`${styles['event-image-placeholder']}`}>
                                     <Calendar size={32} className="opacity-50" />
                                 </div>
                             )}
-                            <div className="event-date-badge">
-                                <span className="month">{formatDate(featuredEvent.date).month}</span>
-                                <span className="day">{formatDate(featuredEvent.date).day}</span>
+                            <div className={`${styles['event-date-badge']}`}>
+                                <span className={`${styles['month']}`}>{formatDate(featuredEvent.date).month}</span>
+                                <span className={`${styles['day']}`}>{formatDate(featuredEvent.date).day}</span>
                             </div>
                         </div>
-                        <div className="event-info">
-                            <div className="event-info-header">
-                                <div className="event-type-badge flex items-center gap-1">
+                        <div className={`${styles['event-info']}`}>
+                            <div className={`${styles['event-info-header']}`}>
+                                <div className={`${styles['event-type-badge']} flex items-center gap-1`}>
                                     <Star size={14} className="text-yellow-400 fill-yellow-400" /> {t('events.featuredEvent')}
                                 </div>
                                 {featuredEventsList.length > 1 && (
-                                    <div className="featured-controls">
-                                        <button onClick={handlePrevFeatured} className="carousel-control" aria-label="Previous">
+                                    <div className={`${styles['featured-controls']}`}>
+                                        <button onClick={handlePrevFeatured} className={`${styles['carousel-control']}`} aria-label="Previous">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                                         </button>
-                                        <button onClick={handleNextFeatured} className="carousel-control" aria-label="Next">
+                                        <button onClick={handleNextFeatured} className={`${styles['carousel-control']}`} aria-label="Next">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                                         </button>
                                     </div>
                                 )}
                             </div>
                             <div className="inline-flex items-center px-6 py-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg auto-shine glass-shine mb-6">
-                                <h3 className="event-title relative z-10 text-white" style={{ marginBottom: 0, marginTop: 0 }}>
+                                <h3 className={`${styles['event-title']} relative z-10 text-white`} style={{ marginBottom: 0, marginTop: 0 }}>
                                     {featuredEvent.title}
                                 </h3>
                             </div>
-                            <div className="event-desc-markdown">
+                            <div className={`${styles['event-desc-markdown']}`}>
                                 <ReactMarkdown>
                                     {featuredEvent.description || t('events.noDescription')}
                                 </ReactMarkdown>
                             </div>
-                            <div className="event-meta-premium">
-                                <div className="meta-item-badge flex items-center gap-1.5">
+                            <div className={`${styles['event-meta-premium']}`}>
+                                <div className={`${styles['meta-item-badge']} flex items-center gap-1.5`}>
                                     <MapPin size={14} className="text-red-400" /> <span>{featuredEvent.location || t('events.online')}</span>
                                 </div>
-                                <div className="meta-item-badge flex items-center gap-1.5">
+                                <div className={`${styles['meta-item-badge']} flex items-center gap-1.5`}>
                                     <Clock size={14} className="text-blue-400" /> <span>{formatDate(featuredEvent.date).time}</span>
                                 </div>
                             </div>
                             {featuredEvent.link && (
-                                <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className="event-main-btn">
+                                <a href={featuredEvent.link} target="_blank" rel="noopener noreferrer" className={`${styles['event-main-btn']}`}>
                                     {t('btn.registerNow')}
                                 </a>
                             )}
@@ -169,56 +170,56 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                 )}
                 
                 {/* Right: Timeline Side */}
-                <div className="upcoming-events-list trans-up">
-                    <div className="manage-header">
-                        <h2 className="timeline-section-title">{t('section.timeline')}</h2>
-                        <div className="timeline-tabs">
-                            <button type="button" className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => setActiveTab('upcoming')}>{t('events.upcoming')}</button>
-                            <button type="button" className={activeTab === 'past' ? 'active' : ''} onClick={() => setActiveTab('past')}>{t('events.past')}</button>
+                <div className={`${styles['upcoming-events-list']} trans-up`}>
+                    <div className={`${styles['manage-header']}`}>
+                        <h2 className={`${styles['timeline-section-title']}`}>{t('section.timeline')}</h2>
+                        <div className={`${styles['timeline-tabs']}`}>
+                            <button type="button" className={activeTab === 'upcoming' ? styles['active'] : ''} onClick={() => setActiveTab('upcoming')}>{t('events.upcoming')}</button>
+                            <button type="button" className={activeTab === 'past' ? styles['active'] : ''} onClick={() => setActiveTab('past')}>{t('events.past')}</button>
                         </div>
                     </div>
 
-                    <div className="timeline-wrapper">
+                    <div className={`${styles['timeline-wrapper']}`}>
                         {displayEvents.length === 0 ? (
-                            <div className="empty-state" style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
+                            <div className={`${styles['empty-state']}`} style={{ padding: '60px 40px', textAlign: 'center', opacity: 0.5 }}>
                                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}><Calendar size={48} className="opacity-50" /></div>
                                 <p style={{ color: 'var(--text-secondary)' }}>{activeTab === 'upcoming' ? t('events.noUpcoming') : t('events.noPast')}</p>
                             </div>
                         ) : (
                             Object.entries(groupedEvents).map(([dateKey, { dayKey, events }]) => (
-                                <div key={dateKey} className="timeline-group">
-                                    <div className="timeline-date-col">
-                                        <div className="timeline-dot"></div>
-                                        <div className="timeline-date-text">{dateKey}</div>
-                                        <div className="timeline-day-text">{dayKey}</div>
+                                <div key={dateKey} className={`${styles['timeline-group']}`}>
+                                    <div className={`${styles['timeline-date-col']}`}>
+                                        <div className={`${styles['timeline-dot']}`}></div>
+                                        <div className={`${styles['timeline-date-text']}`}>{dateKey}</div>
+                                        <div className={`${styles['timeline-day-text']}`}>{dayKey}</div>
                                     </div>
-                                    <div className="timeline-events-col">
+                                    <div className={`${styles['timeline-events-col']}`}>
                                         {events.map((event) => (
-                                            <div key={event.id} className="timeline-event-card">
-                                                <div className="timeline-event-content">
-                                                    <div className="timeline-event-time">
+                                            <div key={event.id} className={`${styles['timeline-event-card']}`}>
+                                                <div className={`${styles['timeline-event-content']}`}>
+                                                    <div className={`${styles['timeline-event-time']}`}>
                                                         {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </div>
-                                                    <div className="timeline-event-title">{event.title}</div>
-                                                    <div className="timeline-event-host flex items-center gap-1.5">
+                                                    <div className={`${styles['timeline-event-title']}`}>{event.title}</div>
+                                                    <div className={`${styles['timeline-event-host']} flex items-center gap-1.5`}>
                                                         <Users size={12} className="text-gray-400" /> <span>{t('events.byDavey')}</span>
                                                     </div>
-                                                    <div className="timeline-event-location flex items-center gap-1.5 mt-1">
+                                                    <div className={`${styles['timeline-event-location']} flex items-center gap-1.5 mt-1`}>
                                                         <MapPin size={12} className="text-red-400" /> {event.location || t('events.onlineLink')}
                                                     </div>
-                                                    <div className="timeline-event-actions">
-                                                        <div className={`status-badge ${activeTab === 'upcoming' ? 'going' : 'past'}`}>
+                                                    <div className={`${styles['timeline-event-actions']}`}>
+                                                        <div className={`${styles['status-badge']} ${activeTab === 'upcoming' ? styles['going'] : styles['past']}`}>
                                                             {activeTab === 'upcoming' ? t('events.going') : t('events.ended')}
                                                         </div>
                                                         {event.link && (
-                                                            <a href={event.link} target="_blank" rel="noopener noreferrer" className="rsvp-btn">
+                                                            <a href={event.link} target="_blank" rel="noopener noreferrer" className={`${styles['rsvp-btn']}`}>
                                                                 {t('btn.rsvp')}
                                                             </a>
                                                         )}
                                                     </div>
                                                 </div>
                                                 {(event.timelineImageUrl || event.imageUrl) && (
-                                                    <div className="timeline-event-thumb" style={{ position: 'relative', overflow: 'hidden' }}>
+                                                    <div className={`${styles['timeline-event-thumb']}`} style={{ position: 'relative', overflow: 'hidden' }}>
                                                         <Image src={event.timelineImageUrl || event.imageUrl!} alt={event.title} fill style={{ objectFit: 'cover' }} />
                                                     </div>
                                                 )}

@@ -1,0 +1,100 @@
+/* src/app/Home.module.css */
+
+.newsSection {
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+.tweetSection {
+  margin-bottom: 60px;
+}
+
+.eventsSection {
+  margin-bottom: 60px;
+}
+
+.curationSection {
+  margin-top: 80px;
+  margin-bottom: 100px;
+}
+
+.filterFallback {
+  margin: 0 auto 48px;
+}
+
+.marqueeWrapper {
+  padding: 0 20px;
+}
+
+.postCardFlex {
+  flex: 0 0 auto;
+  display: flex;
+}
+
+/* Base Responsive Breakpoints targeting all sections simultaneously */
+@media (max-width: 768px) {
+  .newsSection {
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+  
+  .tweetSection, .eventsSection {
+    margin-bottom: 40px;
+  }
+  
+  .curationSection {
+    margin-top: 50px;
+    margin-bottom: 60px;
+  }
+  
+  .marqueeWrapper {
+    padding: 0 10px;
+  }
+}
+
+
+/* --- PREMIUM HOME BACKGROUND --- */
+.homeContainer {
+  position: relative;
+  min-height: 100vh;
+  /* Ph�n l?p b?ng Gradient Subtle: den tuy?t d?i ? bi�n, x�m than ? t�m */
+  background: radial-gradient(circle at 50% 30%, #2a2a35 0%, #08080c 40%, #000000 90%);
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+/* Th�m K?t C?u M?n, Si�u Th?c (Fine Micro-Texture) */
+.homeContainer::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.06; /* Increased noise opacity to 6% for actual visibility on standard monitors */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* �nh S�ng T�n X? (Environmental Glow/Depth of Field) - M�u d? c?a Event/Logo */
+.environmentalGlow {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  max-width: 1400px;
+  height: 800px;
+  /* Soft red bloom */
+  background: radial-gradient(ellipse at center, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.04) 40%, transparent 70%);
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 0; 
+}
+
+/* Base content protection */
+.contentLayer {
+  position: relative;
+  z-index: 10;
+}

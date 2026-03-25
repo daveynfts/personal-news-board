@@ -6,6 +6,7 @@ import EventCalendar from '@/components/EventCalendar';
 import Container from '@/components/Container';
 import FilterBar from '@/components/FilterBar';
 import TweetWall from '@/components/TweetWall';
+import styles from './Home.module.css';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
@@ -48,9 +49,12 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 export default async function Home({ searchParams }: PageProps) {
   noStore();
   const { filter } = await searchParams;
-  const allPosts = await getAllPosts();
-  const allArticles = await getAllArticles();
-  const allEvents = await getAllEvents();
+  // Run independent DB fetches concurrently to slash TTFB response times
+  const [allPosts, allArticles, allEvents] = await Promise.all([
+    getAllPosts(),
+    getAllArticles(),
+    getAllEvents()
+  ]);
 
   const filteredPosts = filter && filter !== 'all'
     ? allPosts.filter(p => p.type.toLowerCase() === filter.toLowerCase() && !p.isMore)
@@ -66,7 +70,9 @@ export default async function Home({ searchParams }: PageProps) {
 
 
   return (
-    <div className="home-container">
+    <div className={styles.homeContainer}>
+      <div className={styles.environmentalGlow} />
+      <div className={styles.contentLayer}>
       {/* Animated background blobs (macOS Dark Mode logic) */}
       <div className="so-bg-effects">
         <div className="so-blob so-blob-1" />
@@ -77,7 +83,7 @@ export default async function Home({ searchParams }: PageProps) {
 
 
       {/* 1. NEWS (Top Level Container) */}
-      <Container style={{ marginTop: '30px', marginBottom: '60px' }}>
+      <Container className={styles.newsSection}>
         <NewsHero 
            featuredArticles={featuredArticles}
            editorChoices={editorialPicks}
@@ -87,19 +93,19 @@ export default async function Home({ searchParams }: PageProps) {
       </Container>
 
       {/* 2. X PICK (FEATURED TWEETS) */}
-      <Container style={{ marginBottom: '60px' }}>
+      <Container className={styles.tweetSection}>
         <TweetWall />
       </Container>
 
       {/* 3. EVENT CALENDAR */}
       {visibleEvents.length > 0 && (
-        <Container style={{ marginBottom: '60px' }}>
+        <Container className={styles.eventsSection}>
           <EventCalendar events={visibleEvents} />
         </Container>
       )}
 
       {/* CURATION FEED (POSTS) */}
-      <Container style={{ marginTop: '80px', marginBottom: '100px' }}>
+      <Container className={styles.curationSection}>
         <SectionHeader
           titleKey="section.daveyPicks"
           viewAllKey="btn.viewAllPicks"
@@ -107,7 +113,7 @@ export default async function Home({ searchParams }: PageProps) {
         />
         
         <Suspense fallback={
-          <div className="filter-container" style={{ margin: '0 auto 48px' }}>
+          <div className={`${styles.filterFallback} filter-container`}>
             {['All', 'Research', 'Article'].map(cat => (
               <span key={cat} className="filter-btn">{cat}</span>
             ))}
@@ -121,10 +127,10 @@ export default async function Home({ searchParams }: PageProps) {
             <EmptyState />
           ) : (
             <div className="rainbow-glow-container">
-              <div className="marquee-wrapper" style={{ padding: '0 20px' }}>
+              <div className={styles.marqueeWrapper}>
                 <DragScrollContainer className="mb-6">
                   {filteredPosts.slice(0, Math.ceil(filteredPosts.length / 2)).map((post) => (
-                    <div key={post.id} style={{ flex: '0 0 auto', display: 'flex' }}>
+                    <div key={post.id} className={styles.postCardFlex}>
                       <PostCard post={post} />
                     </div>
                   ))}
@@ -133,7 +139,7 @@ export default async function Home({ searchParams }: PageProps) {
                 {filteredPosts.length > 1 && (
                   <DragScrollContainer>
                     {filteredPosts.slice(Math.ceil(filteredPosts.length / 2)).map((post) => (
-                      <div key={post.id} style={{ flex: '0 0 auto', display: 'flex' }}>
+                      <div key={post.id} className={styles.postCardFlex}>
                         <PostCard post={post} />
                       </div>
                     ))}
@@ -144,6 +150,7 @@ export default async function Home({ searchParams }: PageProps) {
           )}
         </section>
       </Container>
+          </div>
     </div>
   );
 }

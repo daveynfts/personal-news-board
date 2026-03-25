@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Tweet } from 'react-tweet';
+import styles from './TweetWall.module.css';
 import { useTranslation } from '@/lib/LanguageContext';
 import { useSwipe } from '@/hooks/useSwipe';
 import { useAutoDragScroll } from '@/hooks/useAutoDragScroll';
@@ -73,14 +74,14 @@ export default function TweetWall() {
     };
 
     return (
-        <section className="tweet-wall-section">
-            <div className="tweet-wall-header">
+        <section className={styles.tweetWallSection}>
+            <div className={styles.tweetWallHeader}>
                 <div>
-                    <h2 className="tweet-wall-title">
-                        <span className="tweet-wall-x">𝕏</span>
+                    <h2 className={styles.tweetWallTitle}>
+                        <span className={styles.tweetWallX}>𝕏</span>
                         {t('section.featuredPosts')}
                     </h2>
-                    <p className="tweet-wall-desc">{t('tweet.curatedInsights')}</p>
+                    <p className={styles.tweetWallDesc}>{t('tweet.curatedInsights')}</p>
                 </div>
                 <Link href="/tweets" className="archive-view-all-btn">
                     {t('btn.viewAllTweets')}
@@ -88,7 +89,7 @@ export default function TweetWall() {
             </div>
 
             {categories.length > 2 && (
-                <div className="tweet-wall-filters">
+                <div className={styles.tweetWallFilters}>
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -102,7 +103,7 @@ export default function TweetWall() {
             )}
 
             <div
-                className="tweet-wall-carousel-wrapper"
+                className={styles.tweetWallCarouselWrapper}
                 ref={tweetSwipeRef}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
@@ -122,21 +123,21 @@ export default function TweetWall() {
 
                 {/* Scrollable tweet row with auto-scroll marquee */}
                 <div
-                    className="tweet-wall-grid"
+                    className={styles.tweetWallGrid}
                     data-theme="dark"
                     ref={scrollRef}
                 >
                     <div className="tweet-marquee-track-js" style={{ display: 'flex', gap: '24px', width: 'max-content', padding: '0 16px' }}>
                         {filtered.map(tw => (
-                            <div key={tw.id} className="tweet-wall-card">
-                                {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
+                            <div key={tw.id} className={styles.tweetWallCard}>
+                                {tw.label && <div className={styles.tweetWallLabel}>{tw.label}</div>}
                                 <Tweet id={tw.tweetId} />
                             </div>
                         ))}
                         {/* Duplicate for seamless loop */}
                         {filtered.map(tw => (
-                            <div key={`dup-${tw.id}`} className="tweet-wall-card">
-                                {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
+                            <div key={`dup-${tw.id}`} className={styles.tweetWallCard}>
+                                {tw.label && <div className={styles.tweetWallLabel}>{tw.label}</div>}
                                 <Tweet id={tw.tweetId} />
                             </div>
                         ))}
