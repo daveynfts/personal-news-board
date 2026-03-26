@@ -72,56 +72,28 @@ export default async function PicksPage({ searchParams }: PageProps) {
     return (
         <div className="archive-page-container">
             {/* Hero */}
-            <div className="archive-hero">
-                <div className="liquid-blob blob-1" style={{ opacity: 0.2, top: '-10%', left: '-5%', background: 'var(--x-color)' }} />
-                <div className="liquid-blob blob-3" style={{ opacity: 0.15, top: '30%', right: '10%' }} />
-                <Container>
-                    <div className="archive-hero-content">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
-                            <Link href="/" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.05)', padding: '6px 16px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer' }}>
-                                &larr; <Tr i18nKey="btn.backToHome" />
-                            </Link>
-                            <div style={{ flex: '1', display: 'flex', justifyContent: 'center' }}>
-                                <div style={{ width: '100%', maxWidth: '400px' }}>
-                                    <SearchBar scope="posts" placeholder="Search picks..." compact />
-                                </div>
-                            </div>
-                            <div style={{ width: '100px', display: 'flex', position: 'relative' }} className="hidden-mobile"></div>
-                        </div>
-                        <div>
-                            <span className="more-label"><Pin className="inline-block mr-1" size={16} /> <Tr i18nKey="archive.picksLabel" /></span>
-                            <h1 className="archive-hero-title"><Tr i18nKey="archive.picksTitle" /></h1>
-                            <p className="archive-hero-subtitle">
-                                <Tr i18nKey="archive.picksSubtitle" />
-                            </p>
-                        </div>
+            <div className="archive-hero relative overflow-hidden">
+                <div className="liquid-blob blob-1" style={{ opacity: 0.15, top: '-10%', left: '-5%', background: 'var(--blog-color, var(--accent-color))' }} />
+                <div className="liquid-blob blob-3" style={{ opacity: 0.1, bottom: '-20%', right: '10%' }} />
+                
+                <Container className="relative z-10 pt-6">
+                    <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+                        <Tr i18nKey="btn.backToHome" />
+                    </Link>
+
+                    <div className="archive-hero-content text-center max-w-3xl mx-auto pt-6 pb-8">
+                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold tracking-widest uppercase text-gray-300 mb-6 drop-shadow-sm backdrop-blur-md">
+                            <Pin size={12} /> <Tr i18nKey="archive.picksLabel" />
+                        </span>
+                        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+                            <Tr i18nKey="archive.picksTitle" />
+                        </h1>
+                        <p className="text-lg text-gray-400 font-light max-w-2xl mx-auto">
+                            <Tr i18nKey="archive.picksSubtitle" />
+                        </p>
                         
-                        <div className="archive-hero-stats">
-                            <div className="archive-stat">
-                                <span className="archive-stat-num">{visiblePosts.length}</span>
-                                <span className="archive-stat-label"><Tr i18nKey="archive.activePicksStat" /></span>
-                            </div>
-                            {['Research', 'Article'].map(type => {
-                                const count = visiblePosts.filter(p => p.type.toLowerCase() === type.toLowerCase()).length;
-                                return count > 0 ? (
-                                    <div key={type} style={{ display: 'contents' }}>
-                                        <div className="archive-stat-sep" />
-                                        <div className="archive-stat">
-                                            <span className="archive-stat-num">{count}</span>
-                                            <span className="archive-stat-label"><Tr i18nKey={`filter.${type.toLowerCase()}`} /></span>
-                                        </div>
-                                    </div>
-                                ) : null;
-                            })}
-                            {morePosts.length > 0 && (
-                                <>
-                                    <div className="archive-stat-sep" />
-                                    <div className="archive-stat">
-                                        <span className="archive-stat-num">{morePosts.length}</span>
-                                        <span className="archive-stat-label"><Tr i18nKey="archive.archived" /></span>
-                                    </div>
-                                </>
-                            )}
+                        <div className="mt-8 mx-auto w-full max-w-md">
+                            <SearchBar scope="posts" placeholder="Search picks..." compact />
                         </div>
                     </div>
                 </Container>
@@ -129,7 +101,7 @@ export default async function PicksPage({ searchParams }: PageProps) {
 
             <Container style={{ paddingTop: '48px', paddingBottom: '120px' }}>
                 {/* Filter Tabs */}
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '40px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
                     {categories.map(cat => (
                         <Link
                             key={cat.value}

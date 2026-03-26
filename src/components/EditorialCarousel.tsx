@@ -50,7 +50,7 @@ export default function EditorialCarousel({ articles }: EditorialCarouselProps) 
             <Container>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                     <h2 className="section-title" style={{ marginBottom: 0 }}>{t('section.editorialPicks')}</h2>
-                    <Link href="/articles" className="archive-view-all-btn">{t('btn.viewAllArticles')}</Link>
+                    <Link href="/articles" className="archive-view-all-btn">{t('btn.viewAllArticles')} &rarr;</Link>
                 </div>
 
                 <div className={`${styles['editorial-carousel-premium']}`} ref={swipeRef}>

@@ -3,7 +3,6 @@ import { Inter, Be_Vietnam_Pro } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import CryptoTicker from '@/components/CryptoTicker';
-import TokenRain from '@/components/TokenRain';
 import { buildMetadata, buildWebSiteJsonLd } from '@/lib/seo';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
@@ -45,7 +44,6 @@ export default function RootLayout({
           <main style={{ minHeight: '80vh' }}>
             {children}
           </main>
-          <TokenRain />
         </LanguageProvider>
       </body>
     </html>

@@ -24,7 +24,7 @@ export function SectionHeader({
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
       <h2 className="section-title" style={{ marginBottom: 0 }}>{t(titleKey)}</h2>
       {viewAllKey && viewAllHref && (
-        <a href={viewAllHref} className="archive-view-all-btn">{t(viewAllKey)}</a>
+        <a href={viewAllHref} className="archive-view-all-btn">{t(viewAllKey)} &rarr;</a>
       )}
     </div>
   );

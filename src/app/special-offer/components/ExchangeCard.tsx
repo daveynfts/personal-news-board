@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { Crown } from 'lucide-react';
 import styles from '../SpecialOffer.module.css';
 
 interface ExchangeData {
@@ -64,7 +65,9 @@ export default function ExchangeCard({ ex, idx, t }: ExchangeCardProps) {
       <ul className={`${styles['so-exchange-features']}`}>
         {ex.features.map((feat, i) => (
           <li key={i}>
-            <span className={`${styles['so-feature-check']}`}>✓</span>
+            <span className={`${styles['so-medal-badge']}`}>
+              <Crown size={14} strokeWidth={2.5} />
+            </span>
             {feat}
           </li>
         ))}

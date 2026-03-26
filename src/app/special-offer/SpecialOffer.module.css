@@ -1084,6 +1084,19 @@
   font-weight: 800;
 }
 
+.so-medal-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+
+.so-medal-badge svg {
+  color: #e2e8f0;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.35)) drop-shadow(0 0 3px rgba(148, 163, 184, 0.8));
+}
+
 .so-exchange-cta {
   display: flex;
   align-items: center;

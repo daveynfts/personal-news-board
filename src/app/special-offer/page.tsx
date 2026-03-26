@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import styles from './SpecialOffer.module.css';
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '@/components/Container';
-import PremiumBitcoin3D from '@/components/PremiumBitcoin3D';
 import SavingsCalculator from './components/SavingsCalculator';
 import ExchangeCard from './components/ExchangeCard';
 import RadarPreviewCard from './components/RadarPreviewCard';
@@ -30,11 +27,8 @@ export default function SpecialOfferPage() {
       {/* Hero Section - Split Layout */}
       <section className={`${styles['so-hero']} ${styles['so-hero-padding']}`}>
         <Container>
-          <div className={`${styles['so-back-nav']}`}>
-            <Link href="/" className="article-back-link">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
-                    <path d="m15 18-6-6 6-6" />
-                </svg>
+          <div className="relative z-10 pt-2 mb-8 text-left">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
                 {t('btn.backToHome')}
             </Link>
           </div>

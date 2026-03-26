@@ -6,6 +6,7 @@ import Container from '@/components/Container';
 import SearchBar from '@/components/SearchBar';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
+import { Tr } from '@/components/TranslatableText';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,41 +91,28 @@ export default async function EventsPage() {
     return (
         <div className="archive-page-container">
             {/* Hero */}
-            <div className="archive-hero">
-                <div className="liquid-blob blob-1" style={{ opacity: 0.25, top: '-10%', left: '-5%' }} />
-                <div className="liquid-blob blob-2" style={{ opacity: 0.2, bottom: '-20%', right: '0%' }} />
-                <Container>
-                    <div className="archive-hero-content">
-                        <Link href="/" className="more-back-btn">← Back to Home</Link>
-                        <div style={{ marginTop: '24px' }}>
-                            <span className="more-label">📅 Full Archive</span>
-                            <h1 className="archive-hero-title">Events & Timeline</h1>
-                            <p className="archive-hero-subtitle">
-                                All conferences, meetups, and web3 events — upcoming and past.
-                            </p>
-                        </div>
-                        <div style={{ marginTop: '20px' }}>
+            <div className="archive-hero relative overflow-hidden">
+                <div className="liquid-blob blob-1" style={{ opacity: 0.15, top: '-10%', left: '-5%', background: 'var(--success-color)' }} />
+                <div className="liquid-blob blob-3" style={{ opacity: 0.1, bottom: '-20%', right: '10%' }} />
+                
+                <Container className="relative z-10 pt-6">
+                    <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+                        <Tr i18nKey="btn.backToHome" />
+                    </Link>
+
+                    <div className="archive-hero-content text-center max-w-3xl mx-auto pt-6 pb-8">
+                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold tracking-widest uppercase text-gray-300 mb-6 drop-shadow-sm backdrop-blur-md">
+                            📅 Full Archive
+                        </span>
+                        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+                            Events & Timeline
+                        </h1>
+                        <p className="text-lg text-gray-400 font-light max-w-2xl mx-auto">
+                            All conferences, meetups, and web3 events — upcoming and past.
+                        </p>
+                        
+                        <div className="mt-8 mx-auto w-full max-w-md">
                             <SearchBar scope="events" placeholder="Search events..." compact />
-                        </div>
-                        <div className="archive-hero-stats">
-                            <div className="archive-stat">
-                                <span className="archive-stat-num">{upcomingEvents.length}</span>
-                                <span className="archive-stat-label">Upcoming</span>
-                            </div>
-                            <div className="archive-stat-sep" />
-                            <div className="archive-stat">
-                                <span className="archive-stat-num">{pastEvents.length}</span>
-                                <span className="archive-stat-label">Past</span>
-                            </div>
-                            {moreEvents.length > 0 && (
-                                <>
-                                    <div className="archive-stat-sep" />
-                                    <div className="archive-stat">
-                                        <span className="archive-stat-num">{moreEvents.length}</span>
-                                        <span className="archive-stat-label">Archived</span>
-                                    </div>
-                                </>
-                            )}
                         </div>
                     </div>
                 </Container>

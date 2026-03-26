@@ -41,19 +41,15 @@ export default function TweetArchiveGrid({ tweets }: { tweets: TweetData[] }) {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                <Link href="/" className="archive-view-all-btn" style={{ opacity: 0.7, fontSize: '0.85rem' }}>
-                    ← Back to Home
-                </Link>
-            </div>
 
             {categories.length > 2 && (
-                <div className="tweet-wall-filters" style={{ marginBottom: '40px', justifyContent: 'center' }}>
+                <div className="flex flex-wrap justify-center gap-3 mb-10 w-full" style={{ maxWidth: '800px', margin: '0 auto 40px auto' }}>
                     {categories.map(cat => (
                         <button
                             key={cat}
                             onClick={() => setFilter(cat)}
-                            className={`tweet-filter-btn ${filter === cat ? 'active' : ''} flex items-center!`}
+                            className={`tweet-filter-btn ${filter === cat ? 'active' : ''}`}
+                            style={{ display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }}
                         >
                             <CategoryIcon type={cat} /> {categoryLabels[cat] || cat}
                         </button>

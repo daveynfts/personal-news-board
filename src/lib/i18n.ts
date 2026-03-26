@@ -35,10 +35,10 @@ export const translations: Record<Locale, Record<string, string>> = {
     'section.timeline': 'Timeline',
 
     // ── Buttons & Actions ─────────────────────────────────────────────────
-    'btn.viewAllArticles': 'View All Articles →',
-    'btn.viewAllPicks': 'View All Deep Dive →',
-    'btn.viewAllEvents': 'View All Events →',
-    'btn.viewAllTweets': 'View All Posts →',
+    'btn.viewAllArticles': 'View All Articles',
+    'btn.viewAllPicks': 'View All Deep Dive',
+    'btn.viewAllEvents': 'View All Events',
+    'btn.viewAllTweets': 'View All Posts',
     'btn.readArticle': 'Read Article',
     'btn.accessSource': 'ACCESS SOURCE',
     'btn.registerNow': 'Register Now',
@@ -47,7 +47,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'btn.registerNowArrow': 'Register Now ↗',
     'btn.backToHome': '← Back to Home',
     'btn.backToFeed': 'Back to Feed',
-    'btn.backToAllPicks': '← Back to All Deep Dive',
+    'btn.backToAllPicks': '← Back to Deep Dive Zone',
     'btn.goToAdmin': 'Go to Admin',
 
     // ── Carousel ──────────────────────────────────────────────────────────
@@ -96,7 +96,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.noArticles': 'No articles yet',
     'archive.articlesAdminHint': 'Articles added through the admin panel will appear here.',
     'archive.starEditorialPicks': '★ Editorial Picks',
-    'archive.readArticle': 'Read Article →',
+    'archive.readArticle': 'Read Article',
     'archive.xSource': '𝕏 Source',
     'archive.extendedArchive': 'Extended Archive',
 
@@ -112,20 +112,20 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.pastEvents': 'Past Events',
 
     // Picks Archive
-    'archive.picksLabel': 'Full Feed',
+    'archive.picksLabel': '📌 Full Feed',
     'archive.picksTitle': 'Deep Dive Zone',
     'archive.picksSubtitle': 'Every curated news, blog post, and X thread — the complete collection.',
     'archive.activePicksStat': 'Active Picks',
-    'archive.xThread': 'X Thread',
+    'archive.xThread': '𝕏 Thread',
     'archive.noPicks': 'No picks yet',
     'archive.picksAdminHint': 'Posts added through the admin panel will appear here.',
     'archive.allPicks': 'All Deep Dive',
-    'archive.xThreadPicks': 'X Thread Picks',
+    'archive.xThreadPicks': '𝕏 Thread Picks',
     'archive.noPosts': 'No {filter} posts',
     'archive.tryFilter': 'Try a different filter or add posts from the admin panel.',
-    'archive.newsLabel': 'News',
-    'archive.blogLabel': 'Blog',
-    'archive.xLabel': 'X Thread',
+    'archive.newsLabel': '📰 News',
+    'archive.blogLabel': '✍️ Blog',
+    'archive.xLabel': '𝕏 X Thread',
 
     'article.editorialPick': '★ Editorial Pick',
     'article.featureArticle': 'Feature Article',
@@ -209,7 +209,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'search.open': 'mở',
     'search.close': 'đóng',
     'search.found': 'tìm thấy',
-    'search.everything': 'Tìm kiếm...',
+    'search.everything': 'Tìm kiếm tất cả...',
     'search.articles': 'Tìm bài báo...',
     'search.events': 'Tìm sự kiện...',
     'search.picks': 'Tìm picks...',
@@ -229,10 +229,10 @@ export const translations: Record<Locale, Record<string, string>> = {
     'section.timeline': 'Dòng Thời Gian',
 
     // ── Buttons & Actions ─────────────────────────────────────────────────
-    'btn.viewAllArticles': 'Xem Tất Cả Bài Viết →',
-    'btn.viewAllPicks': 'Xem Tất Cả Bài Deep Dive →',
-    'btn.viewAllEvents': 'Xem Tất Cả Sự Kiện →',
-    'btn.viewAllTweets': 'Xem Tất Cả Bài Đăng →',
+    'btn.viewAllArticles': 'Xem Tất Cả Bài Viết',
+    'btn.viewAllPicks': 'Xem Tất Cả Bài Deep Dive',
+    'btn.viewAllEvents': 'Xem Tất Cả Sự Kiện',
+    'btn.viewAllTweets': 'Xem Tất Cả Bài Đăng',
     'btn.readArticle': 'Đọc Bài Viết',
     'btn.accessSource': 'XEM NGUỒN',
     'btn.registerNow': 'Đăng Ký Ngay',
@@ -241,7 +241,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'btn.registerNowArrow': 'Đăng Ký Ngay ↗',
     'btn.backToHome': '← Về Trang Chủ',
     'btn.backToFeed': 'Về Bảng Tin',
-    'btn.backToAllPicks': '← Về Tất Cả Bài Deep Dive',
+    'btn.backToAllPicks': '← Về Deep Dive Zone',
     'btn.goToAdmin': 'Vào Quản Trị',
 
     // ── Carousel ──────────────────────────────────────────────────────────
@@ -290,7 +290,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'archive.noArticles': 'Chưa có bài viết',
     'archive.articlesAdminHint': 'Bài viết được thêm qua trang quản trị sẽ xuất hiện ở đây.',
     'archive.starEditorialPicks': '★ Biên Tập Chọn Lọc',
-    'archive.readArticle': 'Đọc Bài Viết →',
+    'archive.readArticle': 'Đọc Bài Viết',
     'archive.xSource': '𝕏 Nguồn',
     'archive.extendedArchive': 'Kho Lưu Trữ Mở Rộng',
 
@@ -331,7 +331,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'article.readSourceAt': 'Đọc bài gốc tại',
     'article.readFullSource': 'Đọc toàn bộ bài gốc',
     'article.relatedCategory': 'Tin cùng chuyên mục',
-    'article.relatedNews': 'Tin tức',
+    'article.relatedNews': 'Tin tức liên quan',
 
     // ── Empty States ──────────────────────────────────────────────────────
     'empty.noPosts': 'Không tìm thấy bài viết cho danh mục này.',

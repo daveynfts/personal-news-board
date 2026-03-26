@@ -37,7 +37,6 @@ export default function Header() {
     hue: number; delay: number;
   }>>([]);
   const bubbleIdRef = useRef(0);
-  const hoverTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Split bubble text into phrases for individual bubbles
   const bubblePhrases = useMemo(() => {
@@ -195,7 +194,6 @@ export default function Header() {
   return (
     <>
       <div className="header-row">
-        <LanguageToggle />
         <header className="app-header">
           <Container className="header-inner">
             <div className="logo">
@@ -214,17 +212,19 @@ export default function Header() {
                 <h1>DaveyNFTs</h1>
               </Link>
             </div>
-            <nav className="main-nav">
-              <Link href="/special-offer" className="nav-link nav-link-special" title={t('nav.specialOffer')}>
-                <span className="nav-special-icon">
+            <nav className="main-nav" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <Link href="/special-offer" className="nav-link nav-link-special" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 10px', height: '36px' }} title={t('nav.specialOffer')}>
+                <span className="nav-special-icon" style={{ display: 'flex' }}>
                   <Sparkles size={18} style={{ color: '#facc15', filter: 'drop-shadow(0 0 8px rgba(250,204,21,0.8))' }} />
                 </span>
               </Link>
+              <LanguageToggle />
               <button
                 className="header-search-btn"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
                 title="Search (⌘K)"
+                style={{ margin: 0 }}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" />

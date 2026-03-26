@@ -4,6 +4,8 @@ import Container from '@/components/Container';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
 import TweetArchiveGrid from './TweetArchiveGrid';
+import Link from 'next/link';
+import { Tr } from '@/components/TranslatableText';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,24 +27,25 @@ export default async function TweetsArchivePage() {
     return (
         <div className="archive-page-container">
             {/* Hero */}
-            <div className="archive-hero">
-                <div className="archive-hero-bg">
-                    <div className="liquid-blob blob-1" style={{ opacity: 0.4, top: '-20%', left: '10%' }} />
-                    <div className="liquid-blob blob-2" style={{ opacity: 0.3, bottom: '-10%', right: '5%' }} />
-                </div>
-                <Container>
-                    <div className="archive-hero-content">
-                        <span className="archive-hero-label">𝕏 Full Archive</span>
-                        <h1 className="archive-hero-title">Featured X Posts</h1>
-                        <p className="archive-hero-subtitle">
+            <div className="archive-hero relative overflow-hidden">
+                <div className="liquid-blob blob-1" style={{ opacity: 0.15, top: '-10%', left: '-5%', background: 'var(--x-color, #1da1f2)' }} />
+                <div className="liquid-blob blob-3" style={{ opacity: 0.1, bottom: '-20%', right: '10%' }} />
+                
+                <Container className="relative z-10 pt-6">
+                    <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
+                        <Tr i18nKey="btn.backToHome" />
+                    </Link>
+
+                    <div className="archive-hero-content text-center max-w-3xl mx-auto pt-6 pb-8">
+                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold tracking-widest uppercase text-gray-300 mb-6 drop-shadow-sm backdrop-blur-md">
+                            𝕏 Full Archive
+                        </span>
+                        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+                            Featured X Posts
+                        </h1>
+                        <p className="text-lg text-gray-400 font-light max-w-2xl mx-auto">
                             All curated posts from the crypto community — breaking news, analysis, alpha insights, and threads.
                         </p>
-                        <div className="archive-hero-stats">
-                            <div className="archive-stat">
-                                <span className="archive-stat-number">{tweets.length}</span>
-                                <span className="archive-stat-label">Total Posts</span>
-                            </div>
-                        </div>
                     </div>
                 </Container>
             </div>

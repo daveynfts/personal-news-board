@@ -3,6 +3,7 @@ import Container from '@/components/Container';
 import NewsGridClient from './NewsGridClient';
 import Link from 'next/link';
 import { Newspaper } from 'lucide-react';
+import { Tr } from '@/components/TranslatableText';
 import type { Metadata } from 'next';
 import { buildMetadata, buildItemListJsonLd } from '@/lib/seo';
 import { SITE_META } from '@/lib/siteMeta';
@@ -63,7 +64,7 @@ export default async function NewsArchivePage() {
         
         <Container className="relative z-10 pt-6">
           <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100">
-            <span>&larr;</span> Trở về Trang chủ
+             <Tr i18nKey="btn.backToHome" />
           </Link>
 
           <div className="archive-hero-content text-center max-w-3xl mx-auto pt-6 pb-8">

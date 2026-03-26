@@ -84,7 +84,7 @@ export default function TweetWall() {
                     <p className={styles.tweetWallDesc}>{t('tweet.curatedInsights')}</p>
                 </div>
                 <Link href="/tweets" className="archive-view-all-btn">
-                    {t('btn.viewAllTweets')}
+                    {t('btn.viewAllTweets')} &rarr;
                 </Link>
             </div>
 

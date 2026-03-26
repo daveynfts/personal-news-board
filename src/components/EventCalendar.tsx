@@ -105,7 +105,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     href="/events"
                     className="archive-view-all-btn"
                 >
-                    {t('btn.viewAllEvents')}
+                    {t('btn.viewAllEvents')} &rarr;
                 </Link>
             </div>
 
