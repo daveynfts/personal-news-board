@@ -328,7 +328,7 @@ export default function CryptoEventsPage() {
                     <div className="ce-detail-item">
                       <span className="ce-detail-label">Stake</span>
                       <div className="ce-staking-tags">
-                        {event.stakingAssets.map((a, i) => (
+                        {(event.stakingAssets || []).map((a, i) => (
                           <span key={i} className="ce-staking-tag">{a}</span>
                         ))}
                       </div>
@@ -343,7 +343,7 @@ export default function CryptoEventsPage() {
 
                   {/* Tags */}
                   <div className="ce-tags">
-                    {event.tags.map((tag, i) => (
+                    {(event.tags || []).map((tag, i) => (
                       <span key={i} className="ce-tag">{tag}</span>
                     ))}
                   </div>
