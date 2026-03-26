@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Container from '@/components/Container';
 
-/* ───────────────────── Mockup Data ───────────────────── */
+/* ───────────────────── Types ───────────────────── */
 interface CryptoEvent {
   id: string;
   platform: string;
@@ -24,7 +24,8 @@ interface CryptoEvent {
   tags: string[];
 }
 
-const MOCK_EVENTS: CryptoEvent[] = [
+/* ───────────────────── Fallback Data (when Sanity is empty) ───────────────────── */
+const FALLBACK_EVENTS: CryptoEvent[] = [
   {
     id: '1',
     platform: 'Binance',
@@ -135,8 +136,23 @@ const MOCK_EVENTS: CryptoEvent[] = [
 
 /* ───────────────────── Component ───────────────────── */
 export default function CryptoEventsPage() {
+  const [events, setEvents] = useState<CryptoEvent[]>(FALLBACK_EVENTS);
   const [filter, setFilter] = useState<'all' | 'live' | 'upcoming' | 'ended'>('all');
   const [now, setNow] = useState(new Date());
+  const [dataSource, setDataSource] = useState<'fallback' | 'sanity'>('fallback');
+
+  // Fetch from Sanity API — fall back to mock if empty
+  useEffect(() => {
+    fetch('/api/crypto-events')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setEvents(data);
+          setDataSource('sanity');
+        }
+      })
+      .catch(() => { /* keep fallback */ });
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -153,10 +169,10 @@ export default function CryptoEventsPage() {
     return { days, hours, minutes, seconds, expired: false };
   }, [now]);
 
-  const filtered = MOCK_EVENTS.filter(e => filter === 'all' || e.status === filter);
-  const liveCount = MOCK_EVENTS.filter(e => e.status === 'live').length;
-  const upcomingCount = MOCK_EVENTS.filter(e => e.status === 'upcoming').length;
-  const endedCount = MOCK_EVENTS.filter(e => e.status === 'ended').length;
+  const filtered = events.filter(e => filter === 'all' || e.status === filter);
+  const liveCount = events.filter(e => e.status === 'live').length;
+  const upcomingCount = events.filter(e => e.status === 'upcoming').length;
+  const endedCount = events.filter(e => e.status === 'ended').length;
 
   return (
     <div className="ce-page">

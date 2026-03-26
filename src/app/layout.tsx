@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Be_Vietnam_Pro } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import CryptoTicker from '@/components/CryptoTicker';
 import { buildMetadata, buildWebSiteJsonLd } from '@/lib/seo';
 import { LanguageProvider } from '@/lib/LanguageContext';
@@ -44,6 +45,7 @@ export default function RootLayout({
           <main style={{ minHeight: '80vh' }}>
             {children}
           </main>
+          <Footer />
         </LanguageProvider>
       </body>
     </html>

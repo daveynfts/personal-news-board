@@ -7,6 +7,7 @@ import { exchangeType } from './exchange'
 import { cryptoEventType } from './cryptoEvent'
 import { embeddedTweetType } from './embeddedTweet'
 import { siteSettingsType } from './siteSettings'
+import { footerSettingsType } from './footerSettings'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   articleType,
@@ -15,5 +16,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   postType,
   exchangeType,
   cryptoEventType,
-  siteSettingsType
+  siteSettingsType,
+  footerSettingsType
 ]
+

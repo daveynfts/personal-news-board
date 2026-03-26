@@ -193,6 +193,23 @@ export const translations: Record<Locale, Record<string, string>> = {
     'so.badge.live': 'LIVE',
     'so.badge.upcoming': 'UPCOMING',
     'so.badge.hot': 'HOT',
+
+    // ── Footer ───────────────────────────────────────────────────────────
+    'footer.brandDesc': 'Nơi tổng hợp tin tức crypto, bài phân tích chuyên sâu và cập nhật Web3 mới nhất từ DaveyNFTs.',
+    'footer.navTitle': 'Khám Phá',
+    'footer.navHome': 'Trang Chủ',
+    'footer.navNews': 'Tin Tức',
+    'footer.navArticles': 'Bài Viết',
+    'footer.navPicks': 'Deep Dive',
+    'footer.navEvents': 'Sự Kiện',
+    'footer.navTweets': 'Bài Đăng X',
+    'footer.resourcesTitle': 'Tài Nguyên',
+    'footer.specialOffer': 'Ưu Đãi Đối Tác',
+    'footer.cryptoEvents': 'Lịch Airdrop',
+    'footer.followX': 'Theo dõi trên X',
+    'footer.disclaimerLabel': 'Tuyên bố miễn trừ trách nhiệm',
+    'footer.disclaimerText': 'Toàn bộ nội dung trên trang web này chỉ mang tính chất thông tin và giáo dục, không phải lời khuyên tài chính, đầu tư hay pháp lý. Giao dịch tiền mã hóa và tài sản số tiềm ẩn rủi ro thua lỗ lớn và không phù hợp với tất cả nhà đầu tư. Kết quả trong quá khứ không đảm bảo lợi nhuận tương lai. Trang web có thể chứa liên kết tiếp thị liên kết (affiliate), chúng tôi có thể nhận hoa hồng mà bạn không phải trả thêm chi phí. Hãy luôn tự nghiên cứu kỹ (DYOR) trước khi đưa ra bất kỳ quyết định đầu tư nào. DaveyNFTs không phải tổ chức tư vấn tài chính được cấp phép tại Việt Nam hay bất kỳ quốc gia nào.',
+    'footer.allRights': 'Bảo lưu mọi quyền.',
   },
 
   vi: {
@@ -387,5 +404,22 @@ export const translations: Record<Locale, Record<string, string>> = {
     'so.badge.live': 'ĐANG DIỄN RA',
     'so.badge.upcoming': 'SẮP TỚI',
     'so.badge.hot': 'NỔI BẬT',
+
+    // ── Footer ───────────────────────────────────────────────────────────
+    'footer.brandDesc': 'Nơi tổng hợp tin tức crypto, bài phân tích chuyên sâu và cập nhật Web3 mới nhất từ DaveyNFTs.',
+    'footer.navTitle': 'Khám Phá',
+    'footer.navHome': 'Trang Chủ',
+    'footer.navNews': 'Tin Tức',
+    'footer.navArticles': 'Bài Viết',
+    'footer.navPicks': 'Deep Dive',
+    'footer.navEvents': 'Sự Kiện',
+    'footer.navTweets': 'Bài Đăng X',
+    'footer.resourcesTitle': 'Tài Nguyên',
+    'footer.specialOffer': 'Ưu Đãi Đối Tác',
+    'footer.cryptoEvents': 'Lịch Airdrop',
+    'footer.followX': 'Theo dõi trên X',
+    'footer.disclaimerLabel': 'Tuyên bố miễn trừ trách nhiệm',
+    'footer.disclaimerText': 'Toàn bộ nội dung trên trang web này chỉ mang tính chất thông tin và giáo dục, không phải lời khuyên tài chính, đầu tư hay pháp lý. Giao dịch tiền mã hóa và tài sản số tiềm ẩn rủi ro thua lỗ lớn và không phù hợp với tất cả nhà đầu tư. Kết quả trong quá khứ không đảm bảo lợi nhuận tương lai. Trang web có thể chứa liên kết tiếp thị liên kết (affiliate), chúng tôi có thể nhận hoa hồng mà bạn không phải trả thêm chi phí. Hãy luôn tự nghiên cứu kỹ (DYOR) trước khi đưa ra bất kỳ quyết định đầu tư nào. DaveyNFTs không phải tổ chức tư vấn tài chính được cấp phép tại Việt Nam hay bất kỳ quốc gia nào.',
+    'footer.allRights': 'Bảo lưu mọi quyền.',
   },
 };

@@ -19,7 +19,7 @@ export function useCryptoData() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch('/api/exchanges');
+      const res = await fetch('/api/exchanges', { cache: 'no-store' });
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
         setExchanges(data.map((ex: any) => ({
@@ -30,7 +30,7 @@ export function useCryptoData() {
     } catch { /* use defaults */ }
 
     try {
-      const res = await fetch('/api/crypto-events');
+      const res = await fetch('/api/crypto-events', { cache: 'no-store' });
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
         const statusMap: Record<string, string> = { live: 'LIVE', upcoming: 'UPCOMING', ended: 'ENDED' };
