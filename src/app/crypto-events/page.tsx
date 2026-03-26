@@ -187,11 +187,7 @@ export default function CryptoEventsPage() {
       <section className="ce-hero">
         <Container>
           <div className="ce-hero-content">
-            <Link href="/special-offer" className="more-back-btn">← Back to Special Offer</Link>
-            <div className="ce-hero-badge">
-              <span className="ce-radar-ping" />
-              <span>📡 FOMO TRACKER</span>
-            </div>
+            <Link href="/special-offer" className="ce-back-btn">← Back to Special Offer</Link>
             <h1 className="ce-hero-title">
               Airdrop <span style={{
                 background: 'linear-gradient(135deg, #FBF8EA 0%, #D4AF37 45%, #AA7C11 100%)',
@@ -390,7 +386,7 @@ export default function CryptoEventsPage() {
               <a href="https://x.com/DaveyNFTs_" target="_blank" rel="noopener noreferrer" className="ce-follow-btn">
                 <span>𝕏</span> Follow @DaveyNFTs_
               </a>
-              <Link href="/special-offer" className="ce-back-link">
+              <Link href="/special-offer" className="ce-back-btn">
                 ← Back to Special Offer
               </Link>
             </div>

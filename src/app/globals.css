@@ -6726,6 +6726,27 @@ select.form-input {
   background: transparent;
   pointer-events: none;
 }
+.ce-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #FBF8EA;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(212,175,55,0.08);
+  border: 1px solid rgba(212,175,55,0.3);
+  width: fit-content;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.ce-back-btn:hover {
+  background: rgba(212,175,55,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212,175,55,0.15);
+}
 @keyframes gold-coin-spin {
   from { transform: translateY(var(--float-y, 0px)) rotateX(var(--wobble, 0deg)) rotateY(0deg); }
   to { transform: translateY(var(--float-y, 0px)) rotateX(var(--wobble, 0deg)) rotateY(360deg); }
