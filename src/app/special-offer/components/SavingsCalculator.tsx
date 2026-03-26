@@ -101,7 +101,7 @@ export default function SavingsCalculator() {
           <span className={`${styles['so-slider-label']}`}>{t('so.calc.monthlyVolume')}</span>
           <span className={`${styles['so-slider-value']}`} style={{
             fontVariantNumeric: 'tabular-nums',
-            textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(234,179,8,${0.3 + intensity * 0.4})` : 'none',
+            textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(212,175,55,${0.3 + intensity * 0.4})` : 'none',
           }}>{formatCurrency(volume)}</span>
         </div>
         <div className={`${styles['so-slider-track-wrapper']}`}>
@@ -115,7 +115,7 @@ export default function SavingsCalculator() {
             onChange={(e) => setVolume(Number(e.target.value))}
             className={`${styles['so-range-slider']}`}
             style={{
-              background: `linear-gradient(to right, #fef08a 0%, #eab308 ${sliderPercent}%, rgba(255,255,255,0.08) ${sliderPercent}%)`,
+              background: `linear-gradient(to right, #FBF8EA 0%, #D4AF37 ${sliderPercent}%, rgba(255,255,255,0.08) ${sliderPercent}%)`,
             }}
           />
           <div className={`${styles['so-slider-markers']}`}>
@@ -146,7 +146,7 @@ export default function SavingsCalculator() {
         className={`${styles['so-savings-highlight']}`}
         style={{
           boxShadow: intensity > 0.5
-            ? `0 0 ${20 + intensity * 40}px rgba(234,179,8,${intensity * 0.35}), inset 0 0 ${intensity * 30}px rgba(251,191,36,${intensity * 0.15})`
+            ? `0 0 ${20 + intensity * 40}px rgba(212,175,55,${intensity * 0.35}), inset 0 0 ${intensity * 30}px rgba(212,175,55,${intensity * 0.15})`
             : 'none',
         }}
       >
@@ -166,7 +166,7 @@ export default function SavingsCalculator() {
             <div className={`${styles['so-savings-amount']}`} style={{
               fontSize: '2.8rem', fontWeight: '900', letterSpacing: '-1px', color: '#fff',
               fontVariantNumeric: 'tabular-nums',
-              textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(251,191,36,${0.3 + intensity * 0.4})` : 'none',
+              textShadow: intensity > 0.5 ? `0 0 ${10 + intensity * 20}px rgba(212,175,55,${0.3 + intensity * 0.4})` : 'none',
               display: 'flex', alignItems: 'baseline', gap: '8px', lineHeight: 1,
               flexWrap: 'wrap'
             }}>
@@ -174,7 +174,14 @@ export default function SavingsCalculator() {
               <span className={`${styles['so-savings-period']}`} style={{ fontSize: '1.25rem', color: '#9ca3af', fontWeight: '500', whiteSpace: 'nowrap' }}>{t('so.calc.perMonth')}</span>
             </div>
             <div className={`${styles['so-savings-yearly']}`} style={{ fontSize: '0.95rem', color: '#6b7280', marginTop: '10px', wordBreak: 'break-word' }}>
-              {t('so.calc.thats')} <strong style={{ color: '#fbbf24', fontVariantNumeric: 'tabular-nums', textShadow: '0 0 10px rgba(251,191,36,0.3)' }}>{formatCurrency(savings * 12)}</strong> {t('so.calc.perYear')}
+              {t('so.calc.thats')} <strong style={{
+                background: 'linear-gradient(135deg, #FBF8EA 0%, #D4AF37 45%, #AA7C11 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontVariantNumeric: 'tabular-nums',
+                textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5), 0px 4px 15px rgba(212, 175, 55, 0.25)'
+              }}>{formatCurrency(savings * 12)}</strong> {t('so.calc.perYear')}
             </div>
           </div>
         </div>
