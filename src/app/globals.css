@@ -5279,9 +5279,9 @@ select.form-input {
   animation: so-float 22s infinite alternate ease-in-out;
 }
 
-.ce-blob-1 { width: 500px; height: 500px; background: #10b981; top: -10%; left: -8%; }
-.ce-blob-2 { width: 550px; height: 550px; background: #f0b90b; bottom: -15%; right: -8%; animation-delay: -8s; }
-.ce-blob-3 { width: 400px; height: 400px; background: #6366f1; top: 50%; left: 40%; animation-delay: -15s; }
+.ce-blob-1 { width: 500px; height: 500px; background: #FBF8EA; top: -10%; left: -8%; }
+.ce-blob-2 { width: 550px; height: 550px; background: #D4AF37; bottom: -15%; right: -8%; animation-delay: -8s; }
+.ce-blob-3 { width: 400px; height: 400px; background: #AA7C11; top: 50%; left: 40%; animation-delay: -15s; }
 
 /* Hero */
 .ce-hero {
@@ -5304,20 +5304,20 @@ select.form-input {
   gap: 10px;
   padding: 7px 18px;
   border-radius: 999px;
-  background: rgba(16,185,129,0.1);
-  border: 1px solid rgba(16,185,129,0.25);
+  background: rgba(212,175,55,0.1);
+  border: 1px solid rgba(212,175,55,0.25);
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.14em;
-  color: #6ee7b7;
+  color: #FBF8EA;
 }
 
 .ce-radar-ping {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: #10b981;
+  background: #D4AF37;
   animation: so-pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(16,185,129,0.6);
+  box-shadow: 0 0 10px rgba(212,175,55,0.6);
 }
 
 .ce-hero-title {
@@ -5409,10 +5409,11 @@ select.form-input {
 }
 
 .ce-filter-btn.active {
-  background: rgba(255,255,255,0.12);
-  color: #fff;
+  background: rgba(212,175,55,0.15);
+  color: #FBF8EA;
   font-weight: 700;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  border: 1px solid rgba(212,175,55,0.3);
+  box-shadow: 0 1px 8px rgba(212,175,55,0.15);
 }
 
 /* Events Section */

@@ -193,7 +193,13 @@ export default function CryptoEventsPage() {
               <span>📡 FOMO TRACKER</span>
             </div>
             <h1 className="ce-hero-title">
-              Airdrop <span className="so-gradient-text">Radar</span>
+              Airdrop <span style={{
+                background: 'linear-gradient(135deg, #FBF8EA 0%, #D4AF37 45%, #AA7C11 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline-block'
+              }}>Radar</span>
             </h1>
             <p className="ce-hero-subtitle">
               Track the hottest Launchpool, Megadrop, Airdrop &amp; IDO events in real-time.
