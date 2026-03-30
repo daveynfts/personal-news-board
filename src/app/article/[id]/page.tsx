@@ -10,6 +10,7 @@ import { extractPlainText } from '@/lib/stringUtils';
 import ReadingProgressBar from '@/components/ReadingProgressBar';
 import { Tr } from '@/components/TranslatableText';
 import AudioPlayerPill from '@/components/AudioPlayerPill';
+import homeStyles from '@/app/Home.module.css';
 
 interface ArticlePageProps {
     params: Promise<{ id: string }>;
@@ -123,8 +124,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             
             <ReadingProgressBar />
 
-            <div className="article-page-layout">
-                {/* Back navigation */}
+            <div className={homeStyles.homeContainer}>
+                <div className={homeStyles.environmentalGlow} />
+                <div className={homeStyles.contentLayer}>
+                    {/* Animated background blobs (macOS Dark Mode logic) */}
+                    <div className="so-bg-effects">
+                        <div className="so-blob so-blob-1" />
+                        <div className="so-blob so-blob-2" />
+                        <div className="so-blob so-blob-3" />
+                    </div>
+
+                    <div className="article-page-layout">
+                        {/* Back navigation */}
                 <Link href="/articles" className="article-back-link">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="m15 18-6-6 6-6" />
@@ -154,7 +165,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             {article.isEditorialPick ? <Tr i18nKey="archive.starEditorialPicks" /> : <Tr i18nKey="article.featureArticle" />}
                         </span>
                         {article.r2AttachmentUrl && (
-                            <AudioPlayerPill url={article.r2AttachmentUrl} title={article.title} />
+                            <AudioPlayerPill 
+                                url={article.r2AttachmentUrl} 
+                                subtitleUrl={article.srtFileUrl} 
+                                title={article.title} 
+                            />
                         )}
                     </div>
                     <h1 className="article-title">{article.title}</h1>
@@ -338,6 +353,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <Link href="/articles" className="submit-btn" style={{ display: 'inline-block', padding: '14px 40px', textDecoration: 'none', background: 'rgba(255,255,255,0.05)', color: '#fff' }}>
                         &larr; <Tr i18nKey="btn.viewAllArticles" />
                     </Link>
+                </div>
+            </div>
                 </div>
             </div>
         </>

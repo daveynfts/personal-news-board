@@ -28,6 +28,14 @@ export const postType = defineType({
       group: 'media', 
       description: 'Dán link file siêu nặng (Video, PDF, ZIP) từ R2.dev vào đây.'
     }),
+    defineField({ 
+      name: 'srtFile', 
+      title: 'Phụ đề (.srt) cho Audio', 
+      type: 'file', 
+      group: 'media', 
+      options: { accept: '.srt,.vtt,.txt' },
+      description: 'Kéo thả file .srt vào đây. Chỉ hoạt động nếu có file Audio.'
+    }),
     defineField({ name: 'isMore', title: 'Load More Content (Archive)', type: 'boolean', initialValue: false, group: 'status' }),
     defineField({ name: 'publishedAt', title: 'Published At', type: 'datetime', initialValue: () => new Date().toISOString(), group: 'status' }),
   ],

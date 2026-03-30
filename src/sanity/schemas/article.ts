@@ -94,6 +94,17 @@ export const articleType = defineType({
       group: 'media', 
       description: '🔥 BÍ KÍP TIẾT KIỆM: Upload các file siêu nặng (Video MP4, File PDF, ZIP) lên R2 rồi dán link pub.r2.dev vào đây. Đừng up lên Sanity Image để tránh tốn tiền băng thông!'
     }),
+    
+    defineField({ 
+      name: 'srtFile', 
+      title: 'Phụ đề đọc báo (.srt)', 
+      type: 'file', 
+      group: 'media', 
+      options: {
+        accept: '.srt,.vtt,.txt'
+      },
+      description: '📂 Kéo thả file .srt vào đây. Trang web sẽ tự làm "Karaoke" cuộn chữ theo file MP3 của bạn!'
+    }),
 
     defineField({ name: 'isEditorialPick', title: 'Editor\'s Choice', type: 'boolean', initialValue: false, group: 'flags' }),
     defineField({ name: 'isHotStory', title: 'Hot Story', type: 'boolean', initialValue: false, group: 'flags' }),

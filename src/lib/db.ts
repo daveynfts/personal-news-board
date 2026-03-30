@@ -21,6 +21,26 @@ function getOgImageUrl(source: unknown): string {
   }
 }
 
+// Helper to extract download URL from Sanity file asset ref
+function getFileUrl(fileField: unknown): string {
+  if (!fileField || typeof fileField !== 'object') return '';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const f = fileField as any;
+  // If query used asset-> dereference, url is directly available
+  if (f?.asset?.url) return f.asset.url;
+  // Fallback: build from _ref  (format: file-<id>-<ext>)
+  if (f?.asset?._ref) {
+    const ref = f.asset._ref as string;
+    const parts = ref.replace('file-', '').split('-');
+    const ext = parts.pop();
+    const id = parts.join('-');
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '';
+    const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+    return `https://cdn.sanity.io/files/${projectId}/${dataset}/${id}.${ext}`;
+  }
+  return '';
+}
+
 // Helper to Map Legacy Post Types
 function mapPostType(type: string): string {
   if (!type) return 'Research';
@@ -113,6 +133,7 @@ export interface Article {
     authorName?: string;
     daveysTake?: string;
     r2AttachmentUrl?: string;
+    srtFileUrl?: string;
     xSourceUrl?: string;
     isEditorialPick: boolean;
     isHotStory?: boolean;
@@ -142,6 +163,7 @@ interface RawArticle {
     authorName?: string;
     daveysTake?: string;
     r2AttachmentUrl?: string;
+    srtFile?: unknown;
     xSourceUrl?: string;
     isEditorialPick?: boolean;
     isHotStory?: boolean;
@@ -174,6 +196,7 @@ export async function getAllArticles(): Promise<Article[]> {
         authorName: a.authorName,
         daveysTake: a.daveysTake,
         r2AttachmentUrl: a.r2AttachmentUrl,
+        srtFileUrl: getFileUrl(a.srtFile),
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isHotStory: a.isHotStory || false,
@@ -199,6 +222,7 @@ export async function getMoreArticles(): Promise<Article[]> {
         squareThumbnail: getImageUrl(a.squareThumbnail),
         daveysTake: a.daveysTake,
         r2AttachmentUrl: a.r2AttachmentUrl,
+        srtFileUrl: getFileUrl(a.srtFile),
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isMore: true,
@@ -228,6 +252,7 @@ export async function getArticleById(id: string | number): Promise<Article | nul
         squareThumbnail: getImageUrl(a.squareThumbnail),
         daveysTake: a.daveysTake,
         r2AttachmentUrl: a.r2AttachmentUrl,
+        srtFileUrl: getFileUrl(a.srtFile),
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isMore: a.isMore || false,
