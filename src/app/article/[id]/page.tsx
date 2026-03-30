@@ -9,6 +9,7 @@ import { buildCanonicalUrl, SITE_META } from '@/lib/siteMeta';
 import { extractPlainText } from '@/lib/stringUtils';
 import ReadingProgressBar from '@/components/ReadingProgressBar';
 import { Tr } from '@/components/TranslatableText';
+import AudioPlayerPill from '@/components/AudioPlayerPill';
 
 interface ArticlePageProps {
     params: Promise<{ id: string }>;
@@ -189,6 +190,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         )}
                     </div>
                 </header>
+
+                {/* Article Audio Player (Optional) */}
+                {article.r2AttachmentUrl && (
+                    <div className="article-audio-wrapper" style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', marginBottom: '-10px', position: 'relative', zIndex: 10 }}>
+                        <AudioPlayerPill url={article.r2AttachmentUrl} title={article.title} />
+                    </div>
+                )}
 
                 {/* Article Body */}
                 <article className="article-body">

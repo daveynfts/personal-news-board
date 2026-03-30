@@ -112,6 +112,7 @@ export interface Article {
     category?: string;
     authorName?: string;
     daveysTake?: string;
+    r2AttachmentUrl?: string;
     xSourceUrl?: string;
     isEditorialPick: boolean;
     isHotStory?: boolean;
@@ -140,6 +141,7 @@ interface RawArticle {
     category?: string;
     authorName?: string;
     daveysTake?: string;
+    r2AttachmentUrl?: string;
     xSourceUrl?: string;
     isEditorialPick?: boolean;
     isHotStory?: boolean;
@@ -171,6 +173,7 @@ export async function getAllArticles(): Promise<Article[]> {
         category: a.category,
         authorName: a.authorName,
         daveysTake: a.daveysTake,
+        r2AttachmentUrl: a.r2AttachmentUrl,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isHotStory: a.isHotStory || false,
@@ -195,6 +198,7 @@ export async function getMoreArticles(): Promise<Article[]> {
         coverImage: getImageUrl(a.coverImage),
         squareThumbnail: getImageUrl(a.squareThumbnail),
         daveysTake: a.daveysTake,
+        r2AttachmentUrl: a.r2AttachmentUrl,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isMore: true,
@@ -223,6 +227,7 @@ export async function getArticleById(id: string | number): Promise<Article | nul
         coverImage: getImageUrl(a.coverImage),
         squareThumbnail: getImageUrl(a.squareThumbnail),
         daveysTake: a.daveysTake,
+        r2AttachmentUrl: a.r2AttachmentUrl,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isMore: a.isMore || false,
@@ -274,6 +279,7 @@ export async function getRelatedArticles(idToExclude: string | number, category?
         category: a.category,
         authorName: a.authorName,
         daveysTake: a.daveysTake,
+        r2AttachmentUrl: a.r2AttachmentUrl,
         xSourceUrl: a.xSourceUrl,
         isEditorialPick: a.isEditorialPick || false,
         isHotStory: a.isHotStory || false,
