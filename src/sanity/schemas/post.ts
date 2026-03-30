@@ -21,6 +21,13 @@ export const postType = defineType({
       options: { hotspot: true },
       description: '💡 Tỉ lệ khuyến nghị: 16:9 (VD: 1200x675) hoặc Vuông 1:1 (tùy thuộc vào Post Type).'
     }),
+    defineField({ 
+      name: 'r2AttachmentUrl', 
+      title: 'Tệp đính kèm phụ (Từ Cloudflare R2)', 
+      type: 'url', 
+      group: 'media', 
+      description: 'Dán link file siêu nặng (Video, PDF, ZIP) từ R2.dev vào đây.'
+    }),
     defineField({ name: 'isMore', title: 'Load More Content (Archive)', type: 'boolean', initialValue: false, group: 'status' }),
     defineField({ name: 'publishedAt', title: 'Published At', type: 'datetime', initialValue: () => new Date().toISOString(), group: 'status' }),
   ],

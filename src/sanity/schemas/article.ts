@@ -87,6 +87,14 @@ export const articleType = defineType({
       description: '💡 KHUYÊN DÙNG: Upload ảnh tỉ lệ 1:1 (ví dụ 400x400) để hiển thị hoàn hảo ở mục "Tin Tức Mới Nhất" dạng cuộn dọc ngang, ghép không bị cắt chữ.'
     }),
     
+    defineField({ 
+      name: 'r2AttachmentUrl', 
+      title: 'Tệp đính kèm / Video (Từ Cloudflare R2)', 
+      type: 'url', 
+      group: 'media', 
+      description: '🔥 BÍ KÍP TIẾT KIỆM: Upload các file siêu nặng (Video MP4, File PDF, ZIP) lên R2 rồi dán link pub.r2.dev vào đây. Đừng up lên Sanity Image để tránh tốn tiền băng thông!'
+    }),
+
     defineField({ name: 'isEditorialPick', title: 'Editor\'s Choice', type: 'boolean', initialValue: false, group: 'flags' }),
     defineField({ name: 'isHotStory', title: 'Hot Story', type: 'boolean', initialValue: false, group: 'flags' }),
     defineField({ name: 'isMore', title: 'Add to More (Archive)', type: 'boolean', initialValue: false, group: 'flags', description: 'Bật cờ này để đưa bài viết vào kho lưu trữ (Archive).' }),
