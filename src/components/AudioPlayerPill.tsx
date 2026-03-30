@@ -24,12 +24,12 @@ export default function AudioPlayerPill({ url, title }: { url: string; title?: s
                 aria-label={isPlaying ? "Tạm dừng" : "Nghe bài viết"}
             >
                 {isPlaying ? (
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="6" y="5" width="4" height="14" rx="1" />
-                        <rect x="14" y="5" width="4" height="14" rx="1" />
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="1" />
+                        <rect x="14" y="4" width="4" height="16" rx="1" />
                     </svg>
                 ) : (
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8.5 5.5v13l10-6.5-10-6.5z" />
                     </svg>
                 )}
@@ -57,28 +57,31 @@ export default function AudioPlayerPill({ url, title }: { url: string; title?: s
                 .liquid-glass-pill {
                     display: inline-flex;
                     align-items: center;
-                    gap: 10px;
-                    padding: 12px 28px;
-                    border-radius: 50px;
-                    background: rgba(255, 255, 255, 0.08); /* Frosted glass base */
+                    gap: 6px;
+                    padding: 4px 12px;
+                    border-radius: 4px; /* match the editorial badge rectangular curves or keep it pill shape */
+                    background: rgba(255, 255, 255, 0.08);
                     backdrop-filter: blur(20px);
                     -webkit-backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.15); /* Sleek outline */
-                    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2), 
-                                inset 0 1px 0 rgba(255, 255, 255, 0.4); /* Liquid shine */
+                    border: 1px solid rgba(255, 255, 255, 0.15);
+                    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1), 
+                                inset 0 1px 0 rgba(255, 255, 255, 0.4);
                     color: #fff;
-                    font-weight: 600;
-                    font-size: 15px;
+                    font-weight: 700;
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
                     cursor: pointer;
                     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                     position: relative;
                     overflow: hidden;
+                    height: 28px; /* Force small height matching badge */
                 }
 
                 .liquid-glass-pill.playing {
-                    background: rgba(10, 132, 255, 0.15); /* Subtle blue tint when playing */
+                    background: rgba(10, 132, 255, 0.15);
                     border-color: rgba(10, 132, 255, 0.4);
-                    box-shadow: 0 8px 32px 0 rgba(10, 132, 255, 0.2), 
+                    box-shadow: 0 4px 16px 0 rgba(10, 132, 255, 0.2), 
                                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
                 }
 
@@ -97,8 +100,8 @@ export default function AudioPlayerPill({ url, title }: { url: string; title?: s
 
                 .liquid-glass-pill:hover {
                     background: rgba(255, 255, 255, 0.12);
-                    transform: translateY(-2px);
-                    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25), 
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.2), 
                                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
                 }
 
@@ -110,24 +113,24 @@ export default function AudioPlayerPill({ url, title }: { url: string; title?: s
                 .visualizer {
                     display: flex;
                     align-items: center;
-                    gap: 3px;
-                    height: 16px;
-                    margin-left: 8px;
+                    gap: 2px;
+                    height: 10px;
+                    margin-left: 4px;
                 }
                 
                 .bar {
-                    width: 3px;
+                    width: 2px;
                     background: var(--accent-color, #0A84FF);
-                    border-radius: 2px;
+                    border-radius: 1px;
                     animation: bounce 1s ease infinite;
                 }
                 
-                .bar1 { height: 8px; animation-delay: 0.1s; }
-                .bar2 { height: 16px; animation-delay: 0.2s; }
-                .bar3 { height: 10px; animation-delay: 0.3s; }
+                .bar1 { height: 6px; animation-delay: 0.1s; }
+                .bar2 { height: 10px; animation-delay: 0.2s; }
+                .bar3 { height: 8px; animation-delay: 0.3s; }
                 
                 @keyframes bounce {
-                    0%, 100% { transform: scaleY(0.5); }
+                    0%, 100% { transform: scaleY(0.4); }
                     50% { transform: scaleY(1); }
                 }
             `}</style>

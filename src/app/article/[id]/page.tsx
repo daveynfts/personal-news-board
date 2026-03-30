@@ -149,9 +149,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Article Header */}
                 <header className="article-header">
-                    <span className="article-editorial-badge">
-                        {article.isEditorialPick ? <Tr i18nKey="archive.starEditorialPicks" /> : <Tr i18nKey="article.featureArticle" />}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+                        <span className="article-editorial-badge" style={{ marginBottom: 0 }}>
+                            {article.isEditorialPick ? <Tr i18nKey="archive.starEditorialPicks" /> : <Tr i18nKey="article.featureArticle" />}
+                        </span>
+                        {article.r2AttachmentUrl && (
+                            <AudioPlayerPill url={article.r2AttachmentUrl} title={article.title} />
+                        )}
+                    </div>
                     <h1 className="article-title">{article.title}</h1>
                     <div className="article-meta">
                         <span>
@@ -190,13 +195,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         )}
                     </div>
                 </header>
-
-                {/* Article Audio Player (Optional) */}
-                {article.r2AttachmentUrl && (
-                    <div className="article-audio-wrapper" style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', marginBottom: '-10px', position: 'relative', zIndex: 10 }}>
-                        <AudioPlayerPill url={article.r2AttachmentUrl} title={article.title} />
-                    </div>
-                )}
 
                 {/* Article Body */}
                 <article className="article-body">
