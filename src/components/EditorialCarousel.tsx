@@ -12,7 +12,9 @@ interface EditorialCarouselProps {
     articles: Article[];
 }
 
-export default function EditorialCarousel({ articles }: EditorialCarouselProps) {
+export default function EditorialCarousel({ articles: rawArticles }: EditorialCarouselProps) {
+    // Defensive: ensure articles is always an array to prevent crashes in hooks below
+    const articles = rawArticles ?? [];
     const [currentIndex, setCurrentIndex] = useState(0);
     const { t, locale } = useTranslation();
 

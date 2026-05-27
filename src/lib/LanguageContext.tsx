@@ -30,6 +30,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setLocale = useCallback((newLocale: Locale) => {
+    if (typeof window === 'undefined') return;
     setLocaleState(newLocale);
     localStorage.setItem('daveynfts-locale', newLocale);
     // Update html lang attribute

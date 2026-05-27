@@ -45,11 +45,11 @@ export default function SavingsCalculator() {
   const particles = useMemo(() =>
     Array.from({ length: 20 }, (_, i) => ({
       id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: 2 + Math.random() * 4,
-      delay: Math.random() * 4,
-      duration: 2 + Math.random() * 3,
+      x: ((i * 37 + 13) % 100),
+      y: ((i * 53 + 7) % 100),
+      size: 2 + ((i * 17) % 40) / 10,
+      delay: ((i * 29) % 40) / 10,
+      duration: 2 + ((i * 23) % 30) / 10,
     })),
   []);
 

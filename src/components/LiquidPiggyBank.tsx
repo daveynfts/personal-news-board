@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function LiquidPiggyBank({ intensity, className = '', style = {} }: { intensity: number, className?: string, style?: React.CSSProperties }) {
   
@@ -8,7 +8,10 @@ export default function LiquidPiggyBank({ intensity, className = '', style = {} 
   const numBills = 150;
   const activeBills = Math.floor(intensity * numBills);
   
-  const billsData = useMemo(() => {
+  const [billsData, setBillsData] = useState<{ x: number; y: number; rot: number; delay: number }[]>([]);
+
+  // Generate random bill positions only on the client to avoid hydration mismatch
+  useEffect(() => {
     const arr = [];
     const r = 70; // The inner radius where money can fall
     for(let i=0; i<numBills; i++) {
@@ -31,8 +34,8 @@ export default function LiquidPiggyBank({ intensity, className = '', style = {} 
     // Highest Y is technically the lowest visual point on screen. 
     // Wait, we WANT lowest Y (top of screen) to render LAST so they stack ON TOP of others in CSS z-index!
     arr.sort((a,b) => b.y - a.y);
-    return arr;
-  }, []);
+    setBillsData(arr);
+  }, [numBills]);
 
   return (
     <div 

@@ -106,7 +106,7 @@ export default function NewsHero({
                 {t('newshero.by')} <span className="text-white">{featured?.authorName || "Davey"}</span>
               </span>
               <span className="text-gray-400 font-medium">
-                {featured?.createdAt ? new Date(featured.createdAt).toLocaleDateString() : "Just now"}
+                {featured?.createdAt ? new Date(featured.createdAt).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }) : ""}
               </span>
             </div>
             

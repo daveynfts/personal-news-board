@@ -2,6 +2,9 @@ import { MetadataRoute } from 'next';
 import { getAllArticles } from '@/lib/db';
 import { SITE_META } from '@/lib/siteMeta';
 
+// Ensure sitemap is always regenerated with fresh data (prevents stale/missing articles)
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_META.SITE_URL;
 

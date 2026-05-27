@@ -53,10 +53,10 @@ export default function LiquidChart({ intensity, className = '', style = {} }: {
             const shadowColor = c.isUp ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)';
             const animName = `candleBounce${i}`;
             return (
-              <g key={i} style={{ animation: `${animName} ${1 + (Math.random() * 0.5) - intensity * 0.3}s infinite alternate ease-in-out` }}>
+              <g key={i} style={{ animation: `${animName} ${1 + ((i * 13 + 7) % 10) * 0.05 - intensity * 0.3}s infinite alternate ease-in-out` }}>
                 <style>{`
                   @keyframes ${animName} {
-                    0% { transform: translateY(${Math.random() * 5}px); }
+                    0% { transform: translateY(${((i * 17 + 3) % 10) * 0.5}px); }
                     100% { transform: translateY(-${15 + intensity * 15}px); }
                   }
                 `}</style>

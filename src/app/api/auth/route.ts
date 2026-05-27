@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '123456A@a';
-const TOKEN_SECRET = process.env.TOKEN_SECRET || ADMIN_PASSWORD + '_session_secret_v1';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const TOKEN_SECRET = process.env.TOKEN_SECRET || (ADMIN_PASSWORD ? ADMIN_PASSWORD + '_session_secret_v1' : 'fallback_dev_secret_change_me');
 
 // Token expiry durations (ms)
 const SESSION_EXPIRY = 24 * 60 * 60 * 1000;         // 1 day (no "remember me")
@@ -60,6 +60,11 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Password is required' }, { status: 400 });
         }
 
+        if (!ADMIN_PASSWORD) {
+            console.error('[auth] ADMIN_PASSWORD env var is not set — login is disabled.');
+            return NextResponse.json({ error: 'Authentication not configured' }, { status: 503 });
+        }
+
         if (password === ADMIN_PASSWORD) {
             const expiry = rememberMe ? REMEMBER_EXPIRY : SESSION_EXPIRY;
             const expiresAt = Date.now() + expiry;
@@ -81,8 +86,10 @@ export async function POST(request: Request) {
 // ── GET: Verify existing session token ────────────────────────────────────────
 export async function GET(request: Request) {
     try {
+        // Prefer Authorization header, fall back to query param for backwards compatibility
+        const authHeader = request.headers.get('Authorization');
         const { searchParams } = new URL(request.url);
-        const token = searchParams.get('token');
+        const token = authHeader?.replace(/^Bearer\s+/i, '') || searchParams.get('token');
 
         if (!token) {
             return NextResponse.json({ valid: false }, { status: 400 });

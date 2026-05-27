@@ -27,7 +27,7 @@ export default function PostCard({ post }: { post: Post }) {
 
     const hasValidImage = !imgError && isValidImageUrl(post.imageUrl);
     const displayImg = hasValidImage ? post.imageUrl! : FALLBACK_IMAGE;
-    const dateLocale = locale === 'vi' ? 'vi-VN' : undefined;
+    const dateLocale = locale === 'vi' ? 'vi-VN' : 'en-US';
 
     return (
         <a

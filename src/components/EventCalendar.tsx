@@ -14,17 +14,27 @@ interface EventCalendarProps {
     events: CalendarEvent[];
 }
 
-export default function EventCalendar({ events }: EventCalendarProps) {
+export default function EventCalendar({ events: rawEvents }: EventCalendarProps) {
+    // Defensive: ensure events is always an array to prevent crashes
+    const events = rawEvents ?? [];
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
     const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
     const { t, locale } = useTranslation();
 
-    // Filter events
-    const now = new Date();
+    // Use state for `now` to avoid hydration mismatch — server and client
+    // would produce different Date values, causing event filtering to differ.
+    const [now, setNow] = useState<Date | null>(null);
+    useEffect(() => { setNow(new Date()); }, []);
 
-    const allUpcoming = events.filter(e => new Date(e.date) >= now).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    const allPast = events.filter(e => new Date(e.date) < now).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Until `now` is set (after hydration), show all events as "upcoming"
+    // to keep server/client output identical on first render.
+    const allUpcoming = now
+        ? events.filter(e => new Date(e.date) >= now).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        : [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const allPast = now
+        ? events.filter(e => new Date(e.date) < now).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        : [];
 
     const MAX_EVENTS = 4;
     const upcomingEvents = allUpcoming.slice(0, MAX_EVENTS);
@@ -86,7 +96,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
             month: d.toLocaleString(dateLocale, { month: 'short' }).toUpperCase(),
             day: d.getDate(),
             weekday: d.toLocaleString(dateLocale, { weekday: 'short' }),
-            time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            time: d.toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })
         };
     };
 
@@ -198,7 +208,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                             <div key={event.id} className={`${styles['timeline-event-card']}`}>
                                                 <div className={`${styles['timeline-event-content']}`}>
                                                     <div className={`${styles['timeline-event-time']}`}>
-                                                        {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        {new Date(event.date).toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })}
                                                     </div>
                                                     <div className={`${styles['timeline-event-title']}`}>{event.title}</div>
                                                     <div className={`${styles['timeline-event-host']} flex items-center gap-1.5`}>

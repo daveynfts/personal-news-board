@@ -184,8 +184,11 @@ export default function Header() {
     if (!q || q.length < 2) return text;
     const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     const parts = text.split(regex);
+    // Use 'i' flag only for test() — the 'g' flag makes test() stateful,
+    // causing intermittent match failures when called in a loop.
+    const testRegex = new RegExp(`^${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
     return parts.map((part, i) =>
-      regex.test(part)
+      testRegex.test(part)
         ? <mark key={i} className="search-highlight">{part}</mark>
         : part
     );
