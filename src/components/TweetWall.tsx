@@ -131,14 +131,14 @@ export default function TweetWall() {
                         {filtered.map(tw => (
                             <div key={tw.id} className={styles.tweetWallCard}>
                                 {tw.label && <div className={styles.tweetWallLabel}>{tw.label}</div>}
-                                <Tweet id={tw.tweetId} />
+                                <Tweet id={tw.tweetId} apiUrl={`/api/tweet/${tw.tweetId}`} />
                             </div>
                         ))}
                         {/* Duplicate for seamless loop */}
                         {filtered.map(tw => (
                             <div key={`dup-${tw.id}`} className={styles.tweetWallCard}>
                                 {tw.label && <div className={styles.tweetWallLabel}>{tw.label}</div>}
-                                <Tweet id={tw.tweetId} />
+                                <Tweet id={tw.tweetId} apiUrl={`/api/tweet/${tw.tweetId}`} />
                             </div>
                         ))}
                     </div>

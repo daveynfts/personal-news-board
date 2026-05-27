@@ -72,7 +72,7 @@ const customPortableTextComponents = {
       return (
         <div className="article-tweet-embed-container" style={{ margin: '40px 0' }}>
             <div className="article-tweet-embed" data-theme="dark" style={{ margin: '0 auto', maxWidth: '550px' }}>
-                <Tweet id={tweetId} />
+                <Tweet id={tweetId} apiUrl={`/api/tweet/${tweetId}`} />
             </div>
             {value.contextTop && (
                 <div className="tweet-context-top" style={{ marginTop: '12px', textAlign: 'center', fontSize: '0.9rem', fontStyle: 'italic', lineHeight: 1.5, color: 'var(--text-muted)' }}>
@@ -166,7 +166,7 @@ export default function ArticleContent({ content }: Props) {
                     if (block.type === 'tweet') {
                         return (
                             <div key={i} className="article-tweet-embed" data-theme="dark">
-                                <Tweet id={block.content} />
+                                <Tweet id={block.content} apiUrl={`/api/tweet/${block.content}`} />
                             </div>
                         );
                     }

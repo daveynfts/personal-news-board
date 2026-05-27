@@ -67,7 +67,7 @@ export default function TweetArchiveGrid({ tweets }: { tweets: TweetData[] }) {
                     {filtered.map(tw => (
                         <div key={tw.id} className="tweet-wall-card">
                             {tw.label && <div className="tweet-wall-label">{tw.label}</div>}
-                            <Tweet id={tw.tweetId} />
+                            <Tweet id={tw.tweetId} apiUrl={`/api/tweet/${tw.tweetId}`} />
                         </div>
                     ))}
                 </div>
