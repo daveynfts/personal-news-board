@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/agentswindler/:path*",
+      "destination": "https://turingdappdavey.vercel.app/agentswindler/:path*"
+    }
+  ]
+}
