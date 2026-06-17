@@ -3,6 +3,10 @@
     {
       "source": "/agentswindler/:path*",
       "destination": "https://turingdappdavey.vercel.app/:path*"
+    },
+    {
+      "source": "/papercut/:path*",
+      "destination": "https://papercut-blond.vercel.app/papercut/:path*"
     }
   ]
 }
