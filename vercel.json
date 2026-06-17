@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/papercut",
-      "destination": "/papercut/",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/agentswindler/:path*",
