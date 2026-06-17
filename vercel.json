@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/papercut",
+      "destination": "/papercut/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/agentswindler/:path*",
@@ -6,7 +13,7 @@
     },
     {
       "source": "/papercut/:path*",
-      "destination": "https://papercut-blond.vercel.app/papercut/:path*"
+      "destination": "https://papercut-blond.vercel.app/:path*"
     }
   ]
 }
